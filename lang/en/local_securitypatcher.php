@@ -25,4 +25,31 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+// General.
 $string['pluginname'] = 'Security Patcher';
+
+// Settings.
+$string['settings:manage'] = 'Manage Security Patcher';
+$string['settings:addsecuritypatches'] = 'Add Security Patches';
+
+// Capabilities.
+
+// Form.
+$string['add:title'] = 'Add Security Patch';
+$string['add:header'] = 'Add Security Patch';
+$string['add:name'] = 'Security Patch Name';
+$string['add:name_help'] = 'Add a short identifier for the security patch file.';
+$string['add:file'] = 'Upload Security Patch File:';
+$string['add:save'] = 'Save';
+
+// Form validation.
+$string['err:namerequired'] = 'The name field is required.';
+$string['err:filerequired'] = 'The file is required.';
+$string['err:existingname'] = 'The provided security patch name ({$a}) already exists.';
+
+// Notifications.
+$string['notification:successnewpatchsave'] = 'The security patch was successfully saved.';
+$string['notification:failnewpatchsave'] = 'The security patch could not be saved.';
+
+// Privacy Provider.
+$string['privacy:metadata'] = 'The Security Patcher plugin does not store any personal data.';
