@@ -1,0 +1,33 @@
+<table id="reporttable" class="table table-striped table-bordered nowrap" style="width:100%">
+    <thead>
+    <tr>
+        <th>{{#str}} datatable:name, local_securitypatcher {{/str}}</th>
+        <th>{{#str}} datatable:filename, local_securitypatcher {{/str}}</th>
+        <th>{{#str}} datatable:applied, local_securitypatcher {{/str}}</th>
+        <th>{{#str}} datatable:created, local_securitypatcher {{/str}}</th>
+        <th>{{#str}} datatable:modified, local_securitypatcher {{/str}}</th>
+        <th>{{#str}} datatable:actions, local_securitypatcher {{/str}}</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{#data}}
+            <tr>
+                <td>{{name}}</td>
+                <td>{{filename}}</td>
+                <td>{{created}}</td>
+                <td>{{modified}}</td>
+                <td>{{applied}}</td>
+                <td>
+                    <ul class="list-actions">
+                    </ul>
+                </td>
+            </tr>
+        {{/data}}
+    </tbody>
+</table>
+
+{{#js}}
+    require(['local_securitypatcher/report'], function(Report) {
+        Report.init();
+    });
+{{/js}}

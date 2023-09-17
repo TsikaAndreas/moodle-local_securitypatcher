@@ -53,3 +53,16 @@ $string['notification:failnewpatchsave'] = 'The security patch could not be save
 
 // Privacy Provider.
 $string['privacy:metadata'] = 'The Security Patcher plugin does not store any personal data.';
+
+// Reports.
+$string['report:title'] = 'Security Patch Reports';
+$string['report:heading'] = 'Security Patch Reports';
+
+// Datatables.
+$string['datatable:id'] = 'ID';
+$string['datatable:name'] = 'Patch Name';
+$string['datatable:filename'] = 'File Name';
+$string['datatable:created'] = 'Created At';
+$string['datatable:modified'] = 'Modified At';
+$string['datatable:applied'] = 'Applied At';
+$string['datatable:actions'] = 'Actions';

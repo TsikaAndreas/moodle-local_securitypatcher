@@ -85,6 +85,58 @@ class api {
     }
 
     /**
+     * Fetches the css files for the datatable.
+     *
+     * @return void
+     */
+    public static function load_datatables_css() {
+        global $PAGE;
+
+        $PAGE->requires->css('/local/securitypatcher/styles/dataTables.bootstrap4.min.css');
+        $PAGE->requires->css('/local/securitypatcher/styles/buttons.bootstrap4.min.css');
+        $PAGE->requires->css('/local/securitypatcher/styles/responsive.bootstrap4.min.css');
+        $PAGE->requires->css('/local/securitypatcher/styles/report.css');
+    }
+
+    /**
+     * Fetches the data for the datatable.
+     *
+     * @return array An array with the report data.
+     */
+    public static function get_report_data(): array {
+        global $DB;
+
+        $patches = [];
+        $records = $DB->get_recordset('local_securitypatcher');
+
+        foreach ($records as $record) {
+            $data = null;
+            $data['id'] = $record->id;
+            $data['name'] = $record->name;
+            $data['filename'] = $record->filename;
+            $data['applied'] = self::get_date($record->timeapplied);
+            $data['created'] = self::get_date($record->timecreated);
+            $data['modified'] = self::get_date($record->timemodified);
+            $patches[] = $data;
+        }
+        $records->close();
+        return $patches;
+    }
+
+    /**
+     * Transforms unix timestamps to date format.
+     *
+     * @param int|null $timestamp
+     * @return string
+     */
+    public static function get_date(?int $timestamp): string {
+        if (!$timestamp) {
+            return '-';
+        }
+        return date('Y-m-d H:i:s', $timestamp);
+    }
+
+    /**
      * Retrieves a stored patch file from the Moodle file storage.
      *
      * @param int $patchid The unique identifier for the security patch.

@@ -30,7 +30,7 @@ use local_securitypatcher\api;
 
 global $OUTPUT, $PAGE;
 
-require_admin();
+require_login();
 
 // Set page configuration.
 $pageurl = new moodle_url('/local/securitypatcher/add.php');
@@ -45,26 +45,23 @@ $PAGE->set_heading(new lang_string('add:header', 'local_securitypatcher'));
 $mform = new addpatch_form();
 $toform = array();
 
-//echo $OUTPUT->single_button($continueurl, get_string('continueuninstall', 'repository'));
-
-$result = api::get_stored_patch_file(13);
-//var_dump($result);
-
 // Form actions.
 if ($mform->is_cancelled()) {
     redirect(new moodle_url('/'));
 } else if ($fromform = $mform->get_data()) {
-
+    // Save the security patch.
     $savedpatch = api::patch_file_save($fromform);
 
+    // Redirection in case of failure.
     if ($savedpatch === false) {
         redirect($pageurl, get_string('notification:failnewpatchsave', 'local_securitypatcher'),
                 null, notification::NOTIFY_ERROR);
     }
-
+    // Redirection in case of success.
     redirect($pageurl, get_string('notification:successnewpatchsave', 'local_securitypatcher'),
             null, notification::NOTIFY_SUCCESS);
 } else {
+    // Set the form data.
     $mform->set_data($toform);
     echo $OUTPUT->header();
     $mform->display();
