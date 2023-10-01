@@ -28,9 +28,12 @@ use core\output\notification;
 use local_securitypatcher\forms\addpatch_form;
 use local_securitypatcher\api;
 
-global $OUTPUT, $PAGE;
+global $OUTPUT, $PAGE, $CFG;
 
 require_login();
+
+// Optional Parameters.
+$id = optional_param('id', null, PARAM_INT);
 
 // Set page configuration.
 $pageurl = new moodle_url('/local/securitypatcher/add.php');
@@ -41,29 +44,55 @@ $PAGE->set_context($context);
 $PAGE->set_title(new lang_string('add:title', 'local_securitypatcher'));
 $PAGE->set_heading(new lang_string('add:header', 'local_securitypatcher'));
 
-// Set up the form instance.
-$mform = new addpatch_form();
+// Check if an ID is provided, indicating whether this is a new or existing security patch.
+if (empty($id)) {
+    $securitypatch = new stdClass();
+    $securitypatch->id = null;
+} else {
+    $securitypatch = api::get_patch($id);
+}
+
+// Set up the form instance with the security patch data.
+$filemangeroptions = api::get_filemanager_options();
+$formargs = ['patch' => $securitypatch];
+$mform = new addpatch_form(null, $formargs);
 $toform = array();
+
+// Prepare the file manager for handling attachments.
+file_prepare_standard_filemanager($securitypatch, 'attachments', $filemangeroptions, $context, api::$component, api::$filearea,
+        $securitypatch->id);
 
 // Form actions.
 if ($mform->is_cancelled()) {
+    // If the form is canceled, redirect to the home page.
     redirect(new moodle_url('/'));
 } else if ($fromform = $mform->get_data()) {
-    // Save the security patch.
-    $savedpatch = api::patch_file_save($fromform);
+    // If form data is submitted.
+    if (empty($securitypatch->id)) {
+        // If it's a new security patch then create it.
+        $patch = api::patch_create($fromform);
+    } else {
+        // If it's an existing security patch, update it.
+        $fromform->id = $securitypatch->id;
+        $patch = api::patch_update($fromform);
+    }
 
-    // Redirection in case of failure.
-    if ($savedpatch === false) {
+    // Redirection based on success or failure.
+    if ($patch === false) {
+        // Redirect with an error notification in case of failure.
         redirect($pageurl, get_string('notification:failnewpatchsave', 'local_securitypatcher'),
                 null, notification::NOTIFY_ERROR);
+    } else {
+        // Redirect with a success notification in case of success.
+        redirect($pageurl, get_string('notification:successnewpatchsave', 'local_securitypatcher'),
+                null, notification::NOTIFY_SUCCESS);
     }
-    // Redirection in case of success.
-    redirect($pageurl, get_string('notification:successnewpatchsave', 'local_securitypatcher'),
-            null, notification::NOTIFY_SUCCESS);
 } else {
-    // Set the form data.
-    $mform->set_data($toform);
+    // If no form data is submitted, set the form data.
+    $mform->set_data($securitypatch);
+    // Render the page.
     echo $OUTPUT->header();
+    // Display the form.
     $mform->display();
     echo $OUTPUT->footer();
 }

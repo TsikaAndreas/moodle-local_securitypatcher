@@ -41,11 +41,8 @@ $PAGE->set_heading(get_string('report:heading', 'local_securitypatcher'));
 // Load datatable css.
 api::load_datatables_css();
 
-// Render the reports.
-$renderable = new local_securitypatcher\output\report();
-$renderer = $PAGE->get_renderer('local_securitypatcher');
-
+// Render the reports page.
 echo $OUTPUT->header();
-echo $renderer->render($renderable);
+echo $OUTPUT->render(new local_securitypatcher\output\report());
 echo $OUTPUT->footer();
 

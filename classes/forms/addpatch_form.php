@@ -16,6 +16,8 @@
 
 namespace local_securitypatcher\forms;
 
+use local_securitypatcher\api;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->libdir/formslib.php");
@@ -34,22 +36,24 @@ class addpatch_form extends \moodleform {
      * The form definition.
      */
     public function definition() {
-
         $mform = $this->_form;
+        $filemanageroptions = api::get_filemanager_options();
 
+        // Hidden element for the edit.
+        $mform->addElement('hidden', 'id');
+
+        // Name.
         $mform->addElement('text', 'name', get_string('add:name', 'local_securitypatcher'));
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', get_string('err:namerequired', 'local_securitypatcher'), 'required');
         $mform->addHelpButton('name', 'add:name', 'local_securitypatcher');
 
-        $mform->addElement('filemanager', 'attachments', get_string('add:file', 'local_securitypatcher'), null,
-            [
-                'subdirs' => 0, 'maxbytes' => 10485760, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
-                'accepted_types' => ['.diff'], 'return_types' => FILE_INTERNAL | FILE_EXTERNAL
-            ]
-        );
-        $mform->addRule('attachments', get_string('err:filerequired', 'local_securitypatcher'), 'required');
+        // Attachment.
+        $mform->addElement('filemanager', 'attachments_filemanager', get_string('add:file', 'local_securitypatcher'), null,
+                $filemanageroptions);
+        $mform->addRule('attachments_filemanager', get_string('err:filerequired', 'local_securitypatcher'), 'required');
 
+        // Save and cancel.
         $this->add_action_buttons(true, get_string('add:save', 'local_securitypatcher'));
     }
 
@@ -63,12 +67,15 @@ class addpatch_form extends \moodleform {
      */
     public function validation($data, $files): array {
         global $DB;
+        $patch = $this->_customdata['patch'];
         $errors = [];
 
-        // Check if security patch with the same name exists.
-        $record = $DB->record_exists('local_securitypatcher', ['name' => $data['name']]);
-        if ($record) {
-            $errors['name'] = get_string('err:existingname', 'securitypatcher', s($data['name']));
+        if (empty($patch->id)) {
+            // Check if security patch with the same name exists.
+            $record = $DB->record_exists('local_securitypatcher', ['name' => $data['name']]);
+            if ($record) {
+                $errors['name'] = get_string('err:existingname', 'securitypatcher', s($data['name']));
+            }
         }
 
         return $errors;

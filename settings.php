@@ -27,20 +27,20 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
     $manage = new admin_category('local_securitypatcher', get_string('pluginname', 'local_securitypatcher'));
-    $ADMIN->add('localplugins', $manage);
+    $ADMIN->add('server', $manage);
 
     $settingspage = new admin_settingpage('managelocalsecuritypatcher',
             new lang_string('settings:manage', 'local_securitypatcher'));
-
-    if ($ADMIN->fulltree) {
-        // TODO: Define actual plugin settings page and add it to the tree - {@link https://docs.moodle.org/dev/Admin_settings}.
-    }
-
     $ADMIN->add('local_securitypatcher', $settingspage);
 
     // Add security patches page.
     $ADMIN->add('local_securitypatcher', new admin_externalpage('addsecuritypatches',
             get_string('settings:addsecuritypatches', 'local_securitypatcher'),
             new moodle_url('/local/securitypatcher/add.php')
+    ));
+    // Add reports page.
+    $ADMIN->add('local_securitypatcher', new admin_externalpage('reportsecuritypatches',
+            get_string('settings:report', 'local_securitypatcher'),
+            new moodle_url('/local/securitypatcher/report.php')
     ));
 }

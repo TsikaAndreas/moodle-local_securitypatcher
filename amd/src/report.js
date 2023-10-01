@@ -21,28 +21,39 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repository',
+        'core/prefetch', 'core/str',
         'local_securitypatcher/jquery.dataTables', 'local_securitypatcher/dataTables.bootstrap4',
         'local_securitypatcher/dataTables.buttons', 'local_securitypatcher/buttons.bootstrap4',
         'local_securitypatcher/buttons.colVis', 'local_securitypatcher/buttons.html5',
         'local_securitypatcher/buttons.print', 'local_securitypatcher/dataTables.responsive',
         'local_securitypatcher/responsive.bootstrap4'],
-    function ($, Ajax, Notification, Repository, DataTable
+    function ($, Ajax, Notification, Repository, Prefetch, Str, DataTable
 ) {
 
     function load_datatable() {
         $(document).ready(function () {
             // Initialize dataTable.
             var table = $('#reporttable').DataTable({
-                dom: '<l<t>ip>',
+                dom: 'Brtip',
                 responsive: true,
                 columnDefs: [
                     { responsivePriority: 1, targets: 0 },
-                    { responsivePriority: 10001, targets: 3 },
-                    { responsivePriority: 2, searchable: false, targets: -1 }
+                    { responsivePriority: 2, searchable: false, targets: -1, orderable: false },
+                    { targets: 1 },
+                    { targets: 2 },
+                    { targets: 3 },
+                    { targets: 4 },
                 ],
                 order: [
                     [0, 'desc']
                 ],
+                buttons: ['colvis', 'copy', 'csv', 'excel', 'pdf', 'print'],
+                initComplete: function(settings, json) {
+                    datatable_loader(false);
+                },
+                drawCallback: function() {
+
+                }
             });
 
             // Place Search Fields in every column.
@@ -56,7 +67,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 $(node).removeClass(sortClasses.join(' '));
                 // Add the filters.
                 var title = $(this).text();
-                $(this).html('<input type="text" placeholder="Filter ' + title + '" style="width: 100%"/>');
+                $(this).html('<input type="text" placeholder="' + title + '" style="width: 100%"/>');
                 $('input', this).on('keyup change', function () {
                     if ($('#reporttable').DataTable().column(i).search() !== this.value) {
                         $('#reporttable').DataTable()
@@ -86,37 +97,134 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 e.stopPropagation();
             });
 
-            // Required (for responsive)
-            $(window).resize(function () {
-                $('#reporttable thead tr:eq(0) th').each(function () {
-                    var display = $(this).css('display');
-                    var position = $(this).index();
-                    if (display == 'none') {
-                        $('thead tr:eq(1)').find('th:eq(' + position + ') ').addClass('hidden');
+            // Responsive filters.
+            table.on( 'responsive-resize', function ( e, datatable, columns ) {
+                columns.forEach(function (visible, index) {
+                    if (visible) {
+                        $('thead tr:eq(1)').find('th:eq(' + index + ') ').show();
                     } else {
-                        $('thead tr:eq(1)').find('th:eq(' + position + ') ').removeClass('hidden');
+                        $('thead tr:eq(1)').find('th:eq(' + index + ') ').hide();
                     }
                 });
             });
 
-            // For collumn visibility
-            $('#reporttable thead tr:eq(0) th').each(function () {
-                var display = $(this).css('display');
-                var position = $(this).index();
-                if (display == 'none') {
-                    $('thead tr:eq(1)').find('th:eq(' + position + ') ').addClass('hidden');
-                } else {
-                    $('thead tr:eq(1)').find('th:eq(' + position + ') ').removeClass('hidden');
-                }
+            // Delete action.
+            table.on('click', 'tbody tr button.delete-patch-action', function() {
+                var node = this;
+                var patch = parseInt(this.getAttribute('data-patch'), 10);
+
+                // Confirmation message.
+                var confirmQuestion = Str.get_string('report:patch_confirmdelete', 'local_securitypatcher');
+                var confirmButton = Str.get_string('report:patch_confirmdeletebtn', 'local_securitypatcher');
+
+                var confirmCallback = function () {
+                    datatable_loader(true);
+                    var args = {
+                        patchid: patch,
+                    };
+                    Repository.delete_patch(args)
+                        .then(function(res) {
+                            if (res.result){
+                                table.row(node.closest('tr')).remove().draw();
+                            }
+                            datatable_loader(false);
+                        })
+                        .catch(function (error) {
+                            datatable_loader(false);
+                        });
+                };
+                show_confirmation(confirmQuestion, confirmButton, confirmCallback);
+            });
+
+            // Apply action.
+            table.on('click', 'tbody tr button.apply-patch-action', function() {
+                var node = this;
+                var patch = parseInt(this.getAttribute('data-patch'), 10);
+
+                // Confirmation message.
+                var confirmQuestion = Str.get_string('report:patch_confirmapply', 'local_securitypatcher');
+                var confirmButton = Str.get_string('report:patch_confirmapplybtn', 'local_securitypatcher');
+
+                var confirmCallback = function () {
+                    datatable_loader(true);
+                    var args = {
+                        patchid: patch,
+                    };
+                    Repository.restore_patch(args)
+                        .then(function(res) {
+                            if (res.result){
+                                // table.row(node.closest('tr')).remove().draw();
+                            }
+                            datatable_loader(false);
+                        })
+                        .catch(function (error) {
+                            datatable_loader(false);
+                        });
+                };
+                show_confirmation(confirmQuestion, confirmButton, confirmCallback);
+            });
+
+            // Restore action.
+            table.on('click', 'tbody tr button.restore-patch-action', function() {
+                var node = this;
+                var patch = parseInt(this.getAttribute('data-patch'), 10);
+
+                // Confirmation message.
+                var confirmQuestion = Str.get_string('report:patch_confirmrestore', 'local_securitypatcher');
+                var confirmButton = Str.get_string('report:patch_confirmrestorebtn', 'local_securitypatcher');
+
+                var confirmCallback = function () {
+                    datatable_loader(true);
+                    var args = {
+                        patchid: patch,
+                    };
+                    Repository.restore_patch(args)
+                        .then(function(res) {
+                            if (res.result){
+                                // table.row(node.closest('tr')).remove().draw();
+                            }
+                            datatable_loader(false);
+                        })
+                        .catch(function (error) {
+                            datatable_loader(false);
+                        });
+                };
+                show_confirmation(confirmQuestion, confirmButton, confirmCallback);
             });
         });
     }
 
+    function show_confirmation(question, confirmButton, confirmCallback) {
+        Notification.confirm(
+            Str.get_string('confirm_title', 'local_securitypatcher'),
+            question,
+            confirmButton,
+            Str.get_string('confirm_cancel', 'local_securitypatcher'),
+            confirmCallback,
+            null
+        );
+    }
+
+    function prefetch_strings() {
+        Prefetch.prefetchStrings('local_securitypatcher', [
+            'confirm_title', 'confirm_cancel', 'report:patch_confirmdelete',
+            'report:patch_confirmdeletebtn', 'report:patch_confirmapply',
+            'report:patch_confirmapplybtn', 'report:patch_confirmrestore',
+            'report:patch_confirmrestorebtn'
+        ]);
+    }
+
+    function datatable_loader(enable) {
+        var loader = $('.table-wrapper .datatable-loader');
+        if (enable) {
+            loader.show();
+        } else {
+            loader.hide();
+        }
+    }
 
     var init = function (params) {
-
-        console.log('test');
-
+        prefetch_strings();
         load_datatable();
     }
 

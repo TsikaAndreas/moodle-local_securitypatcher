@@ -8,11 +8,9 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the provided security patch"/>
-        <FIELD NAME="filename" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="The name of the uploaded security patch file."/>
-        <FIELD NAME="filepath" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The selected path of the uploaded security patch file."/>
-        <FIELD NAME="itemid" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Item id from the files table."/>
-        <FIELD NAME="applied" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Value whether the patch has been implemented. 0: applied, 1: not applied."/>
+        <FIELD NAME="status" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Status of the patch 0: no actions performed, 1: applied, 2: restored."/>
         <FIELD NAME="timeapplied" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp when the security patch was applied."/>
+        <FIELD NAME="timerestored" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp when the security patch was restored."/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Timestamp when the security patch was created."/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Timestamp when the record data was modified."/>
       </FIELDS>

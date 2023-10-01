@@ -36,7 +36,52 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
         return promise;
     };
 
+    var delete_patch = function (args) {
+
+        var request = {
+            methodname: 'local_securitypatcher_delete_patch',
+            args: args
+        };
+
+        var promise = Ajax.call([request])[0];
+
+        promise.fail(Notification.exception);
+
+        return promise;
+    };
+
+    var apply_patch = function (args) {
+
+        var request = {
+            methodname: 'local_securitypatcher_apply_patch',
+            args: args
+        };
+
+        var promise = Ajax.call([request])[0];
+
+        promise.fail(Notification.exception);
+
+        return promise;
+    };
+
+    var restore_patch = function (args) {
+
+        var request = {
+            methodname: 'local_securitypatcher_restore_patch',
+            args: args
+        };
+
+        var promise = Ajax.call([request])[0];
+
+        promise.fail(Notification.exception);
+
+        return promise;
+    };
+
     return {
         get_reports: get_reports,
+        delete_patch: delete_patch,
+        apply_patch: apply_patch,
+        restore_patch: restore_patch,
     };
 });

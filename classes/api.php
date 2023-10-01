@@ -25,6 +25,7 @@
 namespace local_securitypatcher;
 
 use context_system;
+use PhpOffice\PhpSpreadsheet\Reader\Ods\PageSettings;
 use stdClass;
 
 /**
@@ -37,51 +38,141 @@ use stdClass;
 class api {
 
     /**
+     * Patch is clean, not applied.
+     */
+    protected CONST PATCH_CLEAN = 0;
+
+    /**
+     * Patch has been applied.
+     */
+    protected CONST PATCH_APPLIED = 1;
+
+    /**
+     * Patch has been restored.
+     */
+    protected CONST PATCH_RESTORED = 2;
+
+    /**
      * @var string The filearea that the security patches are stored.
      */
-    protected static string $filearea = 'local_securitypatcher_security_patches';
+    public static string $filearea = 'local_securitypatcher_security_patches';
     /**
      * @var string The component the security files belongs.
      */
-    protected static string $component = 'local_securitypatcher';
+    public static string $component = 'local_securitypatcher';
 
     /**
-     * Saves a patch file to the Moodle file storage and records its metadata in the database.
+     * Get file manager options for handling security patch attachments.
      *
-     * @param object $data An object with the submitted form data about the patch file.
-     * @return bool|int Returns the unique identifier of the saved patch record or false if not saved.
+     * @return array An array of options for the file manager.
      */
-    public static function patch_file_save(object $data) {
+    public static function get_filemanager_options(): array {
+        global $CFG;
+
+        require_once($CFG->libdir . '/filelib.php');
+
+        return [
+                'maxfiles' => 1,                                    // Maximum number of files (1 for single file upload).
+                'maxbytes' => $CFG->maxbytes,                       // Maximum file size in bytes.
+                'areamaxbytes' => FILE_AREA_MAX_BYTES_UNLIMITED,    // Maximum bytes per file area (unlimited).
+                'subdirs' => 0,                                     // Allow subdirectories (0 for no subdirectories).
+                'accepted_types' => ['.diff'],                      // Accepted file types (e.g., .diff files).
+        ];
+    }
+
+    /**
+     * Retrieve a security patch record by its ID.
+     *
+     * @param int $patchid The ID of the security patch to retrieve.
+     *
+     * @return stdClass|false Returns the security patch record as an object if found, or false if not found.
+     */
+    public static function get_patch(int $patchid): false|stdClass {
         global $DB;
 
-        $contextid = context_system::instance()->id;
+        return $DB->get_record('local_securitypatcher', ['id' => $patchid]);
+    }
 
-        // Get all files in the draft area.
-        $draftfile = file_get_all_files_in_draftarea($data->attachments);
+    /**
+     * Creates a new security patch record in the database and stores the file attachment.
+     *
+     * @param object $formdata An object containing the form data for the new patch.
+     *
+     * @return bool Returns true if successful, or false if an error occurred.
+     */
+    public static function patch_create(object $formdata): bool {
+        global $DB;
 
-        // Save files from the draft area to the specified component and file area.
-        $patchsaved = file_save_draft_area_files($data->attachments, $contextid, self::$component, self::$filearea, 0);
+        $context = context_system::instance();
 
-        // If files were saved successfully.
-        if ($patchsaved === null) {
-            $currenttime = time();
+        $currenttime = time();
 
-            // Create a new record for the saved patch file.
-            $newrecord = new stdClass();
-            $newrecord->name = $data->name;
-            $newrecord->itemid = 0;
-            $newrecord->filename = $draftfile[0]->filename;
-            $newrecord->filepath = $draftfile[0]->filepath;
-            $newrecord->applied = 0;
-            $newrecord->timecreated = $currenttime;
-            $newrecord->timemodified = $currenttime;
+        // Create a new stdClass object to hold patch data.
+        $patch = new stdClass();
 
-            // Insert the new record into the table and return the unique identifier.
-            return $DB->insert_record('local_securitypatcher', $newrecord);
+        // Set the name of the patch.
+        $patch->name = $formdata->name;
+
+        // Initialize other fields with default values.
+        $patch->status = self::PATCH_CLEAN;
+        $patch->attachments = null;
+        $patch->timeapplied = null;
+        $patch->timerestored = null;
+        $patch->timecreated = $currenttime;
+        $patch->timemodified = $currenttime;
+
+        // Insert the new patch record into the database.
+        $patchid = $DB->insert_record('local_securitypatcher', $patch);
+
+        // Check if the insertion was successful.
+        if (empty($patchid)) {
+            return false;
         }
 
-        // Return false if the patch was not saved.
-        return false;
+        // Assign the generated ID to the patch object.
+        $patch->id = $patchid;
+
+        // Update the attachments.
+        $formdata = file_postupdate_standard_filemanager($formdata, 'attachments', self::get_filemanager_options(), $context,
+                self::$component,
+                self::$filearea, $patch->id);
+
+        // Update the 'attachments' field in the patch object.
+        $patch->attachments = $formdata->attachments;
+
+        // Update the patch record in the database and return the result.
+        return $DB->update_record('local_securitypatcher', $patch);
+    }
+
+    /**
+     * Updates an existing security patch record in the database.
+     *
+     * @param object $formdata An object containing the updated form data for the patch.
+     *
+     * @return bool|int Returns true if the update was successful, false if an error occurred.
+     */
+    public static function patch_update(object $formdata): bool|int {
+        global $DB;
+
+        $context = context_system::instance();
+
+        // Retrieve the existing patch record based on its ID.
+        $patch = self::get_patch($formdata->id);
+
+        // Update the modified fields of the patch.
+        $patch->name = $formdata->name;
+        $patch->timemodified = time();
+
+        // Update the attachments.
+        $formdata = file_postupdate_standard_filemanager($formdata, 'attachments', self::get_filemanager_options(), $context,
+                self::$component,
+                self::$filearea, $patch->id);
+
+        // Update the 'attachments' field in the patch object.
+        $patch->attachments = $formdata->attachments;
+
+        // Update the patch record in the database and return the result.
+        return $DB->update_record('local_securitypatcher', $patch);
     }
 
     /**
@@ -89,7 +180,7 @@ class api {
      *
      * @return void
      */
-    public static function load_datatables_css() {
+    public static function load_datatables_css(): void {
         global $PAGE;
 
         $PAGE->requires->css('/local/securitypatcher/styles/dataTables.bootstrap4.min.css');
@@ -113,10 +204,11 @@ class api {
             $data = null;
             $data['id'] = $record->id;
             $data['name'] = $record->name;
-            $data['filename'] = $record->filename;
             $data['applied'] = self::get_date($record->timeapplied);
-            $data['created'] = self::get_date($record->timecreated);
+            $data['restored'] = self::get_date($record->timerestored);
             $data['modified'] = self::get_date($record->timemodified);
+            $data['created'] = self::get_date($record->timecreated);
+            $data['actions'] = self::parse_actions($record);
             $patches[] = $data;
         }
         $records->close();
@@ -124,15 +216,54 @@ class api {
     }
 
     /**
-     * Transforms unix timestamps to date format.
+     * Parse actions for a given security patch object.
      *
-     * @param int|null $timestamp
-     * @return string
+     * This method generates HTML code for various actions for a security patch.
+     *
+     * @param object $patch The security patch object to generate actions for.
+     *
+     * @return string HTML code containing the security patch actions.
+     */
+    public static function parse_actions(object $patch): string {
+        $actions = '';
+
+        // Edit action.
+        $editurl = new \moodle_url('/local/securitypatcher/add.php', ['id' => $patch->id]);
+        $actions .= '<a href="' . $editurl . '" class="edit-patch-action btn btn-secondary"
+                        data-patch="' . $patch->id . '">
+                        '. get_string('report:editaction', 'local_securitypatcher') .'
+                    </a>';
+
+        // Apply action.
+        $actions .= '<button class="apply-patch-action btn btn-primary" data-patch="' . $patch->id . '">
+                        '. get_string('report:applyaction', 'local_securitypatcher') .'
+                    </button>';
+
+        // Restore action.
+        $actions .= '<button class="restore-patch-action btn btn-warning" data-patch="' . $patch->id . '">
+                        '. get_string('report:restoreaction', 'local_securitypatcher') .'
+                    </button>';
+
+        // Delete action.
+        $actions .= '<button class="delete-patch-action btn btn-danger" data-patch="' . $patch->id . '">
+                        '. get_string('report:deleteaction', 'local_securitypatcher') .'
+                    </button>';
+
+        return $actions;
+    }
+
+    /**
+     * Convert a timestamp to a formatted date and time string.
+     *
+     * @param int|null $timestamp The timestamp to convert. Use null to indicate no timestamp (returns "-").
+     * @return string Returns the formatted date and time string or "-" if no timestamp is provided.
      */
     public static function get_date(?int $timestamp): string {
         if (!$timestamp) {
+            // If no timestamp is provided, or it's null, return a dash ("-").
             return '-';
         }
+        // Format the timestamp as "YYYY-MM-DD HH:MM:SS".
         return date('Y-m-d H:i:s', $timestamp);
     }
 
@@ -163,7 +294,7 @@ class api {
                 $contextid,
                 self::$component,
                 self::$filearea,
-                (int)$record->itemid,
+                (int) $record->itemid,
                 $record->filepath,
                 $record->filename
         );

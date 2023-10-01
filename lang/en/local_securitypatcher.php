@@ -27,10 +27,14 @@ defined('MOODLE_INTERNAL') || die();
 
 // General.
 $string['pluginname'] = 'Security Patcher';
+$string['loading'] = 'Loading...';
+$string['confirm_title'] = 'Confirm';
+$string['confirm_cancel'] = 'Cancel';
 
 // Settings.
 $string['settings:manage'] = 'Manage Security Patcher';
 $string['settings:addsecuritypatches'] = 'Add Security Patches';
+$string['settings:report'] = 'Security Patches Report';
 
 // Capabilities.
 
@@ -57,6 +61,16 @@ $string['privacy:metadata'] = 'The Security Patcher plugin does not store any pe
 // Reports.
 $string['report:title'] = 'Security Patch Reports';
 $string['report:heading'] = 'Security Patch Reports';
+$string['report:applyaction'] = 'Apply';
+$string['report:deleteaction'] = 'Delete';
+$string['report:restoreaction'] = 'Restore';
+$string['report:editaction'] = 'Edit';
+$string['report:patch_confirmdelete'] = 'You are about to delete a security patch, are you sure?';
+$string['report:patch_confirmdeletebtn'] = 'Delete';
+$string['report:patch_confirmapply'] = 'You are about to apply a security patch, are you sure?';
+$string['report:patch_confirmapplybtn'] = 'Apply';
+$string['report:patch_confirmrestore'] = 'You are about to restore a security patch, are you sure?';
+$string['report:patch_confirmrestorebtn'] = 'Restore';
 
 // Datatables.
 $string['datatable:id'] = 'ID';
@@ -65,4 +79,5 @@ $string['datatable:filename'] = 'File Name';
 $string['datatable:created'] = 'Created At';
 $string['datatable:modified'] = 'Modified At';
 $string['datatable:applied'] = 'Applied At';
+$string['datatable:restored'] = 'Restored At';
 $string['datatable:actions'] = 'Actions';
