@@ -22,10 +22,10 @@
  */
 define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notification) {
 
-    var get_reports = function (args) {
+    var get_patches = function (args) {
 
         var request = {
-            methodname: 'local_securitypatcher_get_reports',
+            methodname: 'local_securitypatcher_get_patches',
             args: args
         };
 
@@ -78,10 +78,25 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
         return promise;
     };
 
+    var get_patch_reports = function (args) {
+
+        var request = {
+            methodname: 'local_securitypatcher_get_patch_reports',
+            args: args
+        };
+
+        var promise = Ajax.call([request])[0];
+
+        promise.fail(Notification.exception);
+
+        return promise;
+    };
+
     return {
-        get_reports: get_reports,
+        get_patches: get_patches,
         delete_patch: delete_patch,
         apply_patch: apply_patch,
         restore_patch: restore_patch,
+        get_patch_reports: get_patch_reports,
     };
 });
