@@ -1,8 +1,15 @@
-# Security Patcher #
+# local_securitypatcher
 
-A moodle plugin for applying Security Patches.
+The **local_securitypatcher** plugin simplifies the process of applying and managing security patches within your Moodle Learning Management System (LMS). With this plugin, effortlessly import security patch diff files from the official Moodle security announcements.
 
-TODO Provide more detailed description here.
+### Key Features:
+- **Effortless Patch Import:** Easily import security patch diff files from official Moodle announcements into your platform.
+- **Seamless Application:** Apply security fixes across your Moodle LMS with the click of a button.
+- **Error Handling:** Receive clear notifications in case of any errors or code mismatches during patch application, ensuring your platform's integrity.
+- **Reversion Capability:** Revert applied security changes swiftly and effortlessly, providing flexibility in managing your platform's security updates.
+- **User-Friendly Interface:** All these functionalities are conveniently accessible through a user-friendly interface, making security management hassle-free.
+
+Enhance your Moodle LMS security management by simplifying the process of applying, verifying, and reverting security patches. Keep your platform secure without complexities, using the **local_securitypatcher** plugin.
 
 ## Installing via uploaded ZIP file ##
 
