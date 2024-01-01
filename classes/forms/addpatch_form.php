@@ -37,24 +37,24 @@ class addpatch_form extends \moodleform {
      */
     public function definition() {
         $mform = $this->_form;
-        $filemanageroptions = api::get_filemanager_options();
+        $filemanageroptions = api::get_patch_filemanager_options();
 
         // Hidden element for the edit.
         $mform->addElement('hidden', 'id');
 
         // Name.
-        $mform->addElement('text', 'name', get_string('add:name', 'local_securitypatcher'));
+        $mform->addElement('text', 'name', get_string('patch:name', 'local_securitypatcher'));
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', get_string('err:namerequired', 'local_securitypatcher'), 'required');
-        $mform->addHelpButton('name', 'add:name', 'local_securitypatcher');
+        $mform->addHelpButton('name', 'patch:name', 'local_securitypatcher');
 
         // Attachment.
-        $mform->addElement('filemanager', 'attachments_filemanager', get_string('add:file', 'local_securitypatcher'), null,
+        $mform->addElement('filemanager', 'attachments_filemanager', get_string('patch:file', 'local_securitypatcher'), null,
                 $filemanageroptions);
         $mform->addRule('attachments_filemanager', get_string('err:filerequired', 'local_securitypatcher'), 'required');
 
         // Save and cancel.
-        $this->add_action_buttons(true, get_string('add:save', 'local_securitypatcher'));
+        $this->add_action_buttons(true, get_string('patch:save', 'local_securitypatcher'));
     }
 
     /**

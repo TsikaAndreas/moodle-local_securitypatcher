@@ -39,12 +39,12 @@ $string['settings:report'] = 'Security Patches Report';
 // Capabilities.
 
 // Form.
-$string['add:title'] = 'Add Security Patch';
-$string['add:header'] = 'Add Security Patch';
-$string['add:name'] = 'Security Patch Name';
-$string['add:name_help'] = 'Add a short identifier for the security patch file.';
-$string['add:file'] = 'Upload Security Patch File:';
-$string['add:save'] = 'Save';
+$string['patch:title'] = 'Add Security Patch';
+$string['patch:header'] = 'Add Security Patch';
+$string['patch:name'] = 'Security Patch Name';
+$string['patch:name_help'] = 'Add a short identifier for the security patch file.';
+$string['patch:file'] = 'Upload Security Patch File:';
+$string['patch:save'] = 'Save';
 
 // Form validation.
 $string['err:namerequired'] = 'The name field is required.';
@@ -65,6 +65,7 @@ $string['report:applyaction'] = 'Apply';
 $string['report:deleteaction'] = 'Delete';
 $string['report:restoreaction'] = 'Restore';
 $string['report:editaction'] = 'Edit';
+$string['report:viewreportaction'] = 'View Report';
 $string['report:patch_confirmdelete'] = 'You are about to delete a security patch, are you sure?';
 $string['report:patch_confirmdeletebtn'] = 'Delete';
 $string['report:patch_confirmapply'] = 'You are about to apply a security patch, are you sure?';

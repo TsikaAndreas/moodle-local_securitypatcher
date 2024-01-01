@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * File description for the local_securitypatcher plugin.
+ * Security patch creation and editing form for the local_securitypatcher plugin.
  *
  * @package   local_securitypatcher
  * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
@@ -27,6 +27,7 @@ require_once(__DIR__ . '/../../config.php');
 use core\output\notification;
 use local_securitypatcher\forms\addpatch_form;
 use local_securitypatcher\api;
+use local_securitypatcher\managers\patch_manager;
 
 global $OUTPUT, $PAGE, $CFG;
 
@@ -36,31 +37,34 @@ require_login();
 $id = optional_param('id', null, PARAM_INT);
 
 // Set page configuration.
-$pageurl = new moodle_url('/local/securitypatcher/add.php');
+$pageurl = new moodle_url('/local/securitypatcher/patch.php');
 $PAGE->set_url($pageurl);
 $PAGE->set_pagelayout('admin');
 $context = context_system::instance();
 $PAGE->set_context($context);
-$PAGE->set_title(new lang_string('add:title', 'local_securitypatcher'));
-$PAGE->set_heading(new lang_string('add:header', 'local_securitypatcher'));
+$PAGE->set_title(new lang_string('patch:title', 'local_securitypatcher'));
+$PAGE->set_heading(new lang_string('patch:header', 'local_securitypatcher'));
+
+// Initialize the patch manager.
+$manager = new patch_manager();
 
 // Check if an ID is provided, indicating whether this is a new or existing security patch.
 if (empty($id)) {
     $securitypatch = new stdClass();
     $securitypatch->id = null;
 } else {
-    $securitypatch = api::get_patch($id);
+    $securitypatch = $manager->get_patch($id);
 }
 
 // Set up the form instance with the security patch data.
-$filemangeroptions = api::get_filemanager_options();
+$filemangeroptions = api::get_patch_filemanager_options();
 $formargs = ['patch' => $securitypatch];
 $mform = new addpatch_form(null, $formargs);
 $toform = array();
 
 // Prepare the file manager for handling attachments.
-file_prepare_standard_filemanager($securitypatch, 'attachments', $filemangeroptions, $context, api::$component, api::$filearea,
-        $securitypatch->id);
+file_prepare_standard_filemanager($securitypatch, 'attachments', $filemangeroptions, $context,
+        $manager::$component, $manager::$filearea, $securitypatch->id);
 
 // Form actions.
 if ($mform->is_cancelled()) {
@@ -70,11 +74,11 @@ if ($mform->is_cancelled()) {
     // If form data is submitted.
     if (empty($securitypatch->id)) {
         // If it's a new security patch then create it.
-        $patch = api::patch_create($fromform);
+        $patch = $manager->create_patch($fromform);
     } else {
         // If it's an existing security patch, update it.
         $fromform->id = $securitypatch->id;
-        $patch = api::patch_update($fromform);
+        $patch = $manager->update_patch($fromform);
     }
 
     // Redirection based on success or failure.

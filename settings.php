@@ -36,7 +36,7 @@ if ($hassiteconfig) {
     // Add security patches page.
     $ADMIN->add('local_securitypatcher', new admin_externalpage('addsecuritypatches',
             get_string('settings:addsecuritypatches', 'local_securitypatcher'),
-            new moodle_url('/local/securitypatcher/add.php')
+            new moodle_url('/local/securitypatcher/patch.php')
     ));
     // Add reports page.
     $ADMIN->add('local_securitypatcher', new admin_externalpage('reportsecuritypatches',
