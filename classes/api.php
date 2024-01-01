@@ -105,7 +105,7 @@ class api {
         $actions = '';
 
         // Edit action.
-        $editurl = new \moodle_url('/local/securitypatcher/add.php', ['id' => $patch->id]);
+        $editurl = new \moodle_url('/local/securitypatcher/patch.php', ['id' => $patch->id]);
         $actions .= '<a href="' . $editurl . '" class="edit-patch-action btn btn-secondary"
                         data-patch="' . $patch->id . '">
                         '. get_string('report:editaction', 'local_securitypatcher') .'
