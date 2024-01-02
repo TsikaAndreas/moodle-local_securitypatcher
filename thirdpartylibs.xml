@@ -70,11 +70,4 @@
         <version>0.2.7</version>
         <license>MIT</license>
     </library>
-    <library>
-        <location>amd/src/vfs_fonts.js</location>
-        <name>PDF Make Font Library</name>
-        <description>A JavaScript file with the pdf fonts.</description>
-        <version>0.2.7</version>
-        <license>MIT</license>
-    </library>
 </libraries>

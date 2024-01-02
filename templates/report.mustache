@@ -29,9 +29,10 @@
             {{/data}}
         </tbody>
     </table>
-<div class="table-wrapper">
+</div>
 {{#js}}
-    require(['local_securitypatcher/report'], function(Report) {
+    require(['local_securitypatcher/report', 'local_securitypatcher/jszip'], function(Report, Jszip) {
+        window.JSZip=Jszip;
         Report.init();
     });
 {{/js}}

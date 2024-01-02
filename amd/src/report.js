@@ -25,16 +25,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
         'local_securitypatcher/jquery.dataTables', 'local_securitypatcher/dataTables.bootstrap4',
         'local_securitypatcher/dataTables.buttons', 'local_securitypatcher/buttons.bootstrap4',
         'local_securitypatcher/buttons.colVis', 'local_securitypatcher/buttons.html5',
-        'local_securitypatcher/buttons.print', 'local_securitypatcher/dataTables.responsive',
-        'local_securitypatcher/responsive.bootstrap4'],
+        'local_securitypatcher/buttons.print', 'local_securitypatcher/pdfmake',
+        'local_securitypatcher/dataTables.responsive', 'local_securitypatcher/responsive.bootstrap4'],
     function ($, Ajax, Notification, Repository, Prefetch, Str, DataTable
 ) {
-
     function load_datatable() {
         $(document).ready(function () {
             // Initialize dataTable.
             var table = $('#reporttable').DataTable({
-                dom: 'Brtip',
+                dom: 'Brtrip',
                 responsive: true,
                 columnDefs: [
                     { responsivePriority: 1, targets: 0 },
@@ -47,7 +46,49 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 order: [
                     [0, 'desc']
                 ],
-                buttons: ['colvis', 'copy', 'csv', 'excel', 'pdf', 'print'],
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        columns: ':not(.noVis)'
+                    },
+                    {
+                        extend: 'collection',
+                        className: 'exportButton',
+                        text: 'Export',
+                        buttons: [
+                            {
+                                extend: 'copy',
+                                exportOptions: {
+                                    columns: ':visible:not(.noVis)',
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                exportOptions: {
+                                    columns: ':visible:not(.noVis)',
+                                }
+                            },
+                            {
+                                extend: 'excel',
+                                exportOptions: {
+                                    columns: ':visible:not(.noVis)',
+                                }
+                            },
+                            {
+                                extend: 'pdf',
+                                exportOptions: {
+                                    columns: ':visible:not(.noVis)',
+                                }
+                            },
+                            {
+                                extend: 'csv',
+                                exportOptions: {
+                                    columns: ':visible:not(.noVis)',
+                                }
+                            },
+                        ]
+                    },
+                ],
                 initComplete: function(settings, json) {
                     datatable_loader(false);
                 },
