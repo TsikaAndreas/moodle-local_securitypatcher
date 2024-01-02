@@ -30,7 +30,7 @@ use stdClass;
 use stored_file;
 
 /**
- * Patch manager class. Is responsible for the management of security patches.
+ * Patch manager class responsible for the management of security patches.
  *
  * @package   local_securitypatcher
  * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>

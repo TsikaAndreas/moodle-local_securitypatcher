@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<libraries>
+    <library>
+        <location>amd/src/jquery.dataTables.js</location>
+        <name>DataTables</name>
+        <description>Enhanced HTML tables with advanced interaction controls.</description>
+        <version>1.13.6</version>
+        <license>MIT</license>
+    </library>
+    <library>
+        <location>amd/src/dataTables.responsive.js</location>
+        <name>Responsive Datatables</name>
+        <description>Dynamically show and hide columns based on the browser size.</description>
+        <version>2.5.0</version>
+        <license>MIT</license>
+    </library>
+    <library>
+        <location>amd/src/dataTables.buttons.js</location>
+        <name>Datatable Buttons</name>
+        <description>A common framework for user interaction buttons.</description>
+        <version>2.4.2</version>
+        <license>MIT</license>
+    </library>
+    <library>
+        <location>amd/src/dataTables.bootstrap4.js</location>
+        <name>Datatable Bootstrap 4</name>
+        <description>DataTables Bootstrap 4 integration.</description>
+        <version>1.13.6</version>
+        <license>MIT</license>
+    </library>
+    <library>
+        <location>amd/src/buttons.print.js</location>
+        <name>Datatable Print Button</name>
+        <description>Print button for Buttons and DataTables.</description>
+        <version>2.4.2</version>
+        <license>MIT</license>
+    </library>
+    <library>
+        <location>amd/src/buttons.html5.js</location>
+        <name>Datatable HTML5 Buttons</name>
+        <description>HTML5 export buttons for Buttons and DataTables.</description>
+        <version>2.4.2</version>
+        <license>MIT</license>
+    </library>
+    <library>
+        <location>amd/src/buttons.colVis.js</location>
+        <name>Datatable Column Visibility Button</name>
+        <description>Column visibility buttons for Buttons and DataTables.</description>
+        <version>2.4.2</version>
+        <license>MIT</license>
+    </library>
+    <library>
+        <location>amd/src/buttons.bootstrap4.js</location>
+        <name>Datatable Bootstrap Buttons</name>
+        <description>Bootstrap integration for DataTables' Buttons</description>
+        <version>2.4.2</version>
+        <license>MIT</license>
+    </library>
+    <library>
+        <location>amd/src/jszip.js</location>
+        <name>JSZIP Library</name>
+        <description>A JavaScript class for generating and reading zip files</description>
+        <version>3.10.1</version>
+        <license>MIT</license>
+    </library>
+    <library>
+        <location>amd/src/pdfmake.js</location>
+        <name>PDF Make Library</name>
+        <description>A JavaScript class for pdf files</description>
+        <version>0.2.7</version>
+        <license>MIT</license>
+    </library>
+    <library>
+        <location>amd/src/vfs_fonts.js</location>
+        <name>PDF Make Font Library</name>
+        <description>A JavaScript file with the pdf fonts.</description>
+        <version>0.2.7</version>
+        <license>MIT</license>
+    </library>
+</libraries>
