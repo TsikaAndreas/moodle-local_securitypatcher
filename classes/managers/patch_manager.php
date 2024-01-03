@@ -54,6 +54,11 @@ class patch_manager {
     protected const PATCH_RESTORED = 2;
 
     /**
+     * @var int The identifier of the security patch.
+     */
+    protected int $patchid;
+
+    /**
      * @var string The filearea that the security patches are stored.
      */
     public static string $filearea = 'local_securitypatcher_security_patches';
@@ -158,16 +163,15 @@ class patch_manager {
     /**
      * Retrieves a stored patch file from the Moodle file storage.
      *
-     * @param int $patchid The unique identifier for the security patch.
      * @return false|stored_file|null Returns the stored file or false if not found.
      */
-    public function get_stored_file(int $patchid): stored_file|bool|null {
+    public function get_stored_file(): stored_file|bool|null {
         global $DB;
 
         $contextid = context_system::instance()->id;
 
         // Retrieve the patch record from the table.
-        $record = $DB->get_record('local_securitypatcher', ['id' => $patchid], '*', MUST_EXIST);
+        $record = $DB->get_record('local_securitypatcher', ['id' => $this->patchid], '*', MUST_EXIST);
 
         // Get the Moodle file storage.
         $fs = get_file_storage();
@@ -186,5 +190,29 @@ class patch_manager {
                 $record->filepath,
                 $record->filename
         );
+    }
+
+    /**
+     * Apply a patch identified by its ID.
+     *
+     * @param int $patchid The ID of the patch to be applied.
+     * @return bool Returns true if the patch is successfully applied, otherwise false.
+     */
+    public function apply_patch(int $patchid): bool {
+        global $DB;
+
+        if (!$DB->record_exists('local_securitypatcher', ['id' => $patchid])) {
+            return false;
+        }
+        $this->patchid = $patchid;
+
+        $file = $this->get_stored_file();
+
+        if (empty($file)) {
+            return false;
+        }
+
+        // TODO: Add the apply patch logic.
+        return true;
     }
 }

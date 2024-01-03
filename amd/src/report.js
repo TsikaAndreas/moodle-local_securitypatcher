@@ -191,7 +191,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                     var args = {
                         patchid: patch,
                     };
-                    Repository.restore_patch(args)
+                    Repository.apply_patch(args)
                         .then(function(res) {
                             if (res.result){
                                 // table.row(node.closest('tr')).remove().draw();
