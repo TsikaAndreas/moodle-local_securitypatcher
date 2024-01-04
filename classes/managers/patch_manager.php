@@ -215,4 +215,29 @@ class patch_manager {
         // TODO: Add the apply patch logic.
         return true;
     }
+
+    /**
+     * Restore a patch identified by its ID.
+     * The security patch code changes will be reverted.
+     *
+     * @param int $patchid The ID of the patch to be restored.
+     * @return bool Returns true if the patch is successfully restored, otherwise false.
+     */
+    public function restore_patch(int $patchid): bool {
+        global $DB;
+
+        if (!$DB->record_exists('local_securitypatcher', ['id' => $patchid])) {
+            return false;
+        }
+        $this->patchid = $patchid;
+
+        $file = $this->get_stored_file();
+
+        if (empty($file)) {
+            return false;
+        }
+
+        // TODO: Add the restore patch logic.
+        return true;
+    }
 }
