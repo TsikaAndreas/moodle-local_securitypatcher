@@ -62,8 +62,6 @@ class apply_patch extends external_api {
      * @return array
      */
     public static function execute(int $patchid): array {
-        global $DB;
-
         // Validate all the parameters.
         $params = self::validate_parameters(self::execute_parameters(), [
                 'patchid' => $patchid,

@@ -48,7 +48,7 @@ class api {
                 'maxbytes' => $CFG->maxbytes,                       // Maximum file size in bytes.
                 'areamaxbytes' => FILE_AREA_MAX_BYTES_UNLIMITED,    // Maximum bytes per file area (unlimited).
                 'subdirs' => 0,                                     // Allow subdirectories (0 for no subdirectories).
-                'accepted_types' => ['.diff'],                      // Accepted file types (e.g., .diff files).
+                'accepted_types' => ['.patch'],                      // Accepted file types (e.g., .patch files).
         ];
     }
 

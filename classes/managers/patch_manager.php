@@ -59,6 +59,21 @@ class patch_manager {
     protected int $patchid;
 
     /**
+     * @var array $patchoutput An array to store the output generated during patch operations.
+     *                        This array holds the output messages, logs, or data generated while applying patches.
+     */
+    private array $patchoutput = [];
+
+    /**
+     * @var int|null $patchstatus Represents the status of the patch operation.
+     *                            This attribute holds an integer value indicating the status of a patch operation.
+     *                            It can be null if the status is not yet set or determined.
+     *                            - When set to 0, it indicates a successful execution of the patch operation.
+     *                            - When set to 1, it signifies that an error occurred during the patch operation.
+     */
+    private ?int $patchstatus = null;
+
+    /**
      * @var string The filearea that the security patches are stored.
      */
     public static string $filearea = 'local_securitypatcher_security_patches';
@@ -120,7 +135,7 @@ class patch_manager {
         $patch->id = $patchid;
 
         // Update the attachments.
-        $formdata = file_postupdate_standard_filemanager($formdata,'attachments', api::get_patch_filemanager_options(),
+        $formdata = file_postupdate_standard_filemanager($formdata, 'attachments', api::get_patch_filemanager_options(),
                 $context, self::$component, self::$filearea, $patch->id);
 
         // Update the 'attachments' field in the patch object.
@@ -182,14 +197,35 @@ class patch_manager {
         }
 
         // Retrieve the file.
-        return $fs->get_file(
-                $contextid,
-                self::$component,
-                self::$filearea,
-                (int) $record->itemid,
-                $record->filepath,
-                $record->filename
-        );
+        $areafiles = $fs->get_area_files($contextid, self::$component, self::$filearea, (int) $record->id);
+        foreach ($areafiles as $file) {
+            if ($file->get_filesize() > 0) {
+                return $file;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get the local file path associated with a stored_file object.
+     *
+     * @param stored_file $file The stored_file object for which to retrieve the local file path.
+     *
+     * @return string The local file path associated with the stored_file object.
+     */
+    public function get_patch_path(stored_file $file): string {
+        $fs = get_file_storage();
+        return $fs->get_file_system()->get_local_path_from_storedfile($file);
+    }
+
+    /**
+     * Retrieves the configured path to the Git command.
+     *
+     * @return false|mixed|object|string The path to the Git command if configured, or false if not set.
+     */
+    public function get_git_command_path(): mixed {
+        return get_config('local_securitypatcher', 'git');
     }
 
     /**
@@ -199,7 +235,12 @@ class patch_manager {
      * @return bool Returns true if the patch is successfully applied, otherwise false.
      */
     public function apply_patch(int $patchid): bool {
-        global $DB;
+        global $DB, $CFG;
+
+        $gitpath = $this->get_git_command_path();
+        if (empty($gitpath)) {
+            return false;
+        }
 
         if (!$DB->record_exists('local_securitypatcher', ['id' => $patchid])) {
             return false;
@@ -207,12 +248,14 @@ class patch_manager {
         $this->patchid = $patchid;
 
         $file = $this->get_stored_file();
-
         if (empty($file)) {
             return false;
         }
+        $filepath = $this->get_patch_path($file);
 
-        // TODO: Add the apply patch logic.
+        $command = "cd $CFG->dirroot && $gitpath apply --verbose $filepath 2>&1";
+        exec($command, $this->patchoutput, $this->patchstatus);
+
         return true;
     }
 
@@ -224,7 +267,12 @@ class patch_manager {
      * @return bool Returns true if the patch is successfully restored, otherwise false.
      */
     public function restore_patch(int $patchid): bool {
-        global $DB;
+        global $DB, $CFG;
+
+        $gitpath = $this->get_git_command_path();
+        if (empty($gitpath)) {
+            return false;
+        }
 
         if (!$DB->record_exists('local_securitypatcher', ['id' => $patchid])) {
             return false;
@@ -232,12 +280,14 @@ class patch_manager {
         $this->patchid = $patchid;
 
         $file = $this->get_stored_file();
-
         if (empty($file)) {
             return false;
         }
+        $filepath = $this->get_patch_path($file);
 
-        // TODO: Add the restore patch logic.
+        $command = "cd $CFG->dirroot && $gitpath apply --verbose -R $filepath 2>&1";
+        exec($command, $this->patchoutput, $this->patchstatus);
+
         return true;
     }
 }

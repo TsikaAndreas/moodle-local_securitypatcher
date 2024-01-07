@@ -31,6 +31,14 @@ if ($hassiteconfig) {
 
     $settingspage = new admin_settingpage('managelocalsecuritypatcher',
             new lang_string('settings:manage', 'local_securitypatcher'));
+
+    $settingspage->add(new admin_setting_configexecutable(
+            'local_securitypatcher/git',
+            new lang_string('settings:manage:git', 'local_securitypatcher'),
+            new lang_string('settings:manage:git_desc', 'local_securitypatcher'),
+            ''
+    ));
+
     $ADMIN->add('local_securitypatcher', $settingspage);
 
     // Add security patches page.
