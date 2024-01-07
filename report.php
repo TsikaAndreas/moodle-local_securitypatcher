@@ -38,6 +38,8 @@ $PAGE->set_url('/local/securitypatcher/report.php', []);
 $PAGE->set_title(get_string('report:title', 'local_securitypatcher'));
 $PAGE->set_heading(get_string('report:heading', 'local_securitypatcher'));
 
+require_capability('local/securitypatcher:viewreports', $context);
+
 // Load datatable css.
 api::load_datatables_css();
 

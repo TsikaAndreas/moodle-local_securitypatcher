@@ -41,6 +41,14 @@ $string['settings:addsecuritypatches'] = 'Add Security Patches';
 $string['settings:report'] = 'Security Patches Report';
 
 // Capabilities.
+$string['securitypatcher:viewpatch'] = 'View security patch information';
+$string['securitypatcher:addpatch'] = 'Add security patches';
+$string['securitypatcher:editpatch'] = 'Edit security patches';
+$string['securitypatcher:viewreports'] = 'View the security patch reports';
+$string['securitypatcher:config'] = 'Change the security patcher configuration';
+$string['securitypatcher:deletepatch'] = 'Delete security patch';
+$string['securitypatcher:restorepatch'] = 'Restore security patch';
+$string['securitypatcher:applypatch'] = 'Apply security patch';
 
 // Form.
 $string['patch:title'] = 'Add Security Patch';

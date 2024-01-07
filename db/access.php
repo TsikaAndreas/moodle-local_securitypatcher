@@ -34,6 +34,14 @@ $capabilities = [
                 ],
         ],
 
+        'local/securitypatcher:addpatch' => [
+                'riskbitmask' => RISK_SPAM | RISK_XSS,
+                'captype' => 'write',
+                'contextlevel' => CONTEXT_SYSTEM,
+                'archetypes' => [
+                ],
+        ],
+
         'local/securitypatcher:editpatch' => [
                 'riskbitmask' => RISK_SPAM | RISK_XSS,
                 'captype' => 'write',
@@ -49,7 +57,7 @@ $capabilities = [
                 ],
         ],
 
-        'local/securitypatcher:editsettings' => [
+        'local/securitypatcher:config' => [
                 'riskbitmask' => RISK_CONFIG,
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM,

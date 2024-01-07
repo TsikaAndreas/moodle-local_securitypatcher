@@ -69,8 +69,8 @@ class restore_patch extends external_api {
                 'patchid' => $patchid,
         ]);
 
-        // TODO: Perform security checks.
         $context = \context_system::instance();
+        require_capability('local/securitypatcher:restorepatch', $context);
 
         $manager = new patch_manager();
         $result = $manager->restore_patch($params['patchid']);

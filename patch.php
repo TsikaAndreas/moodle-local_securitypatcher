@@ -50,9 +50,11 @@ $manager = new patch_manager();
 
 // Check if an ID is provided, indicating whether this is a new or existing security patch.
 if (empty($id)) {
+    require_capability('local/securitypatcher:addpatch', $context);
     $securitypatch = new stdClass();
     $securitypatch->id = null;
 } else {
+    require_capability('local/securitypatcher:editpatch', $context);
     $securitypatch = $manager->get_patch($id);
 }
 

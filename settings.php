@@ -29,26 +29,33 @@ if ($hassiteconfig) {
     $manage = new admin_category('local_securitypatcher', get_string('pluginname', 'local_securitypatcher'));
     $ADMIN->add('server', $manage);
 
+    // Add manage settings page.
     $settingspage = new admin_settingpage('managelocalsecuritypatcher',
-            new lang_string('settings:manage', 'local_securitypatcher'));
+            new lang_string('settings:manage', 'local_securitypatcher'),
+            'local/securitypatcher:config');
 
-    $settingspage->add(new admin_setting_configexecutable(
-            'local_securitypatcher/git',
-            new lang_string('settings:manage:git', 'local_securitypatcher'),
-            new lang_string('settings:manage:git_desc', 'local_securitypatcher'),
-            ''
-    ));
+    if ($ADMIN->fulltree) {
+        // Git command.
+        $settingspage->add(new admin_setting_configexecutable(
+                'local_securitypatcher/git',
+                new lang_string('settings:manage:git', 'local_securitypatcher'),
+                new lang_string('settings:manage:git_desc', 'local_securitypatcher'),
+                ''
+        ));
+    }
 
     $ADMIN->add('local_securitypatcher', $settingspage);
 
     // Add security patches page.
     $ADMIN->add('local_securitypatcher', new admin_externalpage('addsecuritypatches',
             get_string('settings:addsecuritypatches', 'local_securitypatcher'),
-            new moodle_url('/local/securitypatcher/patch.php')
+            new moodle_url('/local/securitypatcher/patch.php'),
+            'local/securitypatcher:addpatch'
     ));
     // Add reports page.
     $ADMIN->add('local_securitypatcher', new admin_externalpage('reportsecuritypatches',
             get_string('settings:report', 'local_securitypatcher'),
-            new moodle_url('/local/securitypatcher/report.php')
+            new moodle_url('/local/securitypatcher/report.php'),
+            'local/securitypatcher:viewreports'
     ));
 }

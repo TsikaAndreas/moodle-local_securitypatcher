@@ -67,8 +67,8 @@ class apply_patch extends external_api {
                 'patchid' => $patchid,
         ]);
 
-        // TODO: Perform security checks.
         $context = \context_system::instance();
+        require_capability('local/securitypatcher:applypatch', $context);
 
         $manager = new patch_manager();
         $result = $manager->apply_patch($params['patchid']);
