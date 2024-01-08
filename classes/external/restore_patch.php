@@ -73,7 +73,7 @@ class restore_patch extends external_api {
         require_capability('local/securitypatcher:restorepatch', $context);
 
         $manager = new patch_manager();
-        $result = $manager->restore_patch($params['patchid']);
+        $result = $manager->perform_patch_operation($params['patchid'], 'restore');
 
         // Return a value as described in the returns function.
         return array('result' => $result);

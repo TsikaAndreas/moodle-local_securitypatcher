@@ -56,7 +56,7 @@ class patch_manager {
     /**
      * @var int The identifier of the security patch.
      */
-    protected int $patchid;
+    private int $patchid;
 
     /**
      * @var array $patchoutput An array to store the output generated during patch operations.
@@ -72,6 +72,11 @@ class patch_manager {
      *                            - When set to 1, it signifies that an error occurred during the patch operation.
      */
     private ?int $patchstatus = null;
+
+    /**
+     * @var array|string[] Valid patch operations.
+     */
+    private array $validpatchoperations = ['apply', 'restore'];
 
     /**
      * @var string The filearea that the security patches are stored.
@@ -180,7 +185,7 @@ class patch_manager {
      *
      * @return false|stored_file|null Returns the stored file or false if not found.
      */
-    public function get_stored_file(): stored_file|bool|null {
+    private function get_stored_file(): stored_file|bool|null {
         global $DB;
 
         $contextid = context_system::instance()->id;
@@ -214,7 +219,7 @@ class patch_manager {
      *
      * @return string The local file path associated with the stored_file object.
      */
-    public function get_patch_path(stored_file $file): string {
+    private function get_patch_path(stored_file $file): string {
         $fs = get_file_storage();
         return $fs->get_file_system()->get_local_path_from_storedfile($file);
     }
@@ -224,18 +229,23 @@ class patch_manager {
      *
      * @return false|mixed|object|string The path to the Git command if configured, or false if not set.
      */
-    public function get_git_command_path(): mixed {
+    private function get_git_command_path(): mixed {
         return get_config('local_securitypatcher', 'git');
     }
 
     /**
-     * Apply a patch identified by its ID.
+     * Perform a patch operation (apply or restore) identified by its ID.
      *
-     * @param int $patchid The ID of the patch to be applied.
-     * @return bool Returns true if the patch is successfully applied, otherwise false.
+     * @param int $patchid The ID of the patch to be operated on.
+     * @param string $operation The operation to perform: 'apply' or 'restore'.
+     * @return bool Returns true if the operation is successful, otherwise false.
      */
-    public function apply_patch(int $patchid): bool {
+    public function perform_patch_operation(int $patchid, string $operation): bool {
         global $DB, $CFG;
+
+        if (!in_array($operation, $this->validpatchoperations, true)) {
+            return false; // Invalid operation.
+        }
 
         $gitpath = $this->get_git_command_path();
         if (empty($gitpath)) {
@@ -253,39 +263,8 @@ class patch_manager {
         }
         $filepath = $this->get_patch_path($file);
 
-        $command = "cd $CFG->dirroot && $gitpath apply --verbose $filepath 2>&1";
-        exec($command, $this->patchoutput, $this->patchstatus);
-
-        return true;
-    }
-
-    /**
-     * Restore a patch identified by its ID.
-     * The security patch code changes will be reverted.
-     *
-     * @param int $patchid The ID of the patch to be restored.
-     * @return bool Returns true if the patch is successfully restored, otherwise false.
-     */
-    public function restore_patch(int $patchid): bool {
-        global $DB, $CFG;
-
-        $gitpath = $this->get_git_command_path();
-        if (empty($gitpath)) {
-            return false;
-        }
-
-        if (!$DB->record_exists('local_securitypatcher', ['id' => $patchid])) {
-            return false;
-        }
-        $this->patchid = $patchid;
-
-        $file = $this->get_stored_file();
-        if (empty($file)) {
-            return false;
-        }
-        $filepath = $this->get_patch_path($file);
-
-        $command = "cd $CFG->dirroot && $gitpath apply --verbose -R $filepath 2>&1";
+        $patchcommand = ($operation === 'restore') ? '-R' : ''; // Adjust the patch command based on operation.
+        $command = "cd $CFG->dirroot && $gitpath apply --verbose $patchcommand $filepath 2>&1";
         exec($command, $this->patchoutput, $this->patchstatus);
 
         return true;
