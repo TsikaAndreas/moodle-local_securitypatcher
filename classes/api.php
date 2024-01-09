@@ -24,6 +24,8 @@
 
 namespace local_securitypatcher;
 
+use local_securitypatcher\managers\patch_manager;
+
 /**
  * General purpose api class.
  *
@@ -81,6 +83,7 @@ class api {
             $data = null;
             $data['id'] = $record->id;
             $data['name'] = $record->name;
+            $data['lastaction'] = self::get_last_action_name($record->status);
             $data['applied'] = self::get_date($record->timeapplied);
             $data['restored'] = self::get_date($record->timerestored);
             $data['modified'] = self::get_date($record->timemodified);
@@ -90,6 +93,20 @@ class api {
         }
         $records->close();
         return $patches;
+    }
+
+    /**
+     * Retrieves the name of the last action performed based on the patch status.
+     *
+     * @param int $status The status of the patch.
+     * @return \lang_string|string The name of the last action performed.
+     */
+    private static function get_last_action_name(int $status): \lang_string|string {
+        return match ($status) {
+            patch_manager::PATCH_APPLIED => get_string('apply', 'local_securitypatcher'),
+            patch_manager::PATCH_RESTORED => get_string('restore', 'local_securitypatcher'),
+            default => '',
+        };
     }
 
     /**

@@ -9,6 +9,7 @@
         <thead>
         <tr>
             <th>{{#str}} datatable:name, local_securitypatcher {{/str}}</th>
+            <th>{{#str}} datatable:lastaction, local_securitypatcher {{/str}}</th>
             <th>{{#str}} datatable:created, local_securitypatcher {{/str}}</th>
             <th>{{#str}} datatable:modified, local_securitypatcher {{/str}}</th>
             <th>{{#str}} datatable:applied, local_securitypatcher {{/str}}</th>
@@ -20,6 +21,7 @@
             {{#data}}
                 <tr>
                     <td>{{name}}</td>
+                    <td>{{lastaction}}</td>
                     <td>{{created}}</td>
                     <td>{{modified}}</td>
                     <td>{{applied}}</td>

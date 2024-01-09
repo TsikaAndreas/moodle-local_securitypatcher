@@ -42,6 +42,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                     { targets: 2 },
                     { targets: 3 },
                     { targets: 4 },
+                    { targets: 5 },
                 ],
                 order: [
                     [0, 'desc']

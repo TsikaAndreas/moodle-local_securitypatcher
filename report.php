@@ -28,8 +28,6 @@ use local_securitypatcher\api;
 global $CFG, $OUTPUT, $PAGE;
 
 require_login();
-$CFG->cachejs = false;
-$CFG->cachetemplates = false;
 // Set page configuration.
 $PAGE->set_pagelayout('admin');
 $context = context_system::instance();

@@ -30,6 +30,8 @@ $string['pluginname'] = 'Security Patcher';
 $string['loading'] = 'Loading...';
 $string['confirm_title'] = 'Confirm';
 $string['confirm_cancel'] = 'Cancel';
+$string['apply'] = 'Apply';
+$string['restore'] = 'Restore';
 
 // Settings.
 $string['settings:manage'] = 'Manage Security Patcher';
@@ -88,6 +90,7 @@ $string['report:patch_confirmrestorebtn'] = 'Restore';
 // Datatables.
 $string['datatable:id'] = 'ID';
 $string['datatable:name'] = 'Patch Name';
+$string['datatable:lastaction'] = 'Last Action';
 $string['datatable:filename'] = 'File Name';
 $string['datatable:created'] = 'Created At';
 $string['datatable:modified'] = 'Modified At';
