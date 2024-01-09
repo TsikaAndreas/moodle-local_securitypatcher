@@ -62,8 +62,6 @@ class restore_patch extends external_api {
      * @return array
      */
     public static function execute(int $patchid): array {
-        global $DB;
-
         // Validate all the parameters.
         $params = self::validate_parameters(self::execute_parameters(), [
                 'patchid' => $patchid,
@@ -73,7 +71,8 @@ class restore_patch extends external_api {
         require_capability('local/securitypatcher:restorepatch', $context);
 
         $manager = new patch_manager();
-        $result = $manager->perform_patch_operation($params['patchid'], 'restore');
+        $manager->set_operation_action('restore');
+        $result = $manager->perform_patch_operation($params['patchid']);
 
         // Return a value as described in the returns function.
         return array('result' => $result);

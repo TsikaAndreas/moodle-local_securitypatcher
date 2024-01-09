@@ -38,45 +38,30 @@ use stored_file;
  */
 class patch_manager {
 
-    /**
-     * Patch is clean, not applied.
-     */
-    protected const PATCH_CLEAN = 0;
+    /** Patch is clean, not applied. */
+    public const PATCH_CLEAN = 0;
+    /** Patch has been applied. */
+    public const PATCH_APPLIED = 1;
+    /** Patch has been restored. */
+    public const PATCH_RESTORED = 2;
 
-    /**
-     * Patch has been applied.
-     */
-    protected const PATCH_APPLIED = 1;
-
-    /**
-     * Patch has been restored.
-     */
-    protected const PATCH_RESTORED = 2;
-
-    /**
-     * @var int The identifier of the security patch.
-     */
+    /** @var int The identifier of the security patch. */
     private int $patchid;
-
-    /**
-     * @var array $patchoutput An array to store the output generated during patch operations.
-     *                        This array holds the output messages, logs, or data generated while applying patches.
-     */
-    private array $patchoutput = [];
-
-    /**
-     * @var int|null $patchstatus Represents the status of the patch operation.
-     *                            This attribute holds an integer value indicating the status of a patch operation.
-     *                            It can be null if the status is not yet set or determined.
-     *                            - When set to 0, it indicates a successful execution of the patch operation.
-     *                            - When set to 1, it signifies that an error occurred during the patch operation.
-     */
-    private ?int $patchstatus = null;
-
-    /**
-     * @var array|string[] Valid patch operations.
-     */
+    /** @var object The current security patch in use. */
+    private object $currentpatch;
+    /** @var array|string[] Valid patch operations. */
     private array $validpatchoperations = ['apply', 'restore'];
+    /** @var string The operation action. */
+    private string $operationaction;
+
+    /** @var array $operationoutput An array to store the output generated during patch operations. */
+    private array $operationoutput = [];
+    /**
+     * @var int $operationstatus Represents the status of the patch operation.
+     *                            - When set to 0, it indicates a successful execution of the operation.
+     *                            - When set to 1, it indicates that an error occurred during the operation.
+     */
+    private int $operationstatus;
 
     /**
      * @var string The filearea that the security patches are stored.
@@ -191,18 +176,14 @@ class patch_manager {
         $contextid = context_system::instance()->id;
 
         // Retrieve the patch record from the table.
-        $record = $DB->get_record('local_securitypatcher', ['id' => $this->patchid], '*', MUST_EXIST);
+        if (empty($this->currentpatch)) {
+            $this->currentpatch = $DB->get_record('local_securitypatcher', ['id' => $this->patchid], '*', MUST_EXIST);
+        }
 
         // Get the Moodle file storage.
         $fs = get_file_storage();
-
-        // If the file storage is not available, return false.
-        if ($fs === null) {
-            return false;
-        }
-
         // Retrieve the file.
-        $areafiles = $fs->get_area_files($contextid, self::$component, self::$filearea, (int) $record->id);
+        $areafiles = $fs->get_area_files($contextid, self::$component, self::$filearea, (int) $this->currentpatch->id);
         foreach ($areafiles as $file) {
             if ($file->get_filesize() > 0) {
                 return $file;
@@ -234,39 +215,99 @@ class patch_manager {
     }
 
     /**
+     * Verifies if the operation action is set and matches one of the valid patch operations.
+     *
+     * @throws \RuntimeException When no operation action is found or if the provided action is invalid.
+     * @return void
+     */
+    private function check_operation_action(): void {
+        if (empty($this->operationaction)) {
+            throw new \RuntimeException('No operation action was found.', 500);
+        }
+        if (!in_array($this->operationaction, $this->validpatchoperations, true)) {
+            throw new \RuntimeException("Invalid operation action '$this->operationaction' was provided.", 500);
+        }
+    }
+
+    /**
      * Perform a patch operation (apply or restore) identified by its ID.
      *
      * @param int $patchid The ID of the patch to be operated on.
-     * @param string $operation The operation to perform: 'apply' or 'restore'.
      * @return bool Returns true if the operation is successful, otherwise false.
      */
-    public function perform_patch_operation(int $patchid, string $operation): bool {
+    public function perform_patch_operation(int $patchid): bool {
         global $DB, $CFG;
 
-        if (!in_array($operation, $this->validpatchoperations, true)) {
-            return false; // Invalid operation.
-        }
+        $this->check_operation_action();
 
         $gitpath = $this->get_git_command_path();
         if (empty($gitpath)) {
-            return false;
+            throw new \RuntimeException('Git command path was not found!', 500);
         }
 
-        if (!$DB->record_exists('local_securitypatcher', ['id' => $patchid])) {
-            return false;
-        }
+        $this->currentpatch = $DB->get_record('local_securitypatcher', ['id' => $patchid], '*', MUST_EXIST);
         $this->patchid = $patchid;
 
         $file = $this->get_stored_file();
         if (empty($file)) {
-            return false;
+            throw new \RuntimeException("The security patch file of '{$this->currentpatch->name}' was not found!",404);
         }
         $filepath = $this->get_patch_path($file);
 
-        $patchcommand = ($operation === 'restore') ? '-R' : ''; // Adjust the patch command based on operation.
+        // Execute the operation.
+        $patchcommand = ($this->operationaction === 'restore') ? '-R' : ''; // Adjust the patch command based on operation.
         $command = "cd $CFG->dirroot && $gitpath apply --verbose $patchcommand $filepath 2>&1";
         exec($command, $this->patchoutput, $this->patchstatus);
 
+        $this->process_output();
+
         return true;
+    }
+
+    /**
+     * Update the security patch status.
+     *
+     * @return void
+     */
+    private function update_patch_status(): void {
+        global $DB;
+        switch ($this->operationaction){
+            case 'apply':
+                $this->currentpatch->status = self::PATCH_APPLIED;
+                $this->currentpatch->timeapplied = time();
+                break;
+            case 'restore':
+                $this->currentpatch->status = self::PATCH_RESTORED;
+                $this->currentpatch->timerestored = time();
+                break;
+            default:
+                return;
+        }
+        $DB->update_record('local_securitypatcher', $this->currentpatch);
+    }
+
+    /**
+     * Processes the output after performing the patch operations.
+     *
+     * @return void
+     */
+    private function process_output(): void {
+        $this->update_patch_status();
+    }
+
+    /**
+     * Sets the current security patch in use.
+     *
+     * @param object $currentpatch The current security patch object in use.
+     */
+    public function set_current_patch(object $currentpatch): void {
+        $this->currentpatch = $currentpatch;
+    }
+
+    /**
+     * @param string $action The operation action.
+     */
+    public function set_operation_action(string $action): void {
+        $this->operationaction = $action;
     }
 }

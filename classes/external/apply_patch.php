@@ -71,7 +71,8 @@ class apply_patch extends external_api {
         require_capability('local/securitypatcher:applypatch', $context);
 
         $manager = new patch_manager();
-        $result = $manager->perform_patch_operation($params['patchid'], 'apply');
+        $manager->set_operation_action('apply');
+        $result = $manager->perform_patch_operation($params['patchid']);
 
         // Return a value as described in the returns function.
         return array('result' => $result);
