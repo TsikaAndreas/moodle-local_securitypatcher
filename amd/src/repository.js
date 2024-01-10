@@ -92,11 +92,26 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
         return promise;
     };
 
+    var get_patch_info = function (args) {
+
+        var request = {
+            methodname: 'local_securitypatcher_get_patch_info',
+            args: args
+        };
+
+        var promise = Ajax.call([request])[0];
+
+        promise.fail(Notification.exception);
+
+        return promise;
+    };
+
     return {
         get_patches: get_patches,
         delete_patch: delete_patch,
         apply_patch: apply_patch,
         restore_patch: restore_patch,
         get_patch_reports: get_patch_reports,
+        get_patch_info: get_patch_info,
     };
 });

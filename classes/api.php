@@ -124,22 +124,32 @@ class api {
         // Edit action.
         $editurl = new \moodle_url('/local/securitypatcher/patch.php', ['id' => $patch->id]);
         $actions .= '<a href="' . $editurl . '" class="edit-patch-action btn btn-secondary"
-                        data-patch="' . $patch->id . '">
+                        data-patch="' . $patch->id . '"
+                        title="'. get_string('report:editaction_title', 'local_securitypatcher') .'">
                         '. get_string('report:editaction', 'local_securitypatcher') .'
                     </a>';
 
+        // View action.
+        $actions .= '<button class="view-patch-action btn btn-info" data-patch="' . $patch->id . '"
+                       title="'. get_string('report:viewaction_title', 'local_securitypatcher') .'">
+                        '. get_string('report:viewaction', 'local_securitypatcher') .'
+                    </button>';
+
         // Apply action.
-        $actions .= '<button class="apply-patch-action btn btn-primary" data-patch="' . $patch->id . '">
+        $actions .= '<button class="apply-patch-action btn btn-primary" data-patch="' . $patch->id . '"
+                       title="'. get_string('report:applyaction_title', 'local_securitypatcher') .'">
                         '. get_string('report:applyaction', 'local_securitypatcher') .'
                     </button>';
 
         // Restore action.
-        $actions .= '<button class="restore-patch-action btn btn-warning" data-patch="' . $patch->id . '">
+        $actions .= '<button class="restore-patch-action btn btn-warning" data-patch="' . $patch->id . '"
+                       title="'. get_string('report:restoreaction_title', 'local_securitypatcher') .'">
                         '. get_string('report:restoreaction', 'local_securitypatcher') .'
                     </button>';
 
         // Delete action.
-        $actions .= '<button class="delete-patch-action btn btn-danger" data-patch="' . $patch->id . '">
+        $actions .= '<button class="delete-patch-action btn btn-danger" data-patch="' . $patch->id . '"
+                       title="'. get_string('report:deleteaction_title', 'local_securitypatcher') .'">
                         '. get_string('report:deleteaction', 'local_securitypatcher') .'
                     </button>';
 
