@@ -64,4 +64,12 @@ $functions = array(
                 'ajax' => true,
                 'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
         ),
+        'local_securitypatcher_get_patch_info' => array(
+                'classname' => 'local_securitypatcher\external\get_patch_info',
+                'description' => 'Get security patch info',
+                'capabilities' => 'local/securitypatcher:viewpatch',
+                'type' => 'read',
+                'ajax' => true,
+                'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        ),
 );

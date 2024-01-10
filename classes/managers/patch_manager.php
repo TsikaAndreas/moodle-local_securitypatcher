@@ -82,7 +82,7 @@ class patch_manager {
     public function get_patch(int $patchid): false|stdClass {
         global $DB;
 
-        return $DB->get_record('local_securitypatcher', ['id' => $patchid]);
+        return $DB->get_record('local_securitypatcher', ['id' => $patchid], '*', MUST_EXIST);
     }
 
     /**
@@ -168,9 +168,9 @@ class patch_manager {
     /**
      * Retrieves a stored patch file from the Moodle file storage.
      *
-     * @return false|stored_file|null Returns the stored file or false if not found.
+     * @return stored_file Returns the stored file or throws error if not found.
      */
-    private function get_stored_file(): stored_file|bool|null {
+    private function get_stored_file(): stored_file {
         global $DB;
 
         $contextid = context_system::instance()->id;
@@ -190,7 +190,7 @@ class patch_manager {
             }
         }
 
-        return false;
+        throw new \RuntimeException("The security patch file of '{$this->currentpatch->name}' was not found!",404);
     }
 
     /**
@@ -249,9 +249,6 @@ class patch_manager {
         $this->patchid = $patchid;
 
         $file = $this->get_stored_file();
-        if (empty($file)) {
-            throw new \RuntimeException("The security patch file of '{$this->currentpatch->name}' was not found!",404);
-        }
         $filepath = $this->get_patch_path($file);
 
         // Execute the operation.
@@ -293,6 +290,25 @@ class patch_manager {
      */
     private function process_output(): void {
         $this->update_patch_status();
+    }
+
+    /**
+     * Retrieves patch information by ID.
+     *
+     * @param int $patchid The ID of the patch to retrieve information for.
+     * @return stdClass An object containing patch information:
+     *  - name: The name of the patch.
+     *  - content: The content of the stored file associated with the patch.
+     */
+    public function get_patch_info(int $patchid): object {
+        $this->currentpatch = $this->get_patch($patchid);
+        $file = $this->get_stored_file();
+
+        $info = new stdClass();
+        $info->name = $this->currentpatch->name;
+        $info->content = $file->get_content();
+
+        return $info;
     }
 
     /**
