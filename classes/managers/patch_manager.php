@@ -57,11 +57,11 @@ class patch_manager {
     /** @var array $operationoutput An array to store the output generated during patch operations. */
     private array $operationoutput = [];
     /**
-     * @var int $operationstatus Represents the status of the patch operation.
+     * @var int|null $operationstatus Represents the status of the patch operation.
      *                            - When set to 0, it indicates a successful execution of the operation.
      *                            - When set to 1, it indicates that an error occurred during the operation.
      */
-    private int $operationstatus;
+    private ?int $operationstatus = null;
 
     /**
      * @var string The filearea that the security patches are stored.
@@ -254,7 +254,7 @@ class patch_manager {
         // Execute the operation.
         $patchcommand = ($this->operationaction === 'restore') ? '-R' : ''; // Adjust the patch command based on operation.
         $command = "cd $CFG->dirroot && $gitpath apply --verbose $patchcommand $filepath 2>&1";
-        exec($command, $this->patchoutput, $this->patchstatus);
+        exec($command, $this->operationoutput, $this->operationstatus);
 
         $this->process_output();
 
@@ -290,6 +290,38 @@ class patch_manager {
      */
     private function process_output(): void {
         $this->update_patch_status();
+        $this->create_report_data();
+    }
+
+    /**
+     * Parses the operation output array into a string.
+     *
+     * If the operation output array has multiple items, it concatenates them
+     * with newline characters. If there is only one item, it returns that item as a string.
+     *
+     * @return string The parsed operation output as a string.
+     */
+    private function parse_operation_output(): string {
+        return implode(PHP_EOL, $this->operationoutput);
+    }
+
+    /**
+     * Creates and inserts report data database.
+     *
+     * @return int The ID of the inserted record.
+     */
+    private function create_report_data(): int {
+        global $DB;
+
+        $record = new stdClass();
+        $record->patchid = $this->currentpatch->id;
+        $record->status = $this->operationstatus;
+        $record->data = $this->parse_operation_output();
+        $record->operation = $this->operationaction;
+        $record->timecreated = time();
+        $record->timemodified = time();
+
+        return $DB->insert_record('local_securitypatcher_data', $record, true);
     }
 
     /**
