@@ -34,18 +34,19 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
             // Initialize dataTable.
             var table = $('#patchestable').DataTable({
                 dom: 'Brtrip',
-                responsive: true,
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 0
+                    }
+                },
                 columnDefs: [
-                    { responsivePriority: 1, targets: 0 },
+                    { responsivePriority: 1, className: 'control', orderable: false, targets: 0, searchable: false },
+                    { responsivePriority: 1, targets: 1 },
                     { responsivePriority: 2, searchable: false, targets: -1, orderable: false },
-                    { targets: 1 },
-                    { targets: 2 },
-                    { targets: 3 },
-                    { targets: 4 },
-                    { targets: 5 },
                 ],
                 order: [
-                    [0, 'desc']
+                    [1, 'desc']
                 ],
                 buttons: [
                     {
@@ -92,34 +93,12 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 ],
                 initComplete: function(settings, json) {
                     datatable_loader(false);
+                    add_column_filters(this.api(), settings.aoColumns);
                 },
                 drawCallback: function() {
 
                 }
             });
-
-            // Place Search Fields in every column.
-            $('#patchestable thead tr').clone(true).appendTo('#patchestable thead');
-            $('#patchestable thead tr:eq(1) th').each(function (i, node) {
-                // Remove the sorting icons near the input.
-                var classesArray = $(node).attr('class').split(' ');
-                var sortClasses = classesArray.filter(function(className) {
-                    return className.includes('sorting');
-                });
-                $(node).removeClass(sortClasses.join(' '));
-                // Add the filters.
-                var title = $(this).text();
-                $(this).html('<input type="text" placeholder="' + title + '" style="width: 100%"/>');
-                $('input', this).on('keyup change', function () {
-                    if ($('#patchestable').DataTable().column(i).search() !== this.value) {
-                        $('#patchestable').DataTable()
-                            .column(i)
-                            .search(this.value)
-                            .draw();
-                    }
-                });
-            });
-            $('#patchestable thead tr:eq(1) th:last-child').html('');
 
             // Search on keyup in every column.
             table.columns().every(function () {
@@ -252,6 +231,33 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                     .catch(function (error) {
                         datatable_loader(false);
                     });
+            });
+        });
+    }
+
+    function add_column_filters(table, columns) {
+        $('#patchestable thead tr').clone(true).appendTo('#patchestable thead');
+
+        columns.forEach(function(item) {
+            let clonedCell = $('#patchestable thead tr:eq(1) th:eq(' + item.idx + ')');
+            let title = clonedCell.text();
+            
+            if (item.searchable === false) {
+                clonedCell.html('');
+                return;
+            }
+
+            let classesArray = clonedCell.attr('class').split(' ');
+            let sortClasses = classesArray.filter(function(className) {
+                return className.includes('sorting');
+            });
+            clonedCell.removeClass(sortClasses.join(' '));
+
+            clonedCell.html('<input type="text" placeholder="' + title + '" style="width: 100%"/>');
+            $('input', clonedCell).on('keyup change', function () {
+                if (table.column(item.idx).search() !== this.value) {
+                    table.column(item.idx).search(this.value).draw();
+                }
             });
         });
     }
