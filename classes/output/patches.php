@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Main page output file for the local_securitypatcher plugin.
+ * Patches output file for the local_securitypatcher plugin.
  *
  * @package   local_securitypatcher
  * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
@@ -23,30 +23,31 @@
  */
 namespace local_securitypatcher\output;
 
-use local_securitypatcher\api;
+use local_securitypatcher\managers\report_manager;
 use renderer_base;
 
 /**
- * Class containing data for security patch reports.
+ * Class containing data for security patches datatable.
  *
  * @package   local_securitypatcher
  * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class report implements \renderable, \templatable {
+class patches implements \renderable, \templatable {
 
     /**
-     * Return datatable data.
+     * Return security patches datatable data.
      *
      * @param renderer_base $output
      * @return array
      */
     public function export_for_template(renderer_base $output) {
 
-        $reports = api::get_report_data();
+        $reportmanager = new report_manager();
+        $patches = $reportmanager->get_patches_list();
 
         return [
-                'data' => $reports,
+                'data' => $patches,
         ];
     }
 }

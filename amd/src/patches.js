@@ -32,7 +32,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
     function load_datatable() {
         $(document).ready(function () {
             // Initialize dataTable.
-            var table = $('#reporttable').DataTable({
+            var table = $('#patchestable').DataTable({
                 dom: 'Brtrip',
                 responsive: true,
                 columnDefs: [
@@ -99,8 +99,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
             });
 
             // Place Search Fields in every column.
-            $('#reporttable thead tr').clone(true).appendTo('#reporttable thead');
-            $('#reporttable thead tr:eq(1) th').each(function (i, node) {
+            $('#patchestable thead tr').clone(true).appendTo('#patchestable thead');
+            $('#patchestable thead tr:eq(1) th').each(function (i, node) {
                 // Remove the sorting icons near the input.
                 var classesArray = $(node).attr('class').split(' ');
                 var sortClasses = classesArray.filter(function(className) {
@@ -111,16 +111,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 var title = $(this).text();
                 $(this).html('<input type="text" placeholder="' + title + '" style="width: 100%"/>');
                 $('input', this).on('keyup change', function () {
-                    if ($('#reporttable').DataTable().column(i).search() !== this.value) {
-                        $('#reporttable').DataTable()
+                    if ($('#patchestable').DataTable().column(i).search() !== this.value) {
+                        $('#patchestable').DataTable()
                             .column(i)
                             .search(this.value)
                             .draw();
                     }
                 });
             });
-            // $('#reporttable thead tr:eq(1) th:eq(0) input').remove();
-            $('#reporttable thead tr:eq(1) th:last-child').html('');
+            $('#patchestable thead tr:eq(1) th:last-child').html('');
 
             // Search on keyup in every column.
             table.columns().every(function () {
@@ -156,8 +155,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 var patch = parseInt(this.getAttribute('data-patch'), 10);
 
                 // Confirmation message.
-                var confirmQuestion = Str.get_string('report:patch_confirmdelete', 'local_securitypatcher');
-                var confirmButton = Str.get_string('report:patch_confirmdeletebtn', 'local_securitypatcher');
+                var confirmQuestion = Str.get_string('patches:patch_confirmdelete', 'local_securitypatcher');
+                var confirmButton = Str.get_string('patches:patch_confirmdeletebtn', 'local_securitypatcher');
 
                 var confirmCallback = function () {
                     datatable_loader(true);
@@ -184,8 +183,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 var patch = parseInt(this.getAttribute('data-patch'), 10);
 
                 // Confirmation message.
-                var confirmQuestion = Str.get_string('report:patch_confirmapply', 'local_securitypatcher');
-                var confirmButton = Str.get_string('report:patch_confirmapplybtn', 'local_securitypatcher');
+                var confirmQuestion = Str.get_string('patches:patch_confirmapply', 'local_securitypatcher');
+                var confirmButton = Str.get_string('patches:patch_confirmapplybtn', 'local_securitypatcher');
 
                 var confirmCallback = function () {
                     datatable_loader(true);
@@ -212,8 +211,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 var patch = parseInt(this.getAttribute('data-patch'), 10);
 
                 // Confirmation message.
-                var confirmQuestion = Str.get_string('report:patch_confirmrestore', 'local_securitypatcher');
-                var confirmButton = Str.get_string('report:patch_confirmrestorebtn', 'local_securitypatcher');
+                var confirmQuestion = Str.get_string('patches:patch_confirmrestore', 'local_securitypatcher');
+                var confirmButton = Str.get_string('patches:patch_confirmrestorebtn', 'local_securitypatcher');
 
                 var confirmCallback = function () {
                     datatable_loader(true);
@@ -286,10 +285,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
 
     function prefetch_strings() {
         Prefetch.prefetchStrings('local_securitypatcher', [
-            'confirm_title', 'confirm_cancel', 'report:patch_confirmdelete',
-            'report:patch_confirmdeletebtn', 'report:patch_confirmapply',
-            'report:patch_confirmapplybtn', 'report:patch_confirmrestore',
-            'report:patch_confirmrestorebtn'
+            'confirm_title', 'confirm_cancel', 'patches:patch_confirmdelete',
+            'patches:patch_confirmdeletebtn', 'patches:patch_confirmapply',
+            'patches:patch_confirmapplybtn', 'patches:patch_confirmrestore',
+            'patches:patch_confirmrestorebtn'
         ]);
     }
 

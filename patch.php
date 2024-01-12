@@ -38,6 +38,7 @@ $id = optional_param('id', null, PARAM_INT);
 
 // Set page configuration.
 $pageurl = new moodle_url('/local/securitypatcher/patch.php');
+$pachesreporturl = new moodle_url('/local/securitypatcher/patches.php');
 $PAGE->set_url($pageurl);
 $PAGE->set_pagelayout('admin');
 $context = context_system::instance();
@@ -90,7 +91,7 @@ if ($mform->is_cancelled()) {
                 null, notification::NOTIFY_ERROR);
     } else {
         // Redirect with a success notification in case of success.
-        redirect($pageurl, get_string('notification:successnewpatchsave', 'local_securitypatcher'),
+        redirect($pachesreporturl, get_string('notification:successnewpatchsave', 'local_securitypatcher'),
                 null, notification::NOTIFY_SUCCESS);
     }
 } else {

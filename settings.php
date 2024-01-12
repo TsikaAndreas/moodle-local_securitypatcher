@@ -52,10 +52,10 @@ if ($hassiteconfig) {
             new moodle_url('/local/securitypatcher/patch.php'),
             'local/securitypatcher:addpatch'
     ));
-    // Add reports page.
+    // Add patches page.
     $ADMIN->add('local_securitypatcher', new admin_externalpage('reportsecuritypatches',
-            get_string('settings:report', 'local_securitypatcher'),
-            new moodle_url('/local/securitypatcher/report.php'),
+            get_string('settings:patchesreport', 'local_securitypatcher'),
+            new moodle_url('/local/securitypatcher/patches.php'),
             'local/securitypatcher:viewreports'
     ));
 }

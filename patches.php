@@ -21,9 +21,10 @@
  * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once(__DIR__ . '/../../config.php');
 
-use local_securitypatcher\api;
+use local_securitypatcher\managers\report_manager;
+
+require_once(__DIR__ . '/../../config.php');
 
 global $CFG, $OUTPUT, $PAGE;
 
@@ -32,17 +33,20 @@ require_login();
 $PAGE->set_pagelayout('admin');
 $context = context_system::instance();
 $PAGE->set_context($context);
-$PAGE->set_url('/local/securitypatcher/report.php', []);
-$PAGE->set_title(get_string('report:title', 'local_securitypatcher'));
-$PAGE->set_heading(get_string('report:heading', 'local_securitypatcher'));
+$PAGE->set_url('/local/securitypatcher/patches.php', []);
+$PAGE->set_title(get_string('patches:title', 'local_securitypatcher'));
+$PAGE->set_heading(get_string('patches:heading', 'local_securitypatcher'));
+
+$PAGE->requires->css('/local/securitypatcher/styles/patches.css');
 
 require_capability('local/securitypatcher:viewreports', $context);
 
 // Load datatable css.
-api::load_datatables_css();
+$reportmanager = new report_manager();
+$reportmanager->load_datatables_css();
 
 // Render the reports page.
 echo $OUTPUT->header();
-echo $OUTPUT->render(new local_securitypatcher\output\report());
+echo $OUTPUT->render(new local_securitypatcher\output\patches());
 echo $OUTPUT->footer();
 

@@ -40,7 +40,7 @@ $string['settings:manage:git_desc'] = 'Path to Git. On Linux it is something lik
 On Windows it is something like C:\Program Files (x86)\Git\bin\git.exe. On Mac it is something like /opt/local/bin/git.
 To be able to execute the security patching, you must have installed the git executable and point to it here.';
 $string['settings:addsecuritypatches'] = 'Add Security Patches';
-$string['settings:report'] = 'Security Patches Report';
+$string['settings:patchesreport'] = 'Security Patches List';
 
 // Capabilities.
 $string['securitypatcher:viewpatch'] = 'View security patch information';
@@ -73,33 +73,33 @@ $string['notification:failnewpatchsave'] = 'The security patch could not be save
 $string['privacy:metadata'] = 'The Security Patcher plugin does not store any personal data.';
 
 // Reports.
-$string['report:title'] = 'Security Patch Reports';
-$string['report:heading'] = 'Security Patch Reports';
-$string['report:applyaction'] = 'Apply';
-$string['report:deleteaction'] = 'Delete';
-$string['report:restoreaction'] = 'Restore';
-$string['report:editaction'] = 'Edit';
-$string['report:viewaction'] = 'View';
-$string['report:viewreportaction'] = 'View Report';
-$string['report:applyaction_title'] = 'Apply security patch changes.';
-$string['report:deleteaction_title'] = 'Delete security patch record.';
-$string['report:restoreaction_title'] = 'Restore security patch implementation.';
-$string['report:editaction_title'] = 'Edit security patch.';
-$string['report:viewaction_title'] = 'View file content.';
-$string['report:patch_confirmdelete'] = 'You are about to delete a security patch, are you sure?';
-$string['report:patch_confirmdeletebtn'] = 'Delete';
-$string['report:patch_confirmapply'] = 'You are about to apply a security patch, are you sure?';
-$string['report:patch_confirmapplybtn'] = 'Apply';
-$string['report:patch_confirmrestore'] = 'You are about to restore a security patch, are you sure?';
-$string['report:patch_confirmrestorebtn'] = 'Restore';
+$string['patches:title'] = 'Security Patch List';
+$string['patches:heading'] = 'Security Patch List';
+$string['patches:applyaction'] = 'Apply';
+$string['patches:deleteaction'] = 'Delete';
+$string['patches:restoreaction'] = 'Restore';
+$string['patches:editaction'] = 'Edit';
+$string['patches:viewaction'] = 'View';
+$string['patches:viewreportaction'] = 'View Report';
+$string['patches:applyaction_title'] = 'Apply security patch changes.';
+$string['patches:deleteaction_title'] = 'Delete security patch record.';
+$string['patches:restoreaction_title'] = 'Restore security patch implementation.';
+$string['patches:editaction_title'] = 'Edit security patch.';
+$string['patches:viewaction_title'] = 'View file content.';
+$string['patches:patch_confirmdelete'] = 'You are about to delete a security patch, are you sure?';
+$string['patches:patch_confirmdeletebtn'] = 'Delete';
+$string['patches:patch_confirmapply'] = 'You are about to apply a security patch, are you sure?';
+$string['patches:patch_confirmapplybtn'] = 'Apply';
+$string['patches:patch_confirmrestore'] = 'You are about to restore a security patch, are you sure?';
+$string['patches:patch_confirmrestorebtn'] = 'Restore';
 
-// Datatables.
-$string['datatable:id'] = 'ID';
-$string['datatable:name'] = 'Patch Name';
-$string['datatable:lastaction'] = 'Last Action';
-$string['datatable:filename'] = 'File Name';
-$string['datatable:created'] = 'Created At';
-$string['datatable:modified'] = 'Modified At';
-$string['datatable:applied'] = 'Applied At';
-$string['datatable:restored'] = 'Restored At';
-$string['datatable:actions'] = 'Actions';
+// Patches Datatables.
+$string['datatable:patches:id'] = 'ID';
+$string['datatable:patches:name'] = 'Patch Name';
+$string['datatable:patches:lastaction'] = 'Last Action';
+$string['datatable:patches:filename'] = 'File Name';
+$string['datatable:patches:created'] = 'Created At';
+$string['datatable:patches:modified'] = 'Modified At';
+$string['datatable:patches:applied'] = 'Applied At';
+$string['datatable:patches:restored'] = 'Restored At';
+$string['datatable:patches:actions'] = 'Actions';
