@@ -97,40 +97,65 @@ class report_manager {
      * @return string HTML code containing the security patch actions.
      */
     public function parse_patches_actions(object $patch): string {
-        $actions = '';
+
+        $actions = \html_writer::start_div('patch-actions-wrapper');
 
         // Edit action.
-        $editurl = new \moodle_url('/local/securitypatcher/patch.php', ['id' => $patch->id]);
-        $actions .= '<a href="' . $editurl . '" class="edit-patch-action btn btn-secondary"
-                        data-patch="' . $patch->id . '"
-                        title="'. get_string('patches:editaction_title', 'local_securitypatcher') .'">
-                        '. get_string('patches:editaction', 'local_securitypatcher') .'
-                    </a>';
+        $actions .= \html_writer::link(
+                new \moodle_url('/local/securitypatcher/patch.php', ['id' => $patch->id]),
+                get_string('patches:editaction', 'local_securitypatcher'),
+                [
+                    'title' => get_string('patches:editaction_title', 'local_securitypatcher'),
+                    'data-patch' => $patch->id,
+                    'class' => 'edit-patch-action btn btn-secondary'
+                ]
+        );
 
         // View action.
-        $actions .= '<button class="view-patch-action btn btn-info" data-patch="' . $patch->id . '"
-                       title="'. get_string('patches:viewaction_title', 'local_securitypatcher') .'">
-                        '. get_string('patches:viewaction', 'local_securitypatcher') .'
-                    </button>';
+        $actions .= \html_writer::tag(
+                'button',
+                get_string('patches:viewaction', 'local_securitypatcher'),
+                [
+                    'class' => 'view-patch-action btn btn-info',
+                    'data-patch' => $patch->id,
+                    'title' => get_string('patches:viewaction_title', 'local_securitypatcher')
+                ]
+        );
 
         // Apply action.
-        $actions .= '<button class="apply-patch-action btn btn-primary" data-patch="' . $patch->id . '"
-                       title="'. get_string('patches:applyaction_title', 'local_securitypatcher') .'">
-                        '. get_string('patches:applyaction', 'local_securitypatcher') .'
-                    </button>';
+        $actions .= \html_writer::tag(
+                'button',
+                get_string('patches:applyaction', 'local_securitypatcher'),
+                [
+                        'class' => 'apply-patch-action btn btn-primary',
+                        'data-patch' => $patch->id,
+                        'title' => get_string('patches:applyaction_title', 'local_securitypatcher')
+                ]
+        );
 
         // Restore action.
-        $actions .= '<button class="restore-patch-action btn btn-warning" data-patch="' . $patch->id . '"
-                       title="'. get_string('patches:restoreaction_title', 'local_securitypatcher') .'">
-                        '. get_string('patches:restoreaction', 'local_securitypatcher') .'
-                    </button>';
+        $actions .= \html_writer::tag(
+                'button',
+                get_string('patches:restoreaction', 'local_securitypatcher'),
+                [
+                        'class' => 'restore-patch-action btn btn-warning',
+                        'data-patch' => $patch->id,
+                        'title' => get_string('patches:restoreaction_title', 'local_securitypatcher')
+                ]
+        );
 
         // Delete action.
-        $actions .= '<button class="delete-patch-action btn btn-danger" data-patch="' . $patch->id . '"
-                       title="'. get_string('patches:deleteaction_title', 'local_securitypatcher') .'">
-                        '. get_string('patches:deleteaction', 'local_securitypatcher') .'
-                    </button>';
+        $actions .= \html_writer::tag(
+                'button',
+                get_string('patches:deleteaction', 'local_securitypatcher'),
+                [
+                        'class' => 'delete-patch-action btn btn-danger',
+                        'data-patch' => $patch->id,
+                        'title' => get_string('patches:deleteaction_title', 'local_securitypatcher')
+                ]
+        );
 
+        $actions .= \html_writer::end_div();
         return $actions;
     }
 
@@ -142,7 +167,7 @@ class report_manager {
      */
     public function get_date(?int $timestamp): string {
         if (!$timestamp) {
-            // If no timestamp is provided, or it's null, return a dash ("-").
+            // If no timestamp is provided, or it's null.
             return '';
         }
         // Format the timestamp as "YYYY-MM-DD HH:MM:SS".

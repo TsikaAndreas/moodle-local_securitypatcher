@@ -17,13 +17,20 @@ table tbody tr td.dtr-control:before {
     float: left;
 }
 
-table tbody tr td button[class*="patch-action"]:not(:first-child) {
-    margin-left: 0.5rem;
-}
-
 .new-patch-btn {
     text-align: right;
     margin-bottom: 0.5rem;
+}
+
+.patch-actions-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+tr.child .patch-actions-wrapper {
+    flex-wrap: wrap;
 }
 
 /*Datatable Loader*/
