@@ -253,7 +253,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
             });
             clonedCell.removeClass(sortClasses.join(' '));
 
-            clonedCell.html('<input type="text" placeholder="' + title + '" style="width: 100%"/>');
+            clonedCell.html('<input class="text-center w-100" type="text" placeholder="' + title + '"/>');
             $('input', clonedCell).on('keyup change', function () {
                 if (table.column(item.idx).search() !== this.value) {
                     table.column(item.idx).search(this.value).draw();
