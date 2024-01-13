@@ -32,6 +32,7 @@ $string['confirm_title'] = 'Confirm';
 $string['confirm_cancel'] = 'Cancel';
 $string['apply'] = 'Apply';
 $string['restore'] = 'Restore';
+$string['new_patch_button'] = 'Add new security patch';
 
 // Settings.
 $string['settings:manage'] = 'Manage Security Patcher';
