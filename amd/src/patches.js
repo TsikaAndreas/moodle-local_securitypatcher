@@ -51,7 +51,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 buttons: [
                     {
                         extend: 'colvis',
-                        columns: ':not(.noVis)'
+                        columns: 'th:nth-child(n+2)'
                     },
                     {
                         extend: 'collection',
