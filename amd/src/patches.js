@@ -29,10 +29,13 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
         'local_securitypatcher/dataTables.responsive', 'local_securitypatcher/responsive.bootstrap4'],
     function ($, Ajax, Notification, Repository, Prefetch, Str, ModalFactory, DataTable
 ) {
+    /**
+     *  Initialise and load the datatable.
+     */
     function load_datatable() {
         $(document).ready(function () {
             // Initialize dataTable.
-            var table = $('#patchestable').DataTable({
+            let table = $('#patchestable').DataTable({
                 dom: 'Brtrip',
                 responsive: {
                     details: {
@@ -102,12 +105,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
 
             // Search on keyup in every column.
             table.columns().every(function () {
-                var that = this;
+                let that = this;
                 $('input', this.header()).on('keyup change', function () {
                     if (that.search() !== this.value) {
-                        that
-                            .search(this.value)
-                            .draw();
+                        that.search(this.value).draw();
                     }
                 });
             });
@@ -130,16 +131,16 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
 
             // Delete action.
             table.on('click', 'tbody tr button.delete-patch-action', function() {
-                var node = this;
-                var patch = parseInt(this.getAttribute('data-patch'), 10);
+                let node = this;
+                let patch = parseInt(this.getAttribute('data-patch'), 10);
 
                 // Confirmation message.
-                var confirmQuestion = Str.get_string('patches:patch_confirmdelete', 'local_securitypatcher');
-                var confirmButton = Str.get_string('patches:patch_confirmdeletebtn', 'local_securitypatcher');
+                let confirmQuestion = Str.get_string('patches:patch_confirmdelete', 'local_securitypatcher');
+                let confirmButton = Str.get_string('patches:patch_confirmdeletebtn', 'local_securitypatcher');
 
-                var confirmCallback = function () {
+                let confirmCallback = function () {
                     datatable_loader(true);
-                    var args = {
+                    let args = {
                         patchid: patch,
                     };
                     Repository.delete_patch(args)
@@ -149,7 +150,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                             }
                             datatable_loader(false);
                         })
-                        .catch(function (error) {
+                        .catch(function () {
                             datatable_loader(false);
                         });
                 };
@@ -158,16 +159,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
 
             // Apply action.
             table.on('click', 'tbody tr button.apply-patch-action', function() {
-                var node = this;
-                var patch = parseInt(this.getAttribute('data-patch'), 10);
+                let patch = parseInt(this.getAttribute('data-patch'), 10);
 
                 // Confirmation message.
-                var confirmQuestion = Str.get_string('patches:patch_confirmapply', 'local_securitypatcher');
-                var confirmButton = Str.get_string('patches:patch_confirmapplybtn', 'local_securitypatcher');
+                let confirmQuestion = Str.get_string('patches:patch_confirmapply', 'local_securitypatcher');
+                let confirmButton = Str.get_string('patches:patch_confirmapplybtn', 'local_securitypatcher');
 
-                var confirmCallback = function () {
+                let confirmCallback = function () {
                     datatable_loader(true);
-                    var args = {
+                    let args = {
                         patchid: patch,
                     };
                     Repository.apply_patch(args)
@@ -177,7 +177,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                             }
                             datatable_loader(false);
                         })
-                        .catch(function (error) {
+                        .catch(function () {
                             datatable_loader(false);
                         });
                 };
@@ -186,16 +186,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
 
             // Restore action.
             table.on('click', 'tbody tr button.restore-patch-action', function() {
-                var node = this;
-                var patch = parseInt(this.getAttribute('data-patch'), 10);
+                let patch = parseInt(this.getAttribute('data-patch'), 10);
 
                 // Confirmation message.
-                var confirmQuestion = Str.get_string('patches:patch_confirmrestore', 'local_securitypatcher');
-                var confirmButton = Str.get_string('patches:patch_confirmrestorebtn', 'local_securitypatcher');
+                let confirmQuestion = Str.get_string('patches:patch_confirmrestore', 'local_securitypatcher');
+                let confirmButton = Str.get_string('patches:patch_confirmrestorebtn', 'local_securitypatcher');
 
-                var confirmCallback = function () {
+                let confirmCallback = function () {
                     datatable_loader(true);
-                    var args = {
+                    let args = {
                         patchid: patch,
                     };
                     Repository.restore_patch(args)
@@ -205,7 +204,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                             }
                             datatable_loader(false);
                         })
-                        .catch(function (error) {
+                        .catch(function () {
                             datatable_loader(false);
                         });
                 };
@@ -214,10 +213,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
 
             // View action.
             table.on('click', 'tbody tr button.view-patch-action', function() {
-                var patch = parseInt(this.getAttribute('data-patch'), 10);
+                let patch = parseInt(this.getAttribute('data-patch'), 10);
 
                 datatable_loader(true);
-                var args = {
+                let args = {
                     patchid: patch,
                 };
                 Repository.get_patch_info(args)
@@ -228,13 +227,20 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                         }
                         datatable_loader(false);
                     })
-                    .catch(function (error) {
+                    .catch(function () {
                         datatable_loader(false);
                     });
             });
         });
     }
 
+    /**
+     * Clone the header row of a table and add input filters for specified columns.
+     *
+     * @param {DataTable} table - The DataTable instance representing the table.
+     * @param {Array} columns - An array of column configuration objects.
+     * @returns {void}
+     */
     function add_column_filters(table, columns) {
         $('#patchestable thead tr').clone(true).appendTo('#patchestable thead');
 
@@ -262,6 +268,14 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
         });
     }
 
+    /**
+     * Display a confirmation dialog with a specified question and custom confirmation button.
+     *
+     * @param {string|Promise} question - The question or message to display in the confirmation dialog.
+     * @param {string|Promise} confirmButton - The label for the confirmation button.
+     * @param confirmCallback - The callback function to execute when the confirmation button is clicked.
+     * @returns {void}
+     */
     function show_confirmation(question, confirmButton, confirmCallback) {
         Notification.confirm(
             Str.get_string('confirm_title', 'local_securitypatcher'),
@@ -278,6 +292,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
      *
      * @param {string} title The title for the modal.
      * @param {string} content The html content/body of the modal.
+     * @return {void}
      */
     async function display_patch_content(title, content) {
         let modal = await ModalFactory.create({
@@ -289,6 +304,11 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
         modal.show();
     }
 
+    /**
+     * Prefetches the language strings.
+     *
+     * @return {void}
+     */
     function prefetch_strings() {
         Prefetch.prefetchStrings('local_securitypatcher', [
             'confirm_title', 'confirm_cancel', 'patches:patch_confirmdelete',
@@ -298,8 +318,14 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
         ]);
     }
 
+    /**
+     * Toggle the visibility of a loader for a data table.
+     *
+     * @param {boolean} enable - If true, show the loader; if false, hide the loader.
+     * @returns {void}
+     */
     function datatable_loader(enable) {
-        var loader = $('.table-wrapper .datatable-loader');
+        let loader = $('.table-wrapper .datatable-loader');
         if (enable) {
             loader.show();
         } else {
@@ -307,7 +333,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
         }
     }
 
-    var init = function (params) {
+    const init = function () {
         prefetch_strings();
         load_datatable();
     }
