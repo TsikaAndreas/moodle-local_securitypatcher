@@ -190,7 +190,8 @@ class patch_manager {
             }
         }
 
-        throw new \RuntimeException("The security patch file of '{$this->currentpatch->name}' was not found!",404);
+        throw new \RuntimeException(get_string('exception:patchfilenotfound',
+                'local_securitypatcher', $this->currentpatch->name), 404);
     }
 
     /**
@@ -217,15 +218,16 @@ class patch_manager {
     /**
      * Verifies if the operation action is set and matches one of the valid patch operations.
      *
-     * @throws \RuntimeException When no operation action is found or if the provided action is invalid.
+     * @throws \InvalidArgumentException|\coding_exception When no operation action is found or if the provided action is invalid.
      * @return void
      */
     private function check_operation_action(): void {
         if (empty($this->operationaction)) {
-            throw new \RuntimeException('No operation action was found.', 500);
+            throw new \InvalidArgumentException(get_string('exception:operationnotfound', 'local_securitypatcher'), 500);
         }
         if (!in_array($this->operationaction, $this->validpatchoperations, true)) {
-            throw new \RuntimeException("Invalid operation action '$this->operationaction' was provided.", 500);
+            throw new \InvalidArgumentException(get_string('exception:invalidoperation',
+                    'local_securitypatcher', $this->operationaction), 500);
         }
     }
 
@@ -242,7 +244,7 @@ class patch_manager {
 
         $gitpath = $this->get_git_command_path();
         if (empty($gitpath)) {
-            throw new \RuntimeException('Git command path was not found!', 500);
+            throw new \RuntimeException(get_string('exception:gitpathnotfound', 'local_securitypatcher'), 404);
         }
 
         $this->currentpatch = $DB->get_record('local_securitypatcher', ['id' => $patchid], '*', MUST_EXIST);

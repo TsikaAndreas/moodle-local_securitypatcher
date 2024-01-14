@@ -104,3 +104,9 @@ $string['datatable:patches:modified'] = 'Modified At';
 $string['datatable:patches:applied'] = 'Applied At';
 $string['datatable:patches:restored'] = 'Restored At';
 $string['datatable:patches:actions'] = 'Actions';
+
+// Exceptions.
+$string['exception:patchfilenotfound'] = 'The security patch file of \'{$a}\' was not found!';
+$string['exception:operationnotfound'] = 'No operation action was found!';
+$string['exception:invalidoperation'] = 'Invalid operation action \'{$a}\' was provided!';
+$string['exception:gitpathnotfound'] = 'Git command path was not found!';
