@@ -235,9 +235,9 @@ class patch_manager {
      * Perform a patch operation (apply or restore) identified by its ID.
      *
      * @param int $patchid The ID of the patch to be operated on.
-     * @return bool Returns true if the operation is successful, otherwise false.
+     * @return void
      */
-    public function perform_patch_operation(int $patchid): bool {
+    public function perform_patch_operation(int $patchid): void {
         global $DB, $CFG;
 
         $this->check_operation_action();
@@ -259,8 +259,6 @@ class patch_manager {
         exec($command, $this->operationoutput, $this->operationstatus);
 
         $this->process_output();
-
-        return true;
     }
 
     /**
@@ -343,6 +341,41 @@ class patch_manager {
         $info->content = $file->get_content();
 
         return $info;
+    }
+
+    /**
+     * Retrieves the time when the patch was applied.
+     *
+     * @param bool $formated Whether to return the formatted date.
+     * @return int|string If $formated is true, returns the formatted date; otherwise, returns the timestamp.
+     */
+    public function get_timeapplied(bool $formated = false): int|string {
+        if ($formated) {
+            return (new report_manager())->get_date($this->currentpatch->timeapplied);
+        }
+        return $this->currentpatch->timeapplied;
+    }
+
+    /**
+     * Retrieves the time when the patch was restored.
+     *
+     * @param bool $formated Whether to return the formatted date.
+     * @return int|string If $formated is true, returns the formatted date; otherwise, returns the timestamp.
+     */
+    public function get_timerestored(bool $formated = false): int|string {
+        if ($formated) {
+            return (new report_manager())->get_date($this->currentpatch->timerestored);
+        }
+        return $this->currentpatch->timerestored;
+    }
+
+    /**
+     * Retrieves the status of the patch.
+     *
+     * @return \lang_string|string The name of the last action for the patch's status.
+     */
+    public function get_status(): \lang_string|string {
+        return (new report_manager())->get_patches_last_action_name($this->currentpatch->status);
     }
 
     /**

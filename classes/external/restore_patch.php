@@ -72,8 +72,12 @@ class restore_patch extends external_api {
 
         $manager = new patch_manager();
         $manager->set_operation_action('restore');
-        $result = $manager->perform_patch_operation($params['patchid']);
+        $manager->perform_patch_operation($params['patchid']);
 
+        $result = [
+                'timestamp' => $manager->get_timerestored(true),
+                'status' => $manager->get_status(),
+        ];
         // Return a value as described in the returns function.
         return array('result' => $result);
     }
@@ -85,7 +89,10 @@ class restore_patch extends external_api {
      */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
-                'result' => new external_value(PARAM_BOOL, 'result of the restore action'),
+                'result' => new external_single_structure([
+                        'timestamp' => new external_value(PARAM_TEXT, 'The timestamp of the restored action'),
+                        'status' => new external_value(PARAM_TEXT, 'The status of the patch'),
+                ]),
         ]);
     }
 }

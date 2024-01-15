@@ -79,7 +79,7 @@ class report_manager {
      * @param int $status The status of the patch.
      * @return \lang_string|string The name of the last action performed.
      */
-    private function get_patches_last_action_name(int $status): \lang_string|string {
+    public function get_patches_last_action_name(int $status): \lang_string|string {
         return match ($status) {
             patch_manager::PATCH_APPLIED => get_string('apply', 'local_securitypatcher'),
             patch_manager::PATCH_RESTORED => get_string('restore', 'local_securitypatcher'),

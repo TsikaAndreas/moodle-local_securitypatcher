@@ -160,6 +160,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
             // Apply action.
             table.on('click', 'tbody tr button.apply-patch-action', function() {
                 let patch = parseInt(this.getAttribute('data-patch'), 10);
+                let node = this;
 
                 // Confirmation message.
                 let confirmQuestion = Str.get_string('patches:patch_confirmapply', 'local_securitypatcher');
@@ -173,7 +174,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                     Repository.apply_patch(args)
                         .then(function(res) {
                             if (res.result){
-                                // table.row(node.closest('tr')).remove().draw();
+                                let row = table.row(node.closest('tr')).index();
+                                table.cell(row, 5).data(res.result.timestamp);
+                                table.cell(row, 2).data(res.result.status);
                             }
                             datatable_loader(false);
                         })
@@ -187,6 +190,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
             // Restore action.
             table.on('click', 'tbody tr button.restore-patch-action', function() {
                 let patch = parseInt(this.getAttribute('data-patch'), 10);
+                let node = this;
 
                 // Confirmation message.
                 let confirmQuestion = Str.get_string('patches:patch_confirmrestore', 'local_securitypatcher');
@@ -200,7 +204,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                     Repository.restore_patch(args)
                         .then(function(res) {
                             if (res.result){
-                                // table.row(node.closest('tr')).remove().draw();
+                                let row = table.row(node.closest('tr')).index();
+                                table.cell(row, 6).data(res.result.timestamp);
+                                table.cell(row, 2).data(res.result.status);
                             }
                             datatable_loader(false);
                         })
