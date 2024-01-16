@@ -97,61 +97,62 @@ class report_manager {
      * @return string HTML code containing the security patch actions.
      */
     public function parse_patches_actions(object $patch): string {
+        global $OUTPUT;
 
         $actions = \html_writer::start_div('patch-actions-wrapper');
 
         // Edit action.
         $actions .= \html_writer::link(
                 new \moodle_url('/local/securitypatcher/patch.php', ['id' => $patch->id]),
-                get_string('patches:editaction', 'local_securitypatcher'),
+                $OUTPUT->pix_icon('t/edit', get_string('patches:editaction', 'local_securitypatcher'),
+                        'local_securitypatcher'),
                 [
-                        'title' => get_string('patches:editaction_title', 'local_securitypatcher'),
                         'data-patch' => $patch->id,
-                        'class' => 'edit-patch-action btn btn-secondary'
+                        'class' => 'edit-patch-action align-self-center border-0 bg-transparent'
                 ]
         );
 
         // View action.
         $actions .= \html_writer::tag(
                 'button',
-                get_string('patches:viewaction', 'local_securitypatcher'),
+                $OUTPUT->pix_icon('t/search', get_string('patches:viewaction', 'local_securitypatcher'),
+                        'local_securitypatcher'),
                 [
-                        'class' => 'view-patch-action btn btn-info',
+                        'class' => 'view-patch-action align-self-center border-0 bg-transparent',
                         'data-patch' => $patch->id,
-                        'title' => get_string('patches:viewaction_title', 'local_securitypatcher')
                 ]
         );
 
         // Apply action.
         $actions .= \html_writer::tag(
                 'button',
-                get_string('patches:applyaction', 'local_securitypatcher'),
+                $OUTPUT->pix_icon('t/approve', get_string('patches:applyaction', 'local_securitypatcher'),
+                        'local_securitypatcher'),
                 [
-                        'class' => 'apply-patch-action btn btn-primary',
+                        'class' => 'apply-patch-action align-self-center border-0 bg-transparent',
                         'data-patch' => $patch->id,
-                        'title' => get_string('patches:applyaction_title', 'local_securitypatcher')
                 ]
         );
 
         // Restore action.
         $actions .= \html_writer::tag(
                 'button',
-                get_string('patches:restoreaction', 'local_securitypatcher'),
+                $OUTPUT->pix_icon('t/refresh', get_string('patches:restoreaction', 'local_securitypatcher'),
+                        'local_securitypatcher'),
                 [
-                        'class' => 'restore-patch-action btn btn-warning',
+                        'class' => 'restore-patch-action align-self-center border-0 bg-transparent',
                         'data-patch' => $patch->id,
-                        'title' => get_string('patches:restoreaction_title', 'local_securitypatcher')
                 ]
         );
 
         // Delete action.
         $actions .= \html_writer::tag(
                 'button',
-                get_string('patches:deleteaction', 'local_securitypatcher'),
+                $OUTPUT->pix_icon('t/trash', get_string('patches:deleteaction', 'local_securitypatcher'),
+                        'local_securitypatcher'),
                 [
-                        'class' => 'delete-patch-action btn btn-danger',
+                        'class' => 'delete-patch-action align-self-center border-0 bg-transparent',
                         'data-patch' => $patch->id,
-                        'title' => get_string('patches:deleteaction_title', 'local_securitypatcher')
                 ]
         );
 

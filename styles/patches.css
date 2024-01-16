@@ -26,7 +26,6 @@ table tbody tr td.dtr-control:before {
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
-    gap: 10px;
 }
 
 tr.child .patch-actions-wrapper {
