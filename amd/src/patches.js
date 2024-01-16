@@ -97,25 +97,18 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 initComplete: function(settings, json) {
                     datatable_loader(false);
                     add_column_filters(this.api(), settings.aoColumns);
+                    $('#patchestable').removeClass('d-none');
                 },
                 drawCallback: function() {
 
                 }
             });
 
-            // Search on keyup in every column.
-            table.columns().every(function () {
-                let that = this;
-                $('input', this.header()).on('keyup change', function () {
-                    if (that.search() !== this.value) {
-                        that.search(this.value).draw();
-                    }
-                });
-            });
-
-            // Event to stop sorting when clicking on
-            $('thead tr th input').click(function (e) {
-                e.stopPropagation();
+            // Hide filters for hidden columns.
+            table.columns().every(function (index) {
+                if (this.responsiveHidden() === false) {
+                    $('thead tr:eq(1)').find('th:eq(' + index + ') ').hide();
+                }
             });
 
             // Responsive filters.
@@ -266,10 +259,16 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
             clonedCell.removeClass(sortClasses.join(' '));
 
             clonedCell.html('<input class="text-center w-100" type="text" placeholder="' + title + '"/>');
+
+            // Search on keyup in every column.
             $('input', clonedCell).on('keyup change', function () {
                 if (table.column(item.idx).search() !== this.value) {
                     table.column(item.idx).search(this.value).draw();
                 }
+            });
+            // Event to stop sorting when clicking on.
+            $('input', clonedCell).on('click', function (e) {
+                e.stopPropagation();
             });
         });
     }
