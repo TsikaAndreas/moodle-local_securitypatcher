@@ -57,11 +57,11 @@ class patch_manager {
     /** @var array $operationoutput An array to store the output generated during patch operations. */
     private array $operationoutput = [];
     /**
-     * @var int|null $operationstatus Represents the status of the patch operation.
+     * @var int $operationstatus Represents the status of the patch operation.
      *                            - When set to 0, it indicates a successful execution of the operation.
-     *                            - When set to 1, it indicates that an error occurred during the operation.
+     *                            - Anything else, it indicates that an error occurred during the operation.
      */
-    private ?int $operationstatus = null;
+    private int $operationstatus;
 
     /**
      * @var string The filearea that the security patches are stored.
@@ -375,7 +375,49 @@ class patch_manager {
      * @return \lang_string|string The name of the last action for the patch's status.
      */
     public function get_status(): \lang_string|string {
-        return (new report_manager())->get_patches_last_action_name($this->currentpatch->status);
+        return $this->get_last_operation_name($this->currentpatch->status);
+    }
+
+    /**
+     * Retrieves the name of the last operation performed based on the patch status.
+     *
+     * @param int $status The status of the patch.
+     * @return \lang_string|string The name of the last operation performed.
+     */
+    public function get_last_operation_name(int $status): \lang_string|string {
+        return match ($status) {
+            self::PATCH_APPLIED => get_string('apply', 'local_securitypatcher'),
+            self::PATCH_RESTORED => get_string('restore', 'local_securitypatcher'),
+            default => '',
+        };
+    }
+
+    /**
+     * Get the localized operation name based on the specified operation key.
+     *
+     * @param string $operation The key representing the operation.
+     * @return \lang_string|string The localized operation name.
+     */
+    public static function get_operation_name(string $operation): \lang_string|string {
+        return match ($operation) {
+            'apply' => get_string('apply', 'local_securitypatcher'),
+            'restore' => get_string('restore', 'local_securitypatcher'),
+            default => throw new \InvalidArgumentException(get_string('exception:invalidoperation',
+                    'local_securitypatcher', $operation), 500),
+        };
+    }
+
+    /**
+     * Get the localized patch report status based on the specified status code.
+     *
+     * @param int $status The status code representing the patch report status.
+     * @return \lang_string|string The localized patch report status.
+     */
+    public static function get_patch_report_status(int $status): \lang_string|string {
+        return match ($status) {
+            0 => get_string('operation_success', 'local_securitypatcher'),
+            default => get_string('operation_error', 'local_securitypatcher'),
+        };
     }
 
     /**

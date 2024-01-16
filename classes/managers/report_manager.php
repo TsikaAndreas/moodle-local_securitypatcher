@@ -58,10 +58,9 @@ class report_manager {
         $records = $DB->get_recordset('local_securitypatcher');
 
         foreach ($records as $record) {
-            $data = null;
             $data['id'] = $record->id;
             $data['name'] = $record->name;
-            $data['lastaction'] = $this->get_patches_last_action_name($record->status);
+            $data['lastaction'] = (new patch_manager())->get_last_operation_name($record->status);
             $data['applied'] = $this->get_date($record->timeapplied);
             $data['restored'] = $this->get_date($record->timerestored);
             $data['modified'] = $this->get_date($record->timemodified);
@@ -74,17 +73,18 @@ class report_manager {
     }
 
     /**
-     * Retrieves the name of the last action performed based on the patch status.
+     * Convert a timestamp to a formatted date and time string.
      *
-     * @param int $status The status of the patch.
-     * @return \lang_string|string The name of the last action performed.
+     * @param int|null $timestamp The timestamp to convert. Use null to indicate no timestamp (returns "-").
+     * @return string Returns the formatted date and time string or "-" if no timestamp is provided.
      */
-    public function get_patches_last_action_name(int $status): \lang_string|string {
-        return match ($status) {
-            patch_manager::PATCH_APPLIED => get_string('apply', 'local_securitypatcher'),
-            patch_manager::PATCH_RESTORED => get_string('restore', 'local_securitypatcher'),
-            default => '',
-        };
+    public function get_date(?int $timestamp): string {
+        if (!$timestamp) {
+            // If no timestamp is provided, or it's null.
+            return '';
+        }
+        // Format the timestamp as "YYYY-MM-DD HH:MM:SS".
+        return date('Y-m-d H:i:s', $timestamp);
     }
 
     /**
@@ -105,9 +105,9 @@ class report_manager {
                 new \moodle_url('/local/securitypatcher/patch.php', ['id' => $patch->id]),
                 get_string('patches:editaction', 'local_securitypatcher'),
                 [
-                    'title' => get_string('patches:editaction_title', 'local_securitypatcher'),
-                    'data-patch' => $patch->id,
-                    'class' => 'edit-patch-action btn btn-secondary'
+                        'title' => get_string('patches:editaction_title', 'local_securitypatcher'),
+                        'data-patch' => $patch->id,
+                        'class' => 'edit-patch-action btn btn-secondary'
                 ]
         );
 
@@ -116,9 +116,9 @@ class report_manager {
                 'button',
                 get_string('patches:viewaction', 'local_securitypatcher'),
                 [
-                    'class' => 'view-patch-action btn btn-info',
-                    'data-patch' => $patch->id,
-                    'title' => get_string('patches:viewaction_title', 'local_securitypatcher')
+                        'class' => 'view-patch-action btn btn-info',
+                        'data-patch' => $patch->id,
+                        'title' => get_string('patches:viewaction_title', 'local_securitypatcher')
                 ]
         );
 
@@ -160,17 +160,25 @@ class report_manager {
     }
 
     /**
-     * Convert a timestamp to a formatted date and time string.
+     * Get the list of patch reports based on the specified patch ID.
      *
-     * @param int|null $timestamp The timestamp to convert. Use null to indicate no timestamp (returns "-").
-     * @return string Returns the formatted date and time string or "-" if no timestamp is provided.
+     * @param int $patchid The ID of the patch.
+     * @return array An array containing the patch report list.
      */
-    public function get_date(?int $timestamp): string {
-        if (!$timestamp) {
-            // If no timestamp is provided, or it's null.
-            return '';
+    public function get_patch_report_list(int $patchid): array {
+        global $DB;
+
+        $reports = [];
+        $records = $DB->get_records('local_securitypatcher_data', ['patchid' => $patchid], 'id DESC', '*', 0, 20);
+
+        foreach ($records as $record) {
+            $data['id'] = $record->id;
+            $data['status'] = patch_manager::get_patch_report_status((int) $record->status);
+            $data['operation'] = patch_manager::get_operation_name($record->operation);
+            $data['timecreated'] = $this->get_date($record->timecreated);
+            $data['actions'] = '';
+            $reports[] = $data;
         }
-        // Format the timestamp as "YYYY-MM-DD HH:MM:SS".
-        return date('Y-m-d H:i:s', $timestamp);
+        return $reports;
     }
 }
