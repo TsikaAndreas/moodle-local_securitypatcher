@@ -55,7 +55,7 @@ class report_manager {
         global $DB;
 
         $patches = [];
-        $records = $DB->get_recordset('local_securitypatcher');
+        $records = $DB->get_recordset('local_securitypatcher', null, 'timecreated DESC');
 
         foreach ($records as $record) {
             $data['id'] = $record->id;

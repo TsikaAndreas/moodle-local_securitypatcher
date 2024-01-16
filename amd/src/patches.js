@@ -49,7 +49,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                     { responsivePriority: 2, searchable: false, targets: -1, orderable: false },
                 ],
                 order: [
-                    [1, 'desc']
+                    [3, 'desc']
                 ],
                 buttons: [
                     {
@@ -64,31 +64,31 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                             {
                                 extend: 'copy',
                                 exportOptions: {
-                                    columns: ':visible:not(.noVis)',
+                                    columns: 'th:not(:last-child):nth-child(n+2)',
                                 }
                             },
                             {
                                 extend: 'print',
                                 exportOptions: {
-                                    columns: ':visible:not(.noVis)',
+                                    columns: 'th:not(:last-child):nth-child(n+2)',
                                 }
                             },
                             {
                                 extend: 'excel',
                                 exportOptions: {
-                                    columns: ':visible:not(.noVis)',
+                                    columns: 'th:not(:last-child):nth-child(n+2)',
                                 }
                             },
                             {
                                 extend: 'pdf',
                                 exportOptions: {
-                                    columns: ':visible:not(.noVis)',
+                                    columns: 'th:not(:last-child):nth-child(n+2)',
                                 }
                             },
                             {
                                 extend: 'csv',
                                 exportOptions: {
-                                    columns: ':visible:not(.noVis)',
+                                    columns: 'th:not(:last-child):nth-child(n+2)',
                                 }
                             },
                         ]
