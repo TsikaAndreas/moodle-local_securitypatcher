@@ -83,7 +83,7 @@ $string['patches:deleteaction'] = 'Delete';
 $string['patches:restoreaction'] = 'Restore';
 $string['patches:editaction'] = 'Edit';
 $string['patches:viewaction'] = 'View';
-$string['patches:viewreportaction'] = 'View Report';
+$string['patches:viewreportaction'] = 'Report';
 $string['patches:patch_confirmdelete'] = 'You are about to delete a security patch, are you sure?';
 $string['patches:patch_confirmdeletebtn'] = 'Delete';
 $string['patches:patch_confirmapply'] = 'You are about to apply a security patch, are you sure?';
@@ -101,6 +101,14 @@ $string['datatable:patches:modified'] = 'Modified At';
 $string['datatable:patches:applied'] = 'Applied At';
 $string['datatable:patches:restored'] = 'Restored At';
 $string['datatable:patches:actions'] = 'Actions';
+
+// Patches Report Datatables.
+$string['datatable:patchesreport'] = 'Patches Reports: {$a}';
+$string['datatable:patchesreport:id'] = 'ID';
+$string['datatable:patchesreport:timecreated'] = 'Created At';
+$string['datatable:patchesreport:status'] = 'Status';
+$string['datatable:patchesreport:operation'] = 'Operation';
+$string['datatable:patchesreport:actions'] = 'Actions';
 
 // Exceptions.
 $string['exception:patchfilenotfound'] = 'The security patch file of \'{$a}\' was not found!';

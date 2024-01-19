@@ -21,13 +21,14 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repository',
-        'core/prefetch', 'core/str', 'core/modal_factory',
+        'core/prefetch', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/templates',
         'local_securitypatcher/jquery.dataTables', 'local_securitypatcher/dataTables.bootstrap4',
         'local_securitypatcher/dataTables.buttons', 'local_securitypatcher/buttons.bootstrap4',
         'local_securitypatcher/buttons.colVis', 'local_securitypatcher/buttons.html5',
         'local_securitypatcher/buttons.print', 'local_securitypatcher/pdfmake',
         'local_securitypatcher/dataTables.responsive', 'local_securitypatcher/responsive.bootstrap4'],
-    function ($, Ajax, Notification, Repository, Prefetch, Str, ModalFactory, DataTable
+    function ($, Ajax, Notification, Repository, Prefetch,
+              Str, ModalFactory, ModalEvents, Template, DataTable
 ) {
     /**
      *  Initialise and load the datatable.
@@ -230,6 +231,53 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                         datatable_loader(false);
                     });
             });
+
+            // Report action.
+            table.on('click', 'tbody tr button.report-patch-action', function() {
+                let patch = parseInt(this.getAttribute('data-patch'), 10);
+
+                datatable_loader(true);
+                let args = {
+                    patchid: patch,
+                };
+                Repository.get_patch_reports(args)
+                    .then(function(res) {
+                        console.log(res);
+                        if (Object.keys(res.result).length !== 0){
+                            let context = {
+                                data: res.result
+                            };
+                            
+                            Template.renderForPromise('local_securitypatcher/patches_report', context)
+                                .then(async ({html, js}) => {
+                                    let output = document.createElement("div");
+                                    Template.appendNodeContents(output, html, js);
+
+                                    let modal = await ModalFactory.create({
+                                        title: Str.get_string('datatable:patchesreport', 'local_securitypatcher', patch),
+                                        body: output,
+                                        large: true,
+                                        removeOnClose: true,
+                                    });
+
+                                    datatable_loader(false);
+                                    modal.show();
+
+                                    modal.getRoot().on(ModalEvents.destroyed, function () {
+                                        console.log('modal destroyed');
+
+                                    });
+
+                                })
+                                .catch((error) => Notification.exception(error));
+
+                        }
+                        datatable_loader(false);
+                    })
+                    .catch(function () {
+                        datatable_loader(false);
+                    });
+            });
         });
     }
 
@@ -295,7 +343,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
     /**
      * Creates and displays a modal with specified title and content asynchronously.
      *
-     * @param {string} title The title for the modal.
+     * @param {string|Promise} title The title for the modal.
      * @param {string} content The html content/body of the modal.
      * @return {void}
      */
@@ -304,6 +352,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
             title: title,
             body: content,
             large: true,
+            removeOnClose: true,
         });
         datatable_loader(false);
         modal.show();
@@ -324,6 +373,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
     }
 
     /**
+     * Prefetch the templates.
+     *
+     * @return {void}
+     */
+    function prefetch_templates() {
+        Prefetch.prefetchTemplate('local_securitypatcher/patches_report');
+    }
+
+    /**
      * Toggle the visibility of a loader for a data table.
      *
      * @param {boolean} enable - If true, show the loader; if false, hide the loader.
@@ -340,6 +398,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
 
     const init = function () {
         prefetch_strings();
+        prefetch_templates();
         load_datatable();
     }
 

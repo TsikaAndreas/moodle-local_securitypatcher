@@ -123,6 +123,17 @@ class report_manager {
                 ]
         );
 
+        // Reports action.
+        $actions .= \html_writer::tag(
+                'button',
+                $OUTPUT->pix_icon('t/report', get_string('patches:viewreportaction', 'local_securitypatcher'),
+                        'local_securitypatcher'),
+                [
+                        'class' => 'report-patch-action align-self-center border-0 bg-transparent',
+                        'data-patch' => $patch->id,
+                ]
+        );
+
         // Apply action.
         $actions .= \html_writer::tag(
                 'button',
