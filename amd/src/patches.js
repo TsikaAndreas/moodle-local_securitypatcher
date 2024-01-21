@@ -52,6 +52,34 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 order: [
                     [3, 'desc']
                 ],
+                processing: true,
+                serverSide: true,
+                ajax: function (data, callback, settings) {
+                    datatable_loader(false);
+                    let args = {
+                        data: JSON.stringify(data),
+                    };
+                    Repository.get_patches(args).then((res) => {
+                        callback({
+                            draw: res.draw,
+                            recordsTotal: res.recordsTotal,
+                            recordsFiltered: res.recordsFiltered,
+                            data: res.data,
+                        });
+                    }).catch((error) => {
+                        datatable_loader(false);
+                    });
+                },
+                columns: [
+                    {data: null, defaultContent: ""},
+                    {data: "name", name: "name"},
+                    {data: "lastaction", name: "status"},
+                    {data: "created", name: "timecreated"},
+                    {data: "modified", name: "timemodified"},
+                    {data: "applied", name: "timeapplied"},
+                    {data: "restored", name: "timerestored"},
+                    {data: "actions"},
+                ],
                 buttons: [
                     {
                         extend: 'colvis',
@@ -98,7 +126,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 initComplete: function(settings, json) {
                     datatable_loader(false);
                     add_column_filters(this.api(), settings.aoColumns);
-                    $('#patchestable').removeClass('d-none');
                 },
                 drawCallback: function() {
 

@@ -10,7 +10,7 @@
             <span class="text">{{#str}} loading, local_securitypatcher {{/str}}.</span>
         </div>
     </div>
-    <table id="patchestable" class="table table-striped table-bordered nowrap d-none" style="width: 100%">
+    <table id="patchestable" class="table table-striped table-bordered nowrap" style="width: 100%">
         <thead>
         <tr>
             <th></th>
@@ -23,20 +23,6 @@
             <th>{{#str}} datatable:patches:actions, local_securitypatcher {{/str}}</th>
         </tr>
         </thead>
-        <tbody>
-            {{#data}}
-                <tr>
-                    <td></td>
-                    <td>{{name}}</td>
-                    <td>{{lastaction}}</td>
-                    <td>{{created}}</td>
-                    <td>{{modified}}</td>
-                    <td>{{applied}}</td>
-                    <td>{{restored}}</td>
-                    <td>{{{actions}}}</td>
-                </tr>
-            {{/data}}
-        </tbody>
     </table>
 </div>
 {{#js}}
