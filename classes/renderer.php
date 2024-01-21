@@ -35,12 +35,12 @@ use plugin_renderer_base;
 class renderer extends plugin_renderer_base {
 
     /**
-     * Report render function.
+     * Patches render function.
      *
-     * @param report $report
+     * @param patches $patches
      * @return string HTML to output.
      */
-    public function render_report(report $report) {
-        return $this->render_from_template('local_securitypatcher/report', $report->export_for_template($this));
+    public function render_patches(patches $patches): string {
+        return $this->render_from_template('local_securitypatcher/patches', $patches->export_for_template($this));
     }
 }

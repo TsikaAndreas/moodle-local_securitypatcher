@@ -23,7 +23,6 @@
  */
 namespace local_securitypatcher\output;
 
-use local_securitypatcher\managers\report_manager;
 use renderer_base;
 
 /**
@@ -42,12 +41,6 @@ class patches implements \renderable, \templatable {
      * @return array
      */
     public function export_for_template(renderer_base $output) {
-
-        $reportmanager = new report_manager();
-        $patches = $reportmanager->get_patches_list();
-
-        return [
-                'data' => $patches,
-        ];
+        return [];
     }
 }

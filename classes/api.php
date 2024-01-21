@@ -51,4 +51,19 @@ class api {
                 'accepted_types' => ['.patch'],                      // Accepted file types (e.g., .patch files).
         ];
     }
+
+    /**
+     * Convert a timestamp to a formatted date and time string.
+     *
+     * @param int|null $timestamp The timestamp to convert. Use null to indicate no timestamp (returns "-").
+     * @return string Returns the formatted date and time string or "-" if no timestamp is provided.
+     */
+    public static function get_date(?int $timestamp): string {
+        if (!$timestamp) {
+            // If no timestamp is provided, or it's null.
+            return '';
+        }
+        // Format the timestamp as "YYYY-MM-DD HH:MM:SS".
+        return date('Y-m-d H:i:s', $timestamp);
+    }
 }
