@@ -35,74 +35,74 @@ use stdClass;
  */
 class ssp {
     /**
-     * @var array
+     * @var array The request array with the datatable data.
      */
     protected array $request;
 
     /**
-     * @var int
+     * @var int The draw number.
      */
     protected int $draw;
 
     /**
-     * @var array
+     * @var array Columns array that contains all columns sent.
      */
     protected array $columns;
 
     /**
-     * @var mixed
+     * @var mixed Search array that contains value of the global search.
      */
     protected mixed $search;
 
     /**
-     * @var mixed
+     * @var mixed Order array that contains direction and column name.
      */
     protected mixed $order;
 
     /**
-     * @var mixed
+     * @var mixed The offset.
      */
     protected mixed $start;
 
     /**
-     * @var mixed
+     * @var mixed The limit.
      */
     protected mixed $length;
 
     /**
-     * @var array
+     * @var array Filters array that contains all filters sent.
      */
     protected array $filters = [];
 
     /**
-     * @var array
+     * @var array Global search array that contains the search value sent.
      */
     protected array $globalfilters = [];
 
     /**
-     * @var string
+     * @var string The string that contains the SQL for counting.
      */
     protected string $countsql;
 
     /**
-     * @var string
+     * @var string The string that contains the main SQL.
      */
     protected string $mainsql;
 
     /**
      * Initialise with the request data.
      *
-     * @param array $request
+     * @param array $request The request array with the datatable data.
      * @return void
      */
     public function init(array $request) {
         $this->request = $request;
-        $this->draw = required_param('draw', PARAM_INT);
-        $this->columns = $request['columns']; // Columns array that contains all columns sent.
-        $this->search = $request['search']; // Search array that contains value of glob search.
-        $this->order = $request['order']; // Order array that contains dir and column name.
-        $this->start = required_param('start', PARAM_INT); // The offset.
-        $this->length = required_param('length', PARAM_INT); // The limit.
+        $this->draw = $request['draw'];
+        $this->columns = $request['columns'];
+        $this->search = $request['search'];
+        $this->order = $request['order'];
+        $this->start = $request['start'];
+        $this->length = $request['length'];
 
         // We get the filters by the columns name.
         foreach ($this->columns as $column) {
