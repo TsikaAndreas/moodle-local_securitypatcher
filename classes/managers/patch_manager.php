@@ -388,7 +388,7 @@ class patch_manager {
         return match ($status) {
             self::PATCH_APPLIED => get_string('apply', 'local_securitypatcher'),
             self::PATCH_RESTORED => get_string('restore', 'local_securitypatcher'),
-            default => '',
+            default => get_string('none', 'local_securitypatcher'),
         };
     }
 

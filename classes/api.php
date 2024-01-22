@@ -34,9 +34,14 @@ namespace local_securitypatcher;
 class api {
 
     /**
-     * Get file manager options for handling security patch attachments.
+     * Retrieve file manager options specifically designed for handling security patch attachments.
      *
-     * @return array An array of options for the file manager.
+     * @return array An associative array containing options for the file manager.
+     *   - 'maxfiles': Maximum number of files (1 for single file upload).
+     *   - 'maxbytes': Maximum file size in bytes.
+     *   - 'areamaxbytes': Maximum bytes per file area (unlimited).
+     *   - 'subdirs': Allow subdirectories (0 for no subdirectories).
+     *   - 'accepted_types': Accepted file types (e.g., .patch files).
      */
     public static function get_patch_filemanager_options(): array {
         global $CFG;
@@ -44,11 +49,11 @@ class api {
         require_once($CFG->libdir . '/filelib.php');
 
         return [
-                'maxfiles' => 1,                                    // Maximum number of files (1 for single file upload).
-                'maxbytes' => $CFG->maxbytes,                       // Maximum file size in bytes.
-                'areamaxbytes' => FILE_AREA_MAX_BYTES_UNLIMITED,    // Maximum bytes per file area (unlimited).
-                'subdirs' => 0,                                     // Allow subdirectories (0 for no subdirectories).
-                'accepted_types' => ['.patch'],                      // Accepted file types (e.g., .patch files).
+                'maxfiles' => 1,
+                'maxbytes' => $CFG->maxbytes,
+                'areamaxbytes' => FILE_AREA_MAX_BYTES_UNLIMITED,
+                'subdirs' => 0,
+                'accepted_types' => ['.patch'],
         ];
     }
 
@@ -61,7 +66,7 @@ class api {
     public static function get_date(?int $timestamp): string {
         if (!$timestamp) {
             // If no timestamp is provided, or it's null.
-            return '';
+            return '-';
         }
         // Format the timestamp as "YYYY-MM-DD HH:MM:SS".
         return date('Y-m-d H:i:s', $timestamp);

@@ -32,6 +32,7 @@ $string['confirm_title'] = 'Confirm';
 $string['confirm_cancel'] = 'Cancel';
 $string['apply'] = 'Apply';
 $string['restore'] = 'Restore';
+$string['none'] = 'None';
 $string['new_patch_button'] = 'Add new security patch';
 $string['operation_success'] = 'Successful';
 $string['operation_error'] = 'Error occurred';
