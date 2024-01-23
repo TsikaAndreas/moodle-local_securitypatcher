@@ -57,11 +57,11 @@ class patch_manager {
     /** @var array $operationoutput An array to store the output generated during patch operations. */
     private array $operationoutput = [];
     /**
-     * @var int $operationstatus Represents the status of the patch operation.
+     * @var int|null $operationstatus Represents the status of the patch operation.
      *                            - When set to 0, it indicates a successful execution of the operation.
      *                            - Anything else, it indicates that an error occurred during the operation.
      */
-    private int $operationstatus;
+    private ?int $operationstatus = null;
 
     /**
      * @var string The filearea that the security patches are stored.
@@ -351,7 +351,7 @@ class patch_manager {
      */
     public function get_timeapplied(bool $formated = false): int|string {
         if ($formated) {
-            return (new report_manager())->get_date($this->currentpatch->timeapplied);
+            return api::get_date($this->currentpatch->timeapplied);
         }
         return $this->currentpatch->timeapplied;
     }
@@ -364,7 +364,7 @@ class patch_manager {
      */
     public function get_timerestored(bool $formated = false): int|string {
         if ($formated) {
-            return (new report_manager())->get_date($this->currentpatch->timerestored);
+            return api::get_date($this->currentpatch->timerestored);
         }
         return $this->currentpatch->timerestored;
     }
