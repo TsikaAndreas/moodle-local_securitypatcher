@@ -69,6 +69,6 @@ class api {
             return '-';
         }
         // Format the timestamp as "YYYY-MM-DD HH:MM:SS".
-        return date('Y-m-d H:i:s', $timestamp);
+        return date('d-m-Y H:i:s', $timestamp);
     }
 }
