@@ -32,6 +32,11 @@ tr.child .patch-actions-wrapper {
     flex-wrap: wrap;
 }
 
+/*DataTable Date Picker*/
+div.dt-datetime table tr th {
+    color: #fff;
+}
+
 /*Datatable Loader*/
 .datatable-loader {
     position: absolute;

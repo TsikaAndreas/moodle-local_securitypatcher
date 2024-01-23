@@ -22,7 +22,8 @@
  */
 define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repository',
         'core/prefetch', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/templates',
-        'local_securitypatcher/jquery.dataTables', 'local_securitypatcher/dataTables.bootstrap4',
+        'local_securitypatcher/jquery.dataTables', 'local_securitypatcher/dataTables.dateTime',
+        'local_securitypatcher/dataTables.bootstrap4',
         'local_securitypatcher/dataTables.buttons', 'local_securitypatcher/buttons.bootstrap4',
         'local_securitypatcher/buttons.colVis', 'local_securitypatcher/buttons.html5',
         'local_securitypatcher/buttons.print', 'local_securitypatcher/pdfmake',
@@ -33,7 +34,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
     /**
      *  Initialise and load the datatable.
      */
-    function load_datatable() {
+    function load_datatable(filterOptions) {
         $(document).ready(function () {
             // Initialize dataTable.
             let table = $('#patchestable').DataTable({
@@ -72,12 +73,12 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 },
                 columns: [
                     {data: null, defaultContent: ""},
-                    {data: "name", name: "name"},
-                    {data: "lastaction", name: "status"},
-                    {data: "created", name: "timecreated"},
-                    {data: "modified", name: "timemodified"},
-                    {data: "applied", name: "timeapplied"},
-                    {data: "restored", name: "timerestored"},
+                    {data: "name", name: "name", type: "text"},
+                    {data: "lastaction", name: "status", type: "select"},
+                    {data: "created", name: "timecreated", type: "datetime"},
+                    {data: "modified", name: "timemodified", type: "datetime"},
+                    {data: "applied", name: "timeapplied", type: "datetime"},
+                    {data: "restored", name: "timerestored", type: "datetime"},
                     {data: "actions"},
                 ],
                 buttons: [
@@ -125,7 +126,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 ],
                 initComplete: function(settings, json) {
                     datatable_loader(false);
-                    add_column_filters(this.api(), settings.aoColumns);
+                    add_column_filters(this.api(), settings.aoColumns, filterOptions);
                 },
                 drawCallback: function() {
 
@@ -313,10 +314,11 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
      *
      * @param {DataTable} table - The DataTable instance representing the table.
      * @param {Array} columns - An array of column configuration objects.
+     * @param {Object} filterOptions - Filter options for column.
      * @returns {void}
      */
-    function add_column_filters(table, columns) {
-        $('#patchestable thead tr').clone(true).appendTo('#patchestable thead');
+    function add_column_filters(table, columns, filterOptions) {
+        $('#patchestable thead tr').clone(false).appendTo('#patchestable thead');
 
         columns.forEach(function(item) {
             let clonedCell = $('#patchestable thead tr:eq(1) th:eq(' + item.idx + ')');
@@ -333,19 +335,44 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
             });
             clonedCell.removeClass(sortClasses.join(' '));
 
-            clonedCell.html('<input class="text-center w-100" type="text" placeholder="' + title + '"/>');
-
-            // Search on keyup in every column.
-            $('input', clonedCell).on('keyup change', function () {
-                if (table.column(item.idx).search() !== this.value) {
-                    table.column(item.idx).search(this.value).draw();
-                }
-            });
-            // Event to stop sorting when clicking on.
-            $('input', clonedCell).on('click', function (e) {
-                e.stopPropagation();
-            });
+            create_filter_input(table, item, clonedCell, title, filterOptions);
         });
+    }
+
+    /**
+     * Creates a filter input based on item type and applies it to a DataTable column.
+     *
+     * @param {DataTable} table - The DataTable instance.
+     * @param {Object} item - The item configuration.
+     * @param {jQuery} cell - The jQuery object representing the table cell.
+     * @param {string} title - The column name.
+     * @param {Object} filterOptions - Filter options for column.
+     * @returns {void}
+     */
+    function create_filter_input(table, item, cell,title, filterOptions) {
+        switch (true) {
+            case ['text', 'datetime'].includes(item.type):
+                cell.html('<input class="form-control text-center w-100" type="text" placeholder="' + title + '"/>');
+                $('input', cell).on('keyup change', function () {
+                    if (table.column(item.idx).search() !== this.value) {
+                        table.column(item.idx).search(this.value).draw();
+                    }
+                });
+                if (item.type === 'datetime') {
+                    new DateTime($('input', cell), {
+                        format: 'DD-MM-YYYY'
+                    });
+                }
+                break;
+            case item.type === 'select' && item.name === 'status' && filterOptions.hasOwnProperty(item.name):
+                cell.html(filterOptions[item.name]);
+                $('select', cell).on('change', function () {
+                    if (table.column(item.idx).search() !== this.value) {
+                        table.column(item.idx).search(this.value).draw();
+                    }
+                });
+                break;
+        }
     }
 
     /**
@@ -423,10 +450,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
         }
     }
 
-    const init = function () {
+    const init = function (filterOptions) {
         prefetch_strings();
         prefetch_templates();
-        load_datatable();
+        load_datatable(filterOptions);
     }
 
     return {

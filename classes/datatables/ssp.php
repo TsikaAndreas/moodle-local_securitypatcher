@@ -90,6 +90,16 @@ class ssp {
     protected string $mainsql;
 
     /**
+     * @var string The string that contains the where SQL.
+     */
+    protected string $wheresql;
+
+    /**
+     * @var array The array that contains the column type mapping.
+     */
+    protected array $columntypemap;
+
+    /**
      * Initialise with the request data.
      *
      * @param array $request The request array with the datatable data.
@@ -153,6 +163,20 @@ class ssp {
     }
 
     /**
+     * Set the where sql clause to the DataTable.
+     *
+     * @param string $sql
+     * @return void
+     */
+    public function set_wheresql(string $sql): void {
+        $this->wheresql = $sql;
+    }
+
+    public function set_column_type_map(array $map): void {
+        $this->columntypemap = $map;
+    }
+
+    /**
      * This returns the object that needs to be json encoded and is required
      * by javascript to render the DataTable.
      *
@@ -190,16 +214,14 @@ class ssp {
         $filtersql = '';
 
         if (!empty($this->filters)) {
-            $filtersql .= 'AND (';
+            $filtersql .= !empty($this->wheresql) ? 'AND (' : 'WHERE (';
             $i = 1;
 
             foreach ($this->filters as $columnname => $value) {
                 if ($i > 1) {
                     $filtersql .= ' AND ';
                 }
-
-                $filtersql .= $DB->sql_like("LOWER({$columnname})", ":likestr{$i}", false, false);
-                $params["likestr{$i}"] = '%' . mb_strtolower($value) . '%';
+                $this->add_search_query($columnname, $value, $i, $filtersql, $params, false);
                 $i++;
             }
 
@@ -215,16 +237,14 @@ class ssp {
                     $filtersql .= ' OR ';
                 }
 
-                $filtersql .= $DB->sql_like("LOWER({$columnname})", ":glikestr{$i}", false, false);
-
-                $params["glikestr{$i}"] = '%' . mb_strtolower($value) . '%';
+                $this->add_search_query($columnname, $value, $i, $filtersql, $params, true);
                 $i++;
             }
 
             $filtersql .= ' )';
         }
 
-        $sql = $this->mainsql . " {$filtersql} {$ordersql}";
+        $sql = $this->mainsql . " {$this->wheresql} {$filtersql} {$ordersql}";
         $filteredsql = $this->countsql . " {$filtersql}";
         $recordsfiltered = $DB->get_records_sql($sql, $params, $this->start, $this->length);
         $recordsfilteredtotal = $DB->count_records_sql($filteredsql, $params);
@@ -237,5 +257,46 @@ class ssp {
         $obj->data = $data;
 
         return $obj;
+    }
+
+    /**
+     * Add a search query for a specific column to the SQL query.
+     *
+     * @param string $columnname The name of the column to search.
+     * @param string $value The value to search for.
+     * @param int $i The search index to distinguish multiple search conditions.
+     * @param string &$sql The SQL query to which the search condition will be added.
+     * @param array &$params The array of parameters used in the SQL query.
+     * @param bool $isglobal Whether the search is global or not. Defaults to false.
+     * @return void
+     */
+    private function add_search_query(string $columnname, string $value, int $i, string &$sql, array &$params,
+            bool $isglobal = false): void {
+        global $DB;
+
+        $search = $isglobal ? 'gsearch' : 'search';
+
+        if (array_key_exists($columnname, $this->columntypemap)) {
+            $type = $this->columntypemap[$columnname];
+
+            switch ($type) {
+                case 'int':
+                    $sql .= $DB->sql_like("LOWER({$columnname})", ":{$search}{$i}", false, false);
+                    $params["{$search}{$i}"] = mb_strtolower($value);
+                    break;
+                case 'timestamp':
+                    $sql .= "(LOWER({$columnname}) >= :{$search}datefrom{$i} AND LOWER({$columnname}) < :{$search}dateto{$i})";
+                    $params["{$search}datefrom{$i}"] = strtotime("midnight", strtotime($value));
+                    $params["{$search}dateto{$i}"] = strtotime("tomorrow", strtotime($value)) - 1;
+                    break;
+                default:
+                    $sql .= $DB->sql_like("LOWER({$columnname})", ":{$search}{$i}", false, false);
+                    $params["{$search}{$i}"] = '%' . mb_strtolower($value) . '%';
+                    break;
+            }
+        } else {
+            $sql .= $DB->sql_like("LOWER({$columnname})", ":{$search}{$i}", false, false);
+            $params["{$search}{$i}"] = '%' . mb_strtolower($value) . '%';
+        }
     }
 }

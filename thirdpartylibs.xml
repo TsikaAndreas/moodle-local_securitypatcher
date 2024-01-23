@@ -70,4 +70,18 @@
         <version>0.2.7</version>
         <license>MIT</license>
     </library>
+    <library>
+        <location>amd/src/dataTables.dateTime.js</location>
+        <name>DataTable DateTime</name>
+        <description>Date picker library used for DataTables.</description>
+        <version>1.5.1</version>
+        <license>MIT</license>
+    </library>
+    <library>
+        <location>amd/src/moment.js</location>
+        <name>Moment.js</name>
+        <description>A JavaScript date library for parsing, validating, manipulating, and formatting dates.</description>
+        <version>2.30.1</version>
+        <license>MIT</license>
+    </library>
 </libraries>

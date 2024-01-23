@@ -65,10 +65,42 @@ class patches {
         $ssp->init($this->request);
         $ssp->set_countsql($this->count_sql());
         $ssp->set_mainsql($this->main_sql());
+        $ssp->set_wheresql($this->where_sql());
+        $ssp->set_column_type_map($this->searchable_column_types_mapping());
 
         $this->result = $ssp->result();
 
         $this->process_data();
+    }
+
+    /**
+     * Generate HTML select options for patch status.
+     *
+     * @return string The HTML select options for patch status.
+     */
+    public static function html_status_select_options(): string {
+        $options = [
+                patch_manager::PATCH_CLEAN => get_string('none', 'local_securitypatcher'),
+                patch_manager::PATCH_APPLIED => get_string('apply', 'local_securitypatcher'),
+                patch_manager::PATCH_RESTORED => get_string('restore', 'local_securitypatcher'),
+        ];
+        return \html_writer::select($options, 'status', '', ['' => 'choosedots'], ['class' => 'w-100']);
+    }
+
+    /**
+     * Get the mapping of searchable column names to their corresponding data types.
+     *
+     * @return array The searchable column types mapping.
+     */
+    private function searchable_column_types_mapping(): array {
+        return [
+                'name' => 'text',
+                'status' => 'int',
+                'timeapplied' => 'timestamp',
+                'timerestored' => 'timestamp',
+                'timecreated' => 'timestamp',
+                'timemodified' => 'timestamp',
+        ];
     }
 
     /**
@@ -208,5 +240,17 @@ class patches {
      */
     private function main_sql(): string {
         return "SELECT * FROM {local_securitypatcher}";
+    }
+
+    /**
+     * Get the WHERE clause SQL query.
+     *
+     * This method returns the WHERE clause for the SQL query.
+     * If no conditions are specified, an empty string is returned.
+     *
+     * @return string The WHERE clause SQL query.
+     */
+    private function where_sql(): string {
+        return '';
     }
 }

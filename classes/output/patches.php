@@ -41,6 +41,12 @@ class patches implements \renderable, \templatable {
      * @return array
      */
     public function export_for_template(renderer_base $output) {
-        return [];
+        $filters = [
+                'status' => \local_securitypatcher\datatables\tables\patches::html_status_select_options(),
+        ];
+
+        return [
+                'filters' => json_encode($filters, JSON_THROW_ON_ERROR),
+        ];
     }
 }

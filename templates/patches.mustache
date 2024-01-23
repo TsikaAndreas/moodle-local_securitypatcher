@@ -26,8 +26,11 @@
     </table>
 </div>
 {{#js}}
-    require(['local_securitypatcher/patches', 'local_securitypatcher/jszip'], function(Patches, Jszip) {
+    require(['local_securitypatcher/patches', 'local_securitypatcher/jszip',
+                'local_securitypatcher/moment'], function(Patches, Jszip, Moment) {
         window.JSZip=Jszip;
-        Patches.init();
+        window.moment = Moment;
+        let options = {{{filters}}};
+        Patches.init(options);
     });
 {{/js}}

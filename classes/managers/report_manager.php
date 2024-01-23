@@ -46,6 +46,7 @@ class report_manager {
         $PAGE->requires->css('/local/securitypatcher/styles/dataTables.bootstrap4.min.css');
         $PAGE->requires->css('/local/securitypatcher/styles/buttons.bootstrap4.min.css');
         $PAGE->requires->css('/local/securitypatcher/styles/responsive.bootstrap4.min.css');
+        $PAGE->requires->css('/local/securitypatcher/styles/dataTables.dateTime.min.css');
     }
 
     /**
