@@ -79,7 +79,7 @@ class apply_patch extends external_api {
                 'status' => $manager->get_status(),
         ];
         // Return a value as described in the returns function.
-        return array('result' => $result);
+        return ['result' => $result];
     }
 
     /**

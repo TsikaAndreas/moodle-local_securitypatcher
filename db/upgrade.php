@@ -51,15 +51,13 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Upgrade the local_securitypatcher plugin
  *
  * @param int $oldversion the version we are upgrading from
  * @param bool result
  */
-function xmldb_local_securitypatcher_upgrade($oldversion) {
+function xmldb_local_securitypatcher_upgrade(int $oldversion) {
     global $CFG, $DB;
 
     $dbman = $DB->get_manager();

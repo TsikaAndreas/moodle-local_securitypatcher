@@ -79,7 +79,7 @@ class delete_patch_report extends external_api {
         }
 
         // Return a value as described in the returns function.
-        return array('result' => $deleted);
+        return ['result' => $deleted];
     }
 
     /**

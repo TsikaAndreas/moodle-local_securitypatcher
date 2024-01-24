@@ -97,7 +97,7 @@ class ssp {
     /**
      * @var array The array that contains the where parameters.
      */
-    protected array $whereparams= [];
+    protected array $whereparams = [];
 
     /**
      * @var array The array that contains the column type mapping.
@@ -187,6 +187,13 @@ class ssp {
         $this->whereparams = $params;
     }
 
+    /**
+     * Sets the column type map for data processing.
+     *
+     * @param array $map An associative array where keys represent column names
+     *                   and values represent their corresponding data types.
+     * @return void
+     */
     public function set_column_type_map(array $map): void {
         $this->columntypemap = $map;
     }
@@ -295,6 +302,7 @@ class ssp {
      * @param string &$sql The SQL query to which the search condition will be added.
      * @param array &$params The array of parameters used in the SQL query.
      * @param bool $isglobal Whether the search is global or not. Defaults to false.
+     *
      * @return void
      */
     private function add_search_query(string $columnname, string $value, int $i, string &$sql, array &$params,

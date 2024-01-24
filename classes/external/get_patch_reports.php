@@ -57,7 +57,7 @@ class get_patch_reports extends external_api {
         // Validate all the parameters.
         $params = self::validate_parameters(self::execute_parameters(), [
                 'id' => $id,
-                'data' => $data
+                'data' => $data,
         ]);
 
         $context = \context_system::instance();

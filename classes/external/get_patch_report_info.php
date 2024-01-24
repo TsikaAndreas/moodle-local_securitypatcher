@@ -78,7 +78,7 @@ class get_patch_report_info extends external_api {
         $info->content = $report->data;
 
         // Return a value as described in the returns function.
-        return array('result' => $info);
+        return ['result' => $info];
     }
 
     /**
@@ -90,7 +90,7 @@ class get_patch_report_info extends external_api {
         return new external_single_structure([
                 'result' => new external_single_structure([
                     'date' => new external_value(PARAM_TEXT, 'Security patch report date.'),
-                    'content' => new external_value(PARAM_RAW, 'Security patch report content.')
+                    'content' => new external_value(PARAM_RAW, 'Security patch report content.'),
                 ], 'Result object with the security patch report info.'),
         ]);
     }

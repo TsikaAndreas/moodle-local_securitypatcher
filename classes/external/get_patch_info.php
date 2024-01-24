@@ -74,7 +74,7 @@ class get_patch_info extends external_api {
         $result = $manager->get_patch_info($params['patchid']);
 
         // Return a value as described in the returns function.
-        return array('result' => $result);
+        return ['result' => $result];
     }
 
     /**
@@ -86,7 +86,7 @@ class get_patch_info extends external_api {
         return new external_single_structure([
                 'result' => new external_single_structure([
                     'name' => new external_value(PARAM_TEXT, 'Security patch file name.'),
-                    'content' => new external_value(PARAM_RAW, 'Security patch file content.')
+                    'content' => new external_value(PARAM_RAW, 'Security patch file content.'),
                 ], 'Result object with the security patch info.'),
         ]);
     }

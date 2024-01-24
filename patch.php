@@ -63,7 +63,7 @@ if (empty($id)) {
 $filemangeroptions = api::get_patch_filemanager_options();
 $formargs = ['patch' => $securitypatch];
 $mform = new addpatch_form(null, $formargs);
-$toform = array();
+$toform = [];
 
 // Prepare the file manager for handling attachments.
 file_prepare_standard_filemanager($securitypatch, 'attachments', $filemangeroptions, $context,

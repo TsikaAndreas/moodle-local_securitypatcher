@@ -461,6 +461,8 @@ class patch_manager {
     }
 
     /**
+     * Sets the operation action for the current instance.
+     *
      * @param string $action The operation action.
      */
     public function set_operation_action(string $action): void {

@@ -147,7 +147,7 @@ class patches {
                         'local_securitypatcher'),
                 [
                         'data-patch' => $patch->id,
-                        'class' => 'edit-patch-action align-self-center border-0 bg-transparent'
+                        'class' => 'edit-patch-action align-self-center border-0 bg-transparent',
                 ]
         );
 
