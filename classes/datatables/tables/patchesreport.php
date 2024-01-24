@@ -142,11 +142,11 @@ class patchesreport {
      *
      * This method generates HTML code for various actions for a security patch report.
      *
-     * @param object $patch The security patch report object to generate actions for.
+     * @param object $report The security patch report object to generate actions for.
      *
      * @return string HTML code containing the security patch report actions.
      */
-    public function parse_actions(object $patch): string {
+    public function parse_actions(object $report): string {
         global $OUTPUT;
 
         $actions = \html_writer::start_div('patch-report-actions-wrapper');
@@ -158,7 +158,7 @@ class patchesreport {
                         'local_securitypatcher'),
                 [
                         'class' => 'view-report-action align-self-center border-0 bg-transparent',
-                        'data-patch' => $patch->id,
+                        'data-report' => $report->id,
                 ]
         );
 
@@ -169,7 +169,7 @@ class patchesreport {
                         'local_securitypatcher'),
                 [
                         'class' => 'delete-report-action align-self-center border-0 bg-transparent',
-                        'data-patch' => $patch->id,
+                        'data-report' => $report->id,
                 ]
         );
 

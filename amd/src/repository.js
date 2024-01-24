@@ -22,84 +22,112 @@
  */
 define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notification) {
 
-    var get_patches = function (args) {
+    let get_patches = function (args) {
 
-        var request = {
+        let request = {
             methodname: 'local_securitypatcher_get_patches',
             args: args
         };
 
-        var promise = Ajax.call([request])[0];
+        let promise = Ajax.call([request])[0];
 
         promise.fail(Notification.exception);
 
         return promise;
     };
 
-    var delete_patch = function (args) {
+    let delete_patch = function (args) {
 
-        var request = {
+        let request = {
             methodname: 'local_securitypatcher_delete_patch',
             args: args
         };
 
-        var promise = Ajax.call([request])[0];
+        let promise = Ajax.call([request])[0];
 
         promise.fail(Notification.exception);
 
         return promise;
     };
 
-    var apply_patch = function (args) {
+    let apply_patch = function (args) {
 
-        var request = {
+        let request = {
             methodname: 'local_securitypatcher_apply_patch',
             args: args
         };
 
-        var promise = Ajax.call([request])[0];
+        let promise = Ajax.call([request])[0];
 
         promise.fail(Notification.exception);
 
         return promise;
     };
 
-    var restore_patch = function (args) {
+    let restore_patch = function (args) {
 
-        var request = {
+        let request = {
             methodname: 'local_securitypatcher_restore_patch',
             args: args
         };
 
-        var promise = Ajax.call([request])[0];
+        let promise = Ajax.call([request])[0];
 
         promise.fail(Notification.exception);
 
         return promise;
     };
 
-    var get_patch_reports = function (args) {
+    let get_patch_reports = function (args) {
 
-        var request = {
+        let request = {
             methodname: 'local_securitypatcher_get_patch_reports',
             args: args
         };
 
-        var promise = Ajax.call([request])[0];
+        let promise = Ajax.call([request])[0];
 
         promise.fail(Notification.exception);
 
         return promise;
     };
 
-    var get_patch_info = function (args) {
+    let get_patch_info = function (args) {
 
-        var request = {
+        let request = {
             methodname: 'local_securitypatcher_get_patch_info',
             args: args
         };
 
-        var promise = Ajax.call([request])[0];
+        let promise = Ajax.call([request])[0];
+
+        promise.fail(Notification.exception);
+
+        return promise;
+    };
+
+    let delete_patch_report = function (args) {
+
+        let request = {
+            methodname: 'local_securitypatcher_delete_patch_report',
+            args: args
+        };
+
+        let promise = Ajax.call([request])[0];
+
+        promise.fail(Notification.exception);
+
+        return promise;
+    };
+
+    let get_patch_report_info = function (args) {
+
+        let request = {
+            methodname: 'local_securitypatcher_get_patch_report_info',
+            args: args
+        };
+
+        let promise = Ajax.call([request])[0];
 
         promise.fail(Notification.exception);
 
@@ -113,5 +141,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
         restore_patch: restore_patch,
         get_patch_reports: get_patch_reports,
         get_patch_info: get_patch_info,
+        delete_patch_report: delete_patch_report,
+        get_patch_report_info: get_patch_report_info,
     };
 });

@@ -22,13 +22,15 @@ table tbody tr td.dtr-control:before {
     margin-bottom: 0.5rem;
 }
 
-.patch-actions-wrapper {
+.patch-actions-wrapper,
+.patch-report-actions-wrapper {
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
 }
 
-tr.child .patch-actions-wrapper {
+tr.child .patch-actions-wrapper,
+tr.child .patch-report-actions-wrapper {
     flex-wrap: wrap;
 }
 

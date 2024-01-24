@@ -110,22 +110,71 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
 
             // View action.
             table.on('click', 'tbody tr button.view-report-action', function () {
-                let patch = parseInt(this.getAttribute('data-patch'), 10);
-
+                let report = parseInt(this.getAttribute('data-report'), 10);
+                datatable_loader(true);
                 let args = {
-                    patchid: patch,
+                    reportid: report,
                 };
+                Repository.get_patch_report_info(args)
+                    .then(function(res) {
+                        if (Object.keys(res.result).length !== 0){
+                            let content = "<pre class='report-info-content'>" + res.result.content + "</pre>";
+                            display_report_content(res.result.date, content)
+                        }
+                        datatable_loader(false);
+                    })
+                    .catch(function () {
+                        datatable_loader(false);
+                    });
             });
 
             // Delete action.
             table.on('click', 'tbody tr button.delete-report-action', function () {
-                let patch = parseInt(this.getAttribute('data-patch'), 10);
+                let node = this;
+                let report = parseInt(this.getAttribute('data-report'), 10);
 
-                let args = {
-                    patchid: patch,
+                // Confirmation message.
+                let confirmQuestion = Str.get_string('patchesreport:report_confirmdelete', 'local_securitypatcher');
+                let confirmButton = Str.get_string('patchesreport:report_confirmdeletebtn', 'local_securitypatcher');
+
+                let confirmCallback = function () {
+                    datatable_loader(true);
+                    let args = {
+                        reportid: report,
+                    };
+                    Repository.delete_patch_report(args)
+                        .then(function(res) {
+                            if (res.result){
+                                table.row(node.closest('tr')).remove().draw();
+                            }
+                            datatable_loader(false);
+                        })
+                        .catch(function () {
+                            datatable_loader(false);
+                        });
                 };
+                show_confirmation(confirmQuestion, confirmButton, confirmCallback);
             });
         });
+    }
+
+    /**
+     * Display a confirmation dialog with a specified question and custom confirmation button.
+     *
+     * @param {string|Promise} question - The question or message to display in the confirmation dialog.
+     * @param {string|Promise} confirmButton - The label for the confirmation button.
+     * @param confirmCallback - The callback function to execute when the confirmation button is clicked.
+     * @returns {void}
+     */
+    function show_confirmation(question, confirmButton, confirmCallback) {
+        Notification.confirm(
+            Str.get_string('confirm_title', 'local_securitypatcher'),
+            question,
+            confirmButton,
+            Str.get_string('confirm_cancel', 'local_securitypatcher'),
+            confirmCallback,
+            null
+        );
     }
 
     /**
