@@ -76,7 +76,7 @@ $string['notification:failnewpatchsave'] = 'The security patch could not be save
 // Privacy Provider.
 $string['privacy:metadata'] = 'The Security Patcher plugin does not store any personal data.';
 
-// Reports.
+// Patches List.
 $string['patches:title'] = 'Security Patch List';
 $string['patches:heading'] = 'Security Patch List';
 $string['patches:applyaction'] = 'Apply';
@@ -92,6 +92,12 @@ $string['patches:patch_confirmapplybtn'] = 'Apply';
 $string['patches:patch_confirmrestore'] = 'You are about to restore a security patch, are you sure?';
 $string['patches:patch_confirmrestorebtn'] = 'Restore';
 
+// Patches Report List.
+$string['patchesreport:deleteaction'] = 'Delete';
+$string['patchesreport:viewaction'] = 'View';
+$string['patchesreport:report_confirmdelete'] = 'You are about to delete a security patch report, are you sure?';
+$string['patchesreport:report_confirmdeletebtn'] = 'Delete';
+
 // Patches Datatables.
 $string['datatable:patches:id'] = 'ID';
 $string['datatable:patches:name'] = 'Patch Name';
@@ -104,7 +110,7 @@ $string['datatable:patches:restored'] = 'Restored At';
 $string['datatable:patches:actions'] = 'Actions';
 
 // Patches Report Datatables.
-$string['datatable:patchesreport'] = 'Patches Reports: {$a}';
+$string['datatable:patchesreport'] = 'Reports for: {$a}';
 $string['datatable:patchesreport:id'] = 'ID';
 $string['datatable:patchesreport:timecreated'] = 'Created At';
 $string['datatable:patchesreport:status'] = 'Status';

@@ -29,7 +29,7 @@ use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
 use external_value;
-use local_securitypatcher\managers\report_manager;
+use local_securitypatcher\datatables\tables\patchesreport;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -48,23 +48,27 @@ class get_patch_reports extends external_api {
     /**
      * Returns the report list of security patch.
      *
-     * @param int $patchid
-     * @return array
+     * @param int $id
+     * @param string $data
+     * @return object
      */
-    public static function execute(int $patchid): array {
+    public static function execute(int $id, string $data): object {
+        global $PAGE;
         // Validate all the parameters.
         $params = self::validate_parameters(self::execute_parameters(), [
-                'patchid' => $patchid,
+                'id' => $id,
+                'data' => $data
         ]);
 
         $context = \context_system::instance();
         require_capability('local/securitypatcher:viewreports', $context);
+        $PAGE->set_context($context);
 
-        $manager = new report_manager();
-        $result = $manager->get_patch_report_list($params['patchid']);
+        $request = json_decode($params['data'], true, 512, JSON_THROW_ON_ERROR);
+        $manager = new patchesreport($request, $params['id']);
 
-        // Return a value as described in the returns function.
-        return array('result' => $result);
+        // Return value as described in the returns function.
+        return $manager->get_result();
     }
 
     /**
@@ -74,7 +78,8 @@ class get_patch_reports extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-                'patchid' => new external_value(PARAM_INT, 'id of security patch'),
+                'id' => new external_value(PARAM_INT, 'id of security patch'),
+                'data' => new external_value(PARAM_RAW, 'the datatable data'),
         ]);
     }
 
@@ -85,7 +90,10 @@ class get_patch_reports extends external_api {
      */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
-                'result' => new external_multiple_structure(
+                'draw' => new external_value(PARAM_INT, 'datatable draw number'),
+                'recordsTotal' => new external_value(PARAM_INT, 'datatable total records number'),
+                'recordsFiltered' => new external_value(PARAM_INT, 'datatable filtered records number'),
+                'data' => new external_multiple_structure(
                         new external_single_structure([
                                 'id' => new external_value(PARAM_INT, 'report identifier'),
                                 'status' => new external_value(PARAM_TEXT, 'report status'),
@@ -93,7 +101,7 @@ class get_patch_reports extends external_api {
                                 'timecreated' => new external_value(PARAM_TEXT, 'report time creation'),
                                 'actions' => new external_value(PARAM_RAW, 'report actions'),
                         ])
-                        , 'Result with list of security patches reports'),
+                        , 'Result with list of security patch reports'),
         ]);
     }
 }

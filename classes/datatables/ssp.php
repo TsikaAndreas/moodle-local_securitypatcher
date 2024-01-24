@@ -92,7 +92,12 @@ class ssp {
     /**
      * @var string The string that contains the where SQL.
      */
-    protected string $wheresql;
+    protected string $wheresql = '';
+
+    /**
+     * @var array The array that contains the where parameters.
+     */
+    protected array $whereparams= [];
 
     /**
      * @var array The array that contains the column type mapping.
@@ -172,6 +177,16 @@ class ssp {
         $this->wheresql = $sql;
     }
 
+    /**
+     * Set the where clause parameters for the DataTable.
+     *
+     * @param array $params
+     * @return void
+     */
+    public function set_whereparams(array $params): void {
+        $this->whereparams = $params;
+    }
+
     public function set_column_type_map(array $map): void {
         $this->columntypemap = $map;
     }
@@ -214,7 +229,7 @@ class ssp {
         $filtersql = '';
 
         if (!empty($this->filters)) {
-            $filtersql .= !empty($this->wheresql) ? 'AND (' : 'WHERE (';
+            $filtersql .= !empty($this->wheresql) ? ' AND (' : ' (';
             $i = 1;
 
             foreach ($this->filters as $columnname => $value) {
@@ -229,7 +244,7 @@ class ssp {
         }
 
         if (!empty($this->globalfilters)) {
-            $filtersql .= ' AND (';
+            $filtersql .= (!empty($filtersql) && !empty($this->wheresql)) ? ' AND (' : ' (';
             $i = 1;
 
             foreach ($this->globalfilters as $columnname => $value) {
@@ -244,8 +259,20 @@ class ssp {
             $filtersql .= ' )';
         }
 
-        $sql = $this->mainsql . " {$this->wheresql} {$filtersql} {$ordersql}";
-        $filteredsql = $this->countsql . " {$filtersql}";
+        // Build the where sql.
+        $wheresql = (!empty($this->wheresql) || !empty($filtersql)) ? 'WHERE ' : '';
+
+        if (!empty($this->wheresql) && !empty($this->whereparams)) {
+            $wheresql .= "($this->wheresql)";
+            foreach ($this->whereparams as $wherekey => $wherevalue) {
+                $whereparam = ':where' . $wherekey;
+                $wheresql = preg_replace('/\?/', $whereparam, $wheresql, 1);
+                $params["where{$wherekey}"] = $wherevalue;
+            }
+        }
+
+        $sql = $this->mainsql . " {$wheresql} {$filtersql} {$ordersql}";
+        $filteredsql = $this->countsql . " {$wheresql} {$filtersql}";
         $recordsfiltered = $DB->get_records_sql($sql, $params, $this->start, $this->length);
         $recordsfilteredtotal = $DB->count_records_sql($filteredsql, $params);
         $data = array_values($recordsfiltered);

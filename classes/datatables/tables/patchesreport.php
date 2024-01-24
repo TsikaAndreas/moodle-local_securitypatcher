@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Patches process class for the local_securitypatcher plugin.
+ * Patch report process class for the local_securitypatcher plugin.
  *
  * @package   local_securitypatcher
  * @copyright 2024 onwards Andrei-Robert Tica <andreastsika@gmail.com>
@@ -30,33 +30,37 @@ use local_securitypatcher\managers\patch_manager;
 use stdClass;
 
 /**
- * Patches process class for the server side of DataTables.
+ * Patch report process class for the server side of DataTables.
  *
  * @package   local_securitypatcher
  * @copyright 2024 onwards Andrei-Robert Tica <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class patches {
+class patchesreport {
 
     /** @var array $request An array containing the request data. */
     private array $request;
     /** @var stdClass $request An object containing the result. */
     private stdClass $result;
+    /** @var int $patchid An int containing the patch identifier. */
+    private int $patchid;
 
     /**
-     * Constructor for the patches class.
+     * Constructor for the patchesreport class.
      *
      * @param array $request An array containing the request data.
+     * @param int $patchid An int containing the patch identifier.
      */
-    public function __construct(array $request) {
+    public function __construct(array $request, int $patchid) {
         $this->request = $request;
+        $this->patchid = $patchid;
         $this->init();
     }
 
     /**
-     * Initialize the Patches object.
+     * Initialize the Patches report object.
      *
-     * This method performs the initialization process for the Patches object.
+     * This method performs the initialization process for the Patchesreport object.
      * It creates an instance of the 'ssp' class, initializes it with the provided request data,
      * sets the count SQL and main SQL, retrieves the result, and processes the data.
      */
@@ -65,25 +69,13 @@ class patches {
         $ssp->init($this->request);
         $ssp->set_countsql($this->count_sql());
         $ssp->set_mainsql($this->main_sql());
+        $ssp->set_wheresql($this->where_sql());
+        $ssp->set_whereparams($this->where_params());
         $ssp->set_column_type_map($this->searchable_column_types_mapping());
 
         $this->result = $ssp->result();
 
         $this->process_data();
-    }
-
-    /**
-     * Generate HTML select options for patch status.
-     *
-     * @return string The HTML select options for patch status.
-     */
-    public static function html_status_select_options(): string {
-        $options = [
-                patch_manager::PATCH_CLEAN => get_string('none', 'local_securitypatcher'),
-                patch_manager::PATCH_APPLIED => get_string('apply', 'local_securitypatcher'),
-                patch_manager::PATCH_RESTORED => get_string('restore', 'local_securitypatcher'),
-        ];
-        return \html_writer::select($options, 'status', '', ['' => 'choosedots'], ['class' => 'w-100']);
     }
 
     /**
@@ -93,13 +85,36 @@ class patches {
      */
     private function searchable_column_types_mapping(): array {
         return [
-                'name' => 'text',
+                'timecreated' => 'text',
                 'status' => 'int',
-                'timeapplied' => 'timestamp',
-                'timerestored' => 'timestamp',
-                'timecreated' => 'timestamp',
-                'timemodified' => 'timestamp',
+                'operation' => 'text',
         ];
+    }
+
+    /**
+     * Generate HTML select options for patch report status.
+     *
+     * @return string The HTML select options for patch report status.
+     */
+    public static function html_status_select_options(): string {
+        $options = [
+                0 => get_string('operation_success', 'local_securitypatcher'),
+                1 => get_string('operation_error', 'local_securitypatcher'),
+        ];
+        return \html_writer::select($options, 'status', '', ['' => 'choosedots'], ['class' => 'w-100']);
+    }
+
+    /**
+     * Generate HTML select options for patch report opearation.
+     *
+     * @return string The HTML select options for patch report operation.
+     */
+    public static function html_operation_select_options(): string {
+        $options = [
+                'apply' => get_string('apply', 'local_securitypatcher'),
+                'restore' => get_string('restore', 'local_securitypatcher'),
+        ];
+        return \html_writer::select($options, 'operation', '', ['' => 'choosedots'], ['class' => 'w-100']);
     }
 
     /**
@@ -110,88 +125,39 @@ class patches {
      * and ensures proper formatting of date fields.
      */
     private function process_data(): void {
-        $patches = [];
-        $manager = new patch_manager();
+        $reports = [];
         foreach ($this->result->data as $item) {
             $data['id'] = $item->id;
-            $data['name'] = $item->name;
-            $data['lastaction'] = $manager->get_last_operation_name($item->status);
-            $data['applied'] = api::get_date($item->timeapplied);
-            $data['restored'] = api::get_date($item->timerestored);
-            $data['modified'] = api::get_date($item->timemodified);
-            $data['created'] = api::get_date($item->timecreated);
+            $data['status'] = patch_manager::get_patch_report_status((int) $item->status);
+            $data['operation'] = patch_manager::get_operation_name($item->operation);
+            $data['timecreated'] = api::get_date($item->timecreated);
             $data['actions'] = $this->parse_actions($item);
-            $patches[] = $data;
+            $reports[] = $data;
         }
-        $this->result->data = $patches;
+        $this->result->data = $reports;
     }
 
     /**
-     * Parse actions for a given security patch object.
+     * Parse actions for a given security patch report object.
      *
-     * This method generates HTML code for various actions for a security patch.
+     * This method generates HTML code for various actions for a security patch report.
      *
-     * @param object $patch The security patch object to generate actions for.
+     * @param object $patch The security patch report object to generate actions for.
      *
-     * @return string HTML code containing the security patch actions.
+     * @return string HTML code containing the security patch report actions.
      */
     public function parse_actions(object $patch): string {
         global $OUTPUT;
 
-        $actions = \html_writer::start_div('patch-actions-wrapper');
-
-        // Edit action.
-        $actions .= \html_writer::link(
-                new \moodle_url('/local/securitypatcher/patch.php', ['id' => $patch->id]),
-                $OUTPUT->pix_icon('t/edit', get_string('patches:editaction', 'local_securitypatcher'),
-                        'local_securitypatcher'),
-                [
-                        'data-patch' => $patch->id,
-                        'class' => 'edit-patch-action align-self-center border-0 bg-transparent'
-                ]
-        );
+        $actions = \html_writer::start_div('patch-report-actions-wrapper');
 
         // View action.
         $actions .= \html_writer::tag(
                 'button',
-                $OUTPUT->pix_icon('t/search', get_string('patches:viewaction', 'local_securitypatcher'),
+                $OUTPUT->pix_icon('t/search', get_string('patchesreport:viewaction', 'local_securitypatcher'),
                         'local_securitypatcher'),
                 [
-                        'class' => 'view-patch-action align-self-center border-0 bg-transparent',
-                        'data-patch' => $patch->id,
-                ]
-        );
-
-        // Reports action.
-        $actions .= \html_writer::tag(
-                'button',
-                $OUTPUT->pix_icon('t/report', get_string('patches:viewreportaction', 'local_securitypatcher'),
-                        'local_securitypatcher'),
-                [
-                        'class' => 'report-patch-action align-self-center border-0 bg-transparent',
-                        'data-id' => $patch->id,
-                        'data-name' => $patch->name,
-                ]
-        );
-
-        // Apply action.
-        $actions .= \html_writer::tag(
-                'button',
-                $OUTPUT->pix_icon('t/approve', get_string('patches:applyaction', 'local_securitypatcher'),
-                        'local_securitypatcher'),
-                [
-                        'class' => 'apply-patch-action align-self-center border-0 bg-transparent',
-                        'data-patch' => $patch->id,
-                ]
-        );
-
-        // Restore action.
-        $actions .= \html_writer::tag(
-                'button',
-                $OUTPUT->pix_icon('t/refresh', get_string('patches:restoreaction', 'local_securitypatcher'),
-                        'local_securitypatcher'),
-                [
-                        'class' => 'restore-patch-action align-self-center border-0 bg-transparent',
+                        'class' => 'view-report-action align-self-center border-0 bg-transparent',
                         'data-patch' => $patch->id,
                 ]
         );
@@ -199,10 +165,10 @@ class patches {
         // Delete action.
         $actions .= \html_writer::tag(
                 'button',
-                $OUTPUT->pix_icon('t/trash', get_string('patches:deleteaction', 'local_securitypatcher'),
+                $OUTPUT->pix_icon('t/trash', get_string('patchesreport:deleteaction', 'local_securitypatcher'),
                         'local_securitypatcher'),
                 [
-                        'class' => 'delete-patch-action align-self-center border-0 bg-transparent',
+                        'class' => 'delete-report-action align-self-center border-0 bg-transparent',
                         'data-patch' => $patch->id,
                 ]
         );
@@ -228,7 +194,7 @@ class patches {
      * @return string The count SQL query.
      */
     private function count_sql(): string {
-        return "SELECT count(*) FROM {local_securitypatcher}";
+        return "SELECT count(*) FROM {local_securitypatcher_data}";
     }
 
     /**
@@ -239,7 +205,7 @@ class patches {
      * @return string The main SQL query.
      */
     private function main_sql(): string {
-        return "SELECT * FROM {local_securitypatcher}";
+        return "SELECT * FROM {local_securitypatcher_data}";
     }
 
     /**
@@ -251,7 +217,7 @@ class patches {
      * @return string The WHERE clause SQL query.
      */
     private function where_sql(): string {
-        return '';
+        return 'patchid = ?';
     }
 
     /**
@@ -263,6 +229,6 @@ class patches {
      * @return array The WHERE clause parameters for the SQL query.
      */
     private function where_params(): array {
-        return [];
+        return [$this->patchid];
     }
 }

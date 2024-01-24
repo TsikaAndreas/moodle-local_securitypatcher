@@ -71,4 +71,18 @@ class api {
         // Format the timestamp as "YYYY-MM-DD HH:MM:SS".
         return date('d-m-Y H:i:s', $timestamp);
     }
+
+    /**
+     * Fetches the css files for the datatable.
+     *
+     * @return void
+     */
+    public static function load_datatables_css(): void {
+        global $PAGE;
+
+        $PAGE->requires->css('/local/securitypatcher/styles/dataTables.bootstrap4.min.css');
+        $PAGE->requires->css('/local/securitypatcher/styles/buttons.bootstrap4.min.css');
+        $PAGE->requires->css('/local/securitypatcher/styles/responsive.bootstrap4.min.css');
+        $PAGE->requires->css('/local/securitypatcher/styles/dataTables.dateTime.min.css');
+    }
 }
