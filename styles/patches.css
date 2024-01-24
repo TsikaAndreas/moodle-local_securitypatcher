@@ -37,6 +37,10 @@ div.dt-datetime table tr th {
     color: #fff;
 }
 
+.dt-datetime-clear {
+    cursor: pointer;
+}
+
 /*Datatable Loader*/
 .datatable-loader {
     position: absolute;

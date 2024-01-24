@@ -85,8 +85,8 @@ class patchesreport {
      */
     private function searchable_column_types_mapping(): array {
         return [
-                'timecreated' => 'text',
-                'status' => 'int',
+                'timecreated' => 'timestamp',
+                'status' => 'text',
                 'operation' => 'text',
         ];
     }
@@ -98,8 +98,8 @@ class patchesreport {
      */
     public static function html_status_select_options(): string {
         $options = [
-                0 => get_string('operation_success', 'local_securitypatcher'),
-                1 => get_string('operation_error', 'local_securitypatcher'),
+                patch_manager::PATCH_REPORT_SUCCESS => get_string('operation_success', 'local_securitypatcher'),
+                patch_manager::PATCH_REPORT_ERROR => get_string('operation_error', 'local_securitypatcher'),
         ];
         return \html_writer::select($options, 'status', '', ['' => 'choosedots'], ['class' => 'w-100']);
     }
@@ -128,7 +128,7 @@ class patchesreport {
         $reports = [];
         foreach ($this->result->data as $item) {
             $data['id'] = $item->id;
-            $data['status'] = patch_manager::get_patch_report_status((int) $item->status);
+            $data['status'] = patch_manager::get_patch_report_status($item->status);
             $data['operation'] = patch_manager::get_operation_name($item->operation);
             $data['timecreated'] = api::get_date($item->timecreated);
             $data['actions'] = $this->parse_actions($item);

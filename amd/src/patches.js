@@ -342,7 +342,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 });
                 if (item.type === 'datetime') {
                     new DateTime($('input', cell), {
-                        format: 'DD-MM-YYYY'
+                        format: 'DD-MM-YYYY',
+                        buttons: {
+                            clear: true
+                        },
                     });
                 }
                 break;

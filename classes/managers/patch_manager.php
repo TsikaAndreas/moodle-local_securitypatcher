@@ -44,6 +44,10 @@ class patch_manager {
     public const PATCH_APPLIED = 1;
     /** Patch has been restored. */
     public const PATCH_RESTORED = 2;
+    /** Patch report success status. */
+    public const PATCH_REPORT_SUCCESS = 'success';
+    /** Patch report error status. */
+    public const PATCH_REPORT_ERROR = 'error';
 
     /** @var int The identifier of the security patch. */
     private int $patchid;
@@ -315,13 +319,27 @@ class patch_manager {
 
         $record = new stdClass();
         $record->patchid = $this->currentpatch->id;
-        $record->status = $this->operationstatus;
+        $record->statuscode = $this->operationstatus;
+        $record->status = $this->parse_report_status_name($this->operationstatus);
         $record->data = $this->parse_operation_output();
         $record->operation = $this->operationaction;
         $record->timecreated = time();
         $record->timemodified = time();
 
         return $DB->insert_record('local_securitypatcher_data', $record, true);
+    }
+
+    /**
+     * Parses the numeric status code into a corresponding report status name.
+     *
+     * @param int $status The numeric status code.
+     * @return string The report status name.
+     */
+    private function parse_report_status_name(int $status): string {
+        return match ($status) {
+            0 => self::PATCH_REPORT_SUCCESS,
+            default => self::PATCH_REPORT_ERROR,
+        };
     }
 
     /**
@@ -408,14 +426,14 @@ class patch_manager {
     }
 
     /**
-     * Get the localized patch report status based on the specified status code.
+     * Get the localized patch report status based on the specified status.
      *
-     * @param int $status The status code representing the patch report status.
+     * @param string $status The status representing the patch report status.
      * @return \lang_string|string The localized patch report status.
      */
-    public static function get_patch_report_status(int $status): \lang_string|string {
+    public static function get_patch_report_status(string $status): \lang_string|string {
         return match ($status) {
-            0 => get_string('operation_success', 'local_securitypatcher'),
+            self::PATCH_REPORT_SUCCESS => get_string('operation_success', 'local_securitypatcher'),
             default => get_string('operation_error', 'local_securitypatcher'),
         };
     }
