@@ -27,8 +27,6 @@ use local_securitypatcher\api;
 require_once(__DIR__ . '/../../config.php');
 
 global $CFG, $OUTPUT, $PAGE;
-$CFG->cachejs = false;
-//$CFG->cachetemplates = false;
 require_login();
 // Set page configuration.
 $PAGE->set_pagelayout('admin');
