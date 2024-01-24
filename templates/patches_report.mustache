@@ -1,35 +1,26 @@
-<div class="modal-table-wrapper">
-    <div class="datatable-loader">
-        <div class="datatable-loader-overlay">
-            <div class="loader"></div>
-            <span class="text">{{#str}} loading, local_securitypatcher {{/str}}.</span>
-        </div>
+<div class="datatable-loader">
+    <div class="datatable-loader-overlay">
+        <div class="loader"></div>
+        <span class="text">{{#str}} loading, local_securitypatcher {{/str}}.</span>
     </div>
-    <table id="patchesreporttable" class="table table-striped table-bordered nowrap d-none" style="width: 100%">
-        <thead>
-        <tr>
-            <th></th>
-            <th>{{#str}} datatable:patchesreport:timecreated, local_securitypatcher {{/str}}</th>
-            <th>{{#str}} datatable:patchesreport:status, local_securitypatcher {{/str}}</th>
-            <th>{{#str}} datatable:patchesreport:operation, local_securitypatcher {{/str}}</th>
-            <th>{{#str}} datatable:patchesreport:actions, local_securitypatcher {{/str}}</th>
-        </tr>
-        </thead>
-        <tbody>
-            {{#data}}
-                <tr>
-                    <td></td>
-                    <td>{{timecreated}}</td>
-                    <td>{{status}}</td>
-                    <td>{{operation}}</td>
-                    <td>{{actions}}</td>
-                </tr>
-            {{/data}}
-        </tbody>
-    </table>
 </div>
+<table id="patchesreporttable" class="table table-striped table-bordered nowrap" style="width: 100%">
+    <thead>
+    <tr>
+        <th></th>
+        <th>{{#str}} datatable:patchesreport:timecreated, local_securitypatcher {{/str}}</th>
+        <th>{{#str}} datatable:patchesreport:status, local_securitypatcher {{/str}}</th>
+        <th>{{#str}} datatable:patchesreport:operation, local_securitypatcher {{/str}}</th>
+        <th>{{#str}} datatable:patchesreport:actions, local_securitypatcher {{/str}}</th>
+    </tr>
+    </thead>
+</table>
 {{#js}}
     require(['local_securitypatcher/patches_report'], function(Report) {
-        Report.init();
+        let options = {
+            id: {{patchid}},
+            filters: {{{filters}}},
+        };
+        Report.init(options);
     });
 {{/js}}

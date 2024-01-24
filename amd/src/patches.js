@@ -33,6 +33,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
 ) {
     /**
      *  Initialise and load the datatable.
+     *
+     *  @param {Object} filterOptions - Filter options for datatable columns.
      */
     function load_datatable(filterOptions) {
         $(document).ready(function () {
@@ -126,11 +128,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 ],
                 initComplete: function(settings, json) {
                     datatable_loader(false);
-                    add_column_filters(this.api(), settings.aoColumns, filterOptions);
+                    let options = filterOptions['patches'] ?? {};
+                    add_column_filters(this.api(), settings.aoColumns, options);
                 },
-                drawCallback: function() {
-
-                }
             });
 
             // Hide filters for hidden columns.
@@ -262,51 +262,33 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
 
             // Report action.
             table.on('click', 'tbody tr button.report-patch-action', function() {
-                let patch = parseInt(this.getAttribute('data-patch'), 10);
-
-                datatable_loader(true);
-                let args = {
-                    patchid: patch,
+                let filters = filterOptions['patchesreport'] ?? {};
+                let context = {
+                    patchid: parseInt(this.getAttribute('data-id'), 10),
+                    patchname: this.getAttribute('data-name'),
+                    filters: JSON.stringify(filters),
                 };
-                Repository.get_patch_reports(args)
-                    .then(function(res) {
-                        console.log(res);
-                        if (Object.keys(res.result).length !== 0){
-                            let context = {
-                                data: res.result
-                            };
-                            
-                            Template.renderForPromise('local_securitypatcher/patches_report', context)
-                                .then(async ({html, js}) => {
-                                    let output = document.createElement("div");
-                                    Template.appendNodeContents(output, html, js);
-
-                                    let modal = await ModalFactory.create({
-                                        title: Str.get_string('datatable:patchesreport', 'local_securitypatcher', patch),
-                                        body: output,
-                                        large: true,
-                                        removeOnClose: true,
-                                    });
-
-                                    datatable_loader(false);
-                                    modal.show();
-
-                                    modal.getRoot().on(ModalEvents.destroyed, function () {
-                                        console.log('modal destroyed');
-
-                                    });
-
-                                })
-                                .catch((error) => Notification.exception(error));
-
-                        }
-                        datatable_loader(false);
+                Template.renderForPromise('local_securitypatcher/patches_report', context)
+                    .then(async ({html, js}) => {
+                        let output = document.createElement("div");
+                        output.id = 'patches-report-modal-wrapper';
+                        await create_report_modal(context.patchname, output);
+                        Template.appendNodeContents($('#patches-report-modal-wrapper'), html, js);
                     })
-                    .catch(function () {
-                        datatable_loader(false);
-                    });
+                    .catch((error) => Notification.exception(error));
             });
         });
+    }
+
+    async function create_report_modal(name, html) {
+        let modal = await ModalFactory.create({
+            title: Str.get_string('datatable:patchesreport', 'local_securitypatcher', name),
+            body: html,
+            large: true,
+            removeOnClose: true,
+        });
+        datatable_loader(false);
+        modal.show();
     }
 
     /**
@@ -364,7 +346,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                     });
                 }
                 break;
-            case item.type === 'select' && item.name === 'status' && filterOptions.hasOwnProperty(item.name):
+            case item.type === 'select' && filterOptions.hasOwnProperty(item.name):
                 cell.html(filterOptions[item.name]);
                 $('select', cell).on('change', function () {
                     if (table.column(item.idx).search() !== this.value) {
@@ -422,7 +404,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
             'confirm_title', 'confirm_cancel', 'patches:patch_confirmdelete',
             'patches:patch_confirmdeletebtn', 'patches:patch_confirmapply',
             'patches:patch_confirmapplybtn', 'patches:patch_confirmrestore',
-            'patches:patch_confirmrestorebtn'
+            'patches:patch_confirmrestorebtn', 'datatable:patchesreport',
+            'patchesreport:report_confirmdeletebtn', 'patchesreport:report_confirmdelete',
         ]);
     }
 

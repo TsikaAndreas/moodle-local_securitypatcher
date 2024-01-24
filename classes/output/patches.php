@@ -21,8 +21,10 @@
  * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace local_securitypatcher\output;
 
+use local_securitypatcher\datatables\tables\patchesreport;
 use renderer_base;
 
 /**
@@ -41,8 +43,15 @@ class patches implements \renderable, \templatable {
      * @return array
      */
     public function export_for_template(renderer_base $output) {
+
         $filters = [
-                'status' => \local_securitypatcher\datatables\tables\patches::html_status_select_options(),
+                'patches' => [
+                        'status' => \local_securitypatcher\datatables\tables\patches::html_status_select_options(),
+                ],
+                'patchesreport' => [
+                        'status' => patchesreport::html_status_select_options(),
+                        'operation' => patchesreport::html_operation_select_options(),
+                ],
         ];
 
         return [

@@ -22,22 +22,19 @@
  */
 define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repository',
         'core/str', 'core/modal_factory',
-        'local_securitypatcher/jquery.dataTables', 'local_securitypatcher/dataTables.bootstrap4',
-        'local_securitypatcher/dataTables.buttons', 'local_securitypatcher/buttons.bootstrap4',
-        'local_securitypatcher/buttons.colVis', 'local_securitypatcher/dataTables.responsive',
-        'local_securitypatcher/responsive.bootstrap4'],
-    function ($, Ajax, Notification, Repository, Prefetch, Str, ModalFactory, DataTable
+        'local_securitypatcher/jquery.dataTables', 'local_securitypatcher/dataTables.dateTime',
+        'local_securitypatcher/dataTables.bootstrap4', 'local_securitypatcher/dataTables.buttons',
+        'local_securitypatcher/buttons.bootstrap4', 'local_securitypatcher/buttons.colVis',
+        'local_securitypatcher/dataTables.responsive', 'local_securitypatcher/responsive.bootstrap4'],
+    function ($, Ajax, Notification, Repository, Str, ModalFactory, DataTable
 ) {
     /**
      *  Initialise and load the datatable.
+     *
+     *  @param {Object} options - Options for datatable columns.
      */
-    function load_datatable() {
+    function load_datatable(options) {
         $(document).ready( function () {
-            console.log($.fn.DataTable.isDataTable('#patchesreporttable'));
-            console.log('loaded report');
-
-            $('#patchesreporttable tbody').empty();
-
             // Initialize dataTable.
             let table = $('#patchesreporttable').DataTable({
                 dom: 'Brtrip',
@@ -55,6 +52,32 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 order: [
                     [1, 'desc']
                 ],
+                processing: true,
+                serverSide: true,
+                ajax: function (data, callback, settings) {
+                    datatable_loader(false);
+                    let args = {
+                        id: options.id,
+                        data: JSON.stringify(data),
+                    };
+                    Repository.get_patch_reports(args).then((res) => {
+                        callback({
+                            draw: res.draw,
+                            recordsTotal: res.recordsTotal,
+                            recordsFiltered: res.recordsFiltered,
+                            data: res.data,
+                        });
+                    }).catch((error) => {
+                        datatable_loader(false);
+                    });
+                },
+                columns: [
+                    {data: null, defaultContent: ""},
+                    {data: "timecreated", name: "timecreated", type: "datetime"},
+                    {data: "status", name: "status", type: "select"},
+                    {data: "operation", name: "operation", type: "select"},
+                    {data: "actions"},
+                ],
                 buttons: [
                     {
                         extend: 'colvis',
@@ -62,33 +85,40 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                     },
                 ],
                 initComplete: function (settings, json) {
-                    console.log('laoded complete');
                     datatable_loader(false);
-                    add_column_filters(this.api(), settings.aoColumns);
-                    $('#patchesreporttable').removeClass('d-none');
+                    add_column_filters(this.api(), settings.aoColumns, options.filters);
                 },
             });
 
             // Hide filters for hidden columns.
             table.columns().every(function (index) {
                 if (this.responsiveHidden() === false) {
-                    $('thead tr:eq(1)').find('th:eq(' + index + ') ').hide();
+                    $('#patchesreporttable thead tr:eq(1)').find('th:eq(' + index + ') ').hide();
                 }
             });
 
             // Responsive filters.
-            table.on('responsive-resize', function (e, datatable, columns) {
+            table.on('responsive-resize', function ( e, datatable, columns ) {
                 columns.forEach(function (visible, index) {
                     if (visible) {
-                        $('thead tr:eq(1)').find('th:eq(' + index + ') ').show();
+                        $('#patchesreporttable thead tr:eq(1)').find('th:eq(' + index + ') ').show();
                     } else {
-                        $('thead tr:eq(1)').find('th:eq(' + index + ') ').hide();
+                        $('#patchesreporttable thead tr:eq(1)').find('th:eq(' + index + ') ').hide();
                     }
                 });
             });
 
             // View action.
             table.on('click', 'tbody tr button.view-report-action', function () {
+                let patch = parseInt(this.getAttribute('data-patch'), 10);
+
+                let args = {
+                    patchid: patch,
+                };
+            });
+
+            // Delete action.
+            table.on('click', 'tbody tr button.delete-report-action', function () {
                 let patch = parseInt(this.getAttribute('data-patch'), 10);
 
                 let args = {
@@ -103,16 +133,16 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
      *
      * @param {DataTable} table - The DataTable instance representing the table.
      * @param {Array} columns - An array of column configuration objects.
+     * @param {Object} filterOptions - Filter options for column.
      * @returns {void}
      */
-    function add_column_filters(table, columns) {
-        $('#patchesreporttable thead tr').clone(true).appendTo('#patchesreporttable thead');
+    function add_column_filters(table, columns, filterOptions) {
+        $('#patchesreporttable thead tr').clone(false).appendTo('#patchesreporttable thead');
 
         columns.forEach(function(item) {
             let clonedCell = $('#patchesreporttable thead tr:eq(1) th:eq(' + item.idx + ')');
             let title = clonedCell.text();
-            console.log(title);
-            console.log(item);
+
             if (item.searchable === false) {
                 clonedCell.html('');
                 return;
@@ -124,19 +154,44 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
             });
             clonedCell.removeClass(sortClasses.join(' '));
 
-            clonedCell.html('<input class="text-center w-100" type="text" placeholder="' + title + '"/>');
-
-            // Search on keyup in every column.
-            $('input', clonedCell).on('keyup change', function () {
-                if (table.column(item.idx).search() !== this.value) {
-                    table.column(item.idx).search(this.value).draw();
-                }
-            });
-            // Event to stop sorting when clicking on.
-            $('input', clonedCell).on('click', function (e) {
-                e.stopPropagation();
-            });
+            create_filter_input(table, item, clonedCell, title, filterOptions);
         });
+    }
+
+    /**
+     * Creates a filter input based on item type and applies it to a DataTable column.
+     *
+     * @param {DataTable} table - The DataTable instance.
+     * @param {Object} item - The item configuration.
+     * @param {jQuery} cell - The jQuery object representing the table cell.
+     * @param {string} title - The column name.
+     * @param {Object} filterOptions - Filter options for column.
+     * @returns {void}
+     */
+    function create_filter_input(table, item, cell,title, filterOptions) {
+        switch (true) {
+            case ['text', 'datetime'].includes(item.type):
+                cell.html('<input class="form-control text-center w-100" type="text" placeholder="' + title + '"/>');
+                $('input', cell).on('keyup change', function () {
+                    if (table.column(item.idx).search() !== this.value) {
+                        table.column(item.idx).search(this.value).draw();
+                    }
+                });
+                if (item.type === 'datetime') {
+                    new DateTime($('input', cell), {
+                        format: 'DD-MM-YYYY'
+                    });
+                }
+                break;
+            case item.type === 'select' && filterOptions.hasOwnProperty(item.name):
+                cell.html(filterOptions[item.name]);
+                $('select', cell).on('change', function () {
+                    if (table.column(item.idx).search() !== this.value) {
+                        table.column(item.idx).search(this.value).draw();
+                    }
+                });
+                break;
+        }
     }
 
     /**
@@ -164,7 +219,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
      * @returns {void}
      */
     function datatable_loader(enable) {
-        let loader = $('.modal-table-wrapper .datatable-loader');
+        let loader = $('#patches-report-modal-wrapper .datatable-loader');
         if (enable) {
             loader.show();
         } else {
@@ -172,8 +227,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
         }
     }
 
-    const init = function () {
-        load_datatable();
+    const init = function (options) {
+        load_datatable(options);
     }
 
     return {

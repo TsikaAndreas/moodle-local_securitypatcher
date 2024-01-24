@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_securitypatcher\managers\report_manager;
+use local_securitypatcher\api;
 
 require_once(__DIR__ . '/../../config.php');
 
@@ -37,14 +37,10 @@ $PAGE->set_context($context);
 $PAGE->set_url('/local/securitypatcher/patches.php', []);
 $PAGE->set_title(get_string('patches:title', 'local_securitypatcher'));
 $PAGE->set_heading(get_string('patches:heading', 'local_securitypatcher'));
-
-$PAGE->requires->css('/local/securitypatcher/styles/patches.css');
-
 require_capability('local/securitypatcher:viewreports', $context);
-
-// Load datatable css.
-$reportmanager = new report_manager();
-$reportmanager->load_datatables_css();
+// Load css.
+api::load_datatables_css();
+$PAGE->requires->css('/local/securitypatcher/styles/patches.css');
 
 // Render the reports page.
 echo $OUTPUT->header();
