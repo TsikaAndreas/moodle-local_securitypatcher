@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/securitypatcher/db" VERSION="20240111" COMMENT="XMLDB file for Moodle local/securitypatcher"
+<XMLDB PATH="local/securitypatcher/db" VERSION="20240124" COMMENT="XMLDB file for Moodle local/securitypatcher"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -22,7 +22,8 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="patchid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The security patch who belongs this report."/>
-        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="The status of the report. Success: 0, Error: 1."/>
+        <FIELD NAME="status" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" COMMENT="The status of the operation result."/>
+        <FIELD NAME="statuscode" TYPE="int" LENGTH="2" NOTNULL="false" SEQUENCE="false" COMMENT="The status code of the operation result. Success: 0, Error: 1."/>
         <FIELD NAME="data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The report data."/>
         <FIELD NAME="operation" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" COMMENT="The type of the security patch operation."/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Timestamp when the security patch report was created."/>

@@ -91,5 +91,26 @@ function xmldb_local_securitypatcher_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2023083006, 'local', 'securitypatcher');
     }
 
+    if ($oldversion < 2023083008) {
+
+        // Changing type of field status on table local_securitypatcher_data to char.
+        $table = new xmldb_table('local_securitypatcher_data');
+        $field = new xmldb_field('status', XMLDB_TYPE_CHAR, '50', null, XMLDB_NOTNULL, null, null, 'patchid');
+
+        // Launch change of type for field status.
+        $dbman->change_field_type($table, $field);
+
+        // Define field statuscode to be added to local_securitypatcher_data.
+        $field = new xmldb_field('statuscode', XMLDB_TYPE_INTEGER, '2', null, null, null, null, 'status');
+
+        // Conditionally launch add field statuscode.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Securitypatcher savepoint reached.
+        upgrade_plugin_savepoint(true, 2023083008, 'local', 'securitypatcher');
+    }
+
     return true;
 }

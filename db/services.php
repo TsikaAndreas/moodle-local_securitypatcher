@@ -72,4 +72,20 @@ $functions = array(
                 'ajax' => true,
                 'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
         ),
+        'local_securitypatcher_delete_patch_report' => array(
+                'classname' => 'local_securitypatcher\external\delete_patch_report',
+                'description' => 'Delete security patch report',
+                'capabilities' => 'local/securitypatcher:deletepatchreport',
+                'type' => 'write',
+                'ajax' => true,
+                'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        ),
+        'local_securitypatcher_get_patch_report_info' => array(
+                'classname' => 'local_securitypatcher\external\get_patch_report_info',
+                'description' => 'Get security patch report_info',
+                'capabilities' => 'local/securitypatcher:viewpatch',
+                'type' => 'read',
+                'ajax' => true,
+                'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        ),
 );

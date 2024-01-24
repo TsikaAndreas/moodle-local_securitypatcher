@@ -85,4 +85,10 @@ $capabilities = [
                 'archetypes' => [
                 ],
         ],
+        'local/securitypatcher:deletepatchreport' => [
+                'captype' => 'write',
+                'contextlevel' => CONTEXT_SYSTEM,
+                'archetypes' => [
+                ],
+        ],
 ];
