@@ -34,6 +34,12 @@ Alternatively, you can run
 
 to complete the installation from the command line.
 
+## Minimum Requirements ##
+
+- Moodle version 4.1
+- PHP 8.1
+
+
 ## License ##
 
 2023 Andrei-Robert Tica <andreastsika@gmail.com>
