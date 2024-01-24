@@ -44,4 +44,3 @@ $PAGE->requires->css('/local/securitypatcher/styles/patches.css');
 echo $OUTPUT->header();
 echo $OUTPUT->render(new local_securitypatcher\output\patches());
 echo $OUTPUT->footer();
-

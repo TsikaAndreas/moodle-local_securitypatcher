@@ -211,6 +211,19 @@ class patch_manager {
     }
 
     /**
+     * Deletes the stored security patch file.
+     *
+     * @param int $patchid The ID of the security patch file to delete.
+     * @return bool always true or exception if error occurred.
+     */
+    public function delete_patch_stored_file(int $patchid): bool {
+        $contextid = context_system::instance()->id;
+
+        // Get the Moodle file storage.
+        return get_file_storage()->delete_area_files($contextid, self::$component, self::$filearea, $patchid);
+    }
+
+    /**
      * Retrieves the configured path to the Git command.
      *
      * @return false|mixed|object|string The path to the Git command if configured, or false if not set.

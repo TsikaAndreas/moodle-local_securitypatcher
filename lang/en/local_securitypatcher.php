@@ -52,7 +52,7 @@ $string['securitypatcher:addpatch'] = 'Add security patches';
 $string['securitypatcher:editpatch'] = 'Edit security patches';
 $string['securitypatcher:viewreports'] = 'View the security patch reports';
 $string['securitypatcher:config'] = 'Change the security patcher configuration';
-$string['securitypatcher:deletepatch'] = 'Delete security patch';
+$string['securitypatcher:deletepatch'] = 'Delete security patch and associated reports';
 $string['securitypatcher:restorepatch'] = 'Restore security patch';
 $string['securitypatcher:applypatch'] = 'Apply security patch';
 
@@ -85,7 +85,7 @@ $string['patches:restoreaction'] = 'Restore';
 $string['patches:editaction'] = 'Edit';
 $string['patches:viewaction'] = 'View';
 $string['patches:viewreportaction'] = 'Report';
-$string['patches:patch_confirmdelete'] = 'You are about to delete a security patch, are you sure?';
+$string['patches:patch_confirmdelete'] = 'You are about to delete a security patch and reports, are you sure?';
 $string['patches:patch_confirmdeletebtn'] = 'Delete';
 $string['patches:patch_confirmapply'] = 'You are about to apply a security patch, are you sure?';
 $string['patches:patch_confirmapplybtn'] = 'Apply';

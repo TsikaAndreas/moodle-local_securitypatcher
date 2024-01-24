@@ -28,6 +28,7 @@ use external_api;
 use external_function_parameters;
 use external_single_structure;
 use external_value;
+use local_securitypatcher\managers\patch_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -75,6 +76,10 @@ class delete_patch extends external_api {
         $deleted = false;
         if ($DB->record_exists('local_securitypatcher', ['id' => $params['patchid']])) {
             $DB->delete_records('local_securitypatcher', ['id' => $params['patchid']]);
+            $DB->delete_records('local_securitypatcher_data', ['patchid' => $params['patchid']]);
+
+            $manager = new patch_manager();
+            $manager->delete_patch_stored_file($params['patchid']);
             $deleted = true;
         }
 

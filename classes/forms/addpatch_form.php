@@ -41,6 +41,7 @@ class addpatch_form extends \moodleform {
 
         // Hidden element for the edit.
         $mform->addElement('hidden', 'id');
+        $mform->setType('id', PARAM_INT);
 
         // Name.
         $mform->addElement('text', 'name', get_string('patch:name', 'local_securitypatcher'));
