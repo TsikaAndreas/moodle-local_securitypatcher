@@ -38,6 +38,7 @@ to complete the installation from the command line.
 
 - Moodle version 4.1
 - PHP 8.1
+- Git version 2
 
 
 ## License ##
