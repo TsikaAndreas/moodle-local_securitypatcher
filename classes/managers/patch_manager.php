@@ -272,7 +272,7 @@ class patch_manager {
 
         // Execute the operation.
         $patchcommand = ($this->operationaction === 'restore') ? '-R' : ''; // Adjust the patch command based on operation.
-        $command = "cd $CFG->dirroot && $gitpath apply --verbose $patchcommand $filepath 2>&1";
+        $command = "cd $CFG->dirroot && $gitpath apply --ignore-whitespace --verbose $patchcommand $filepath 2>&1";
         exec($command, $this->operationoutput, $this->operationstatus);
 
         $this->process_output();
