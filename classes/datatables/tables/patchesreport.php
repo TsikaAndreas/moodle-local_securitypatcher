@@ -24,6 +24,7 @@
 
 namespace local_securitypatcher\datatables\tables;
 
+use html_writer;
 use local_securitypatcher\api;
 use local_securitypatcher\datatables\ssp;
 use local_securitypatcher\managers\patch_manager;
@@ -101,7 +102,7 @@ class patchesreport {
                 patch_manager::PATCH_REPORT_SUCCESS => get_string('operation_success', 'local_securitypatcher'),
                 patch_manager::PATCH_REPORT_ERROR => get_string('operation_error', 'local_securitypatcher'),
         ];
-        return \html_writer::select($options, 'status', '', ['' => 'choosedots'], ['class' => 'w-100']);
+        return html_writer::select($options, 'status', '', ['' => 'choosedots'], ['class' => 'w-100']);
     }
 
     /**
@@ -114,7 +115,7 @@ class patchesreport {
                 'apply' => get_string('apply', 'local_securitypatcher'),
                 'restore' => get_string('restore', 'local_securitypatcher'),
         ];
-        return \html_writer::select($options, 'operation', '', ['' => 'choosedots'], ['class' => 'w-100']);
+        return html_writer::select($options, 'operation', '', ['' => 'choosedots'], ['class' => 'w-100']);
     }
 
     /**
@@ -149,10 +150,10 @@ class patchesreport {
     public function parse_actions(object $report): string {
         global $OUTPUT;
 
-        $actions = \html_writer::start_div('patch-report-actions-wrapper');
+        $actions = html_writer::start_div('patch-report-actions-wrapper');
 
         // View action.
-        $actions .= \html_writer::tag(
+        $actions .= html_writer::tag(
                 'button',
                 $OUTPUT->pix_icon('t/search', get_string('patchesreport:viewaction', 'local_securitypatcher'),
                         'local_securitypatcher'),
@@ -163,7 +164,7 @@ class patchesreport {
         );
 
         // Delete action.
-        $actions .= \html_writer::tag(
+        $actions .= html_writer::tag(
                 'button',
                 $OUTPUT->pix_icon('t/trash', get_string('patchesreport:deleteaction', 'local_securitypatcher'),
                         'local_securitypatcher'),
@@ -173,7 +174,7 @@ class patchesreport {
                 ]
         );
 
-        $actions .= \html_writer::end_div();
+        $actions .= html_writer::end_div();
         return $actions;
     }
 

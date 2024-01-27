@@ -52,22 +52,22 @@ class ssp {
     /**
      * @var mixed Search array that contains value of the global search.
      */
-    protected mixed $search;
+    protected $search;
 
     /**
      * @var mixed Order array that contains direction and column name.
      */
-    protected mixed $order;
+    protected $order;
 
     /**
      * @var mixed The offset.
      */
-    protected mixed $start;
+    protected $start;
 
     /**
      * @var mixed The limit.
      */
-    protected mixed $length;
+    protected $length;
 
     /**
      * @var array Filters array that contains all filters sent.
@@ -110,7 +110,7 @@ class ssp {
      * @param array $request The request array with the datatable data.
      * @return void
      */
-    public function init(array $request) {
+    public function init(array $request): void {
         $this->request = $request;
         $this->draw = $request['draw'];
         $this->columns = $request['columns'];
@@ -214,7 +214,6 @@ class ssp {
 
         if (!empty($this->order)) {
             $orders = [];
-            $dir = 'asc';
 
             // Get the names of the columns we want to order by.
             foreach ($this->order as $order) {

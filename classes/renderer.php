@@ -21,8 +21,9 @@
  * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace local_securitypatcher\output;
+namespace local_securitypatcher;
 
+use local_securitypatcher\output\patches;
 use plugin_renderer_base;
 
 /**

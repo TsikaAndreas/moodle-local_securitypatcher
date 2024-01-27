@@ -83,7 +83,7 @@ class patch_manager {
      *
      * @return stdClass|false Returns the security patch record as an object if found, or false if not found.
      */
-    public function get_patch(int $patchid): false|stdClass {
+    public function get_patch(int $patchid) {
         global $DB;
 
         return $DB->get_record('local_securitypatcher', ['id' => $patchid], '*', MUST_EXIST);
@@ -146,7 +146,7 @@ class patch_manager {
      *
      * @return bool|int Returns true if the update was successful, false if an error occurred.
      */
-    public function update_patch(object $formdata): bool|int {
+    public function update_patch(object $formdata) {
         global $DB;
 
         $context = context_system::instance();
@@ -228,7 +228,7 @@ class patch_manager {
      *
      * @return false|mixed|object|string The path to the Git command if configured, or false if not set.
      */
-    private function get_git_command_path(): mixed {
+    private function get_git_command_path() {
         return get_config('local_securitypatcher', 'git');
     }
 
@@ -349,10 +349,11 @@ class patch_manager {
      * @return string The report status name.
      */
     private function parse_report_status_name(int $status): string {
-        return match ($status) {
-            0 => self::PATCH_REPORT_SUCCESS,
-            default => self::PATCH_REPORT_ERROR,
-        };
+        if ($status === 0) {
+            return self::PATCH_REPORT_SUCCESS;
+        }
+
+        return self::PATCH_REPORT_ERROR;
     }
 
     /**
@@ -380,7 +381,7 @@ class patch_manager {
      * @param bool $formated Whether to return the formatted date.
      * @return int|string If $formated is true, returns the formatted date; otherwise, returns the timestamp.
      */
-    public function get_timeapplied(bool $formated = false): int|string {
+    public function get_timeapplied(bool $formated = false) {
         if ($formated) {
             return api::get_date($this->currentpatch->timeapplied);
         }
@@ -393,7 +394,7 @@ class patch_manager {
      * @param bool $formated Whether to return the formatted date.
      * @return int|string If $formated is true, returns the formatted date; otherwise, returns the timestamp.
      */
-    public function get_timerestored(bool $formated = false): int|string {
+    public function get_timerestored(bool $formated = false) {
         if ($formated) {
             return api::get_date($this->currentpatch->timerestored);
         }
@@ -405,7 +406,7 @@ class patch_manager {
      *
      * @return \lang_string|string The name of the last action for the patch's status.
      */
-    public function get_status(): \lang_string|string {
+    public function get_status(): string {
         return $this->get_last_operation_name($this->currentpatch->status);
     }
 
@@ -415,12 +416,15 @@ class patch_manager {
      * @param int $status The status of the patch.
      * @return \lang_string|string The name of the last operation performed.
      */
-    public function get_last_operation_name(int $status): \lang_string|string {
-        return match ($status) {
-            self::PATCH_APPLIED => get_string('apply', 'local_securitypatcher'),
-            self::PATCH_RESTORED => get_string('restore', 'local_securitypatcher'),
-            default => get_string('none', 'local_securitypatcher'),
-        };
+    public function get_last_operation_name(int $status): string {
+        switch ($status) {
+            case self::PATCH_APPLIED:
+                return get_string('apply', 'local_securitypatcher');
+            case self::PATCH_RESTORED:
+                return get_string('restore', 'local_securitypatcher');
+            default:
+                return get_string('none', 'local_securitypatcher');
+        }
     }
 
     /**
@@ -429,13 +433,18 @@ class patch_manager {
      * @param string $operation The key representing the operation.
      * @return \lang_string|string The localized operation name.
      */
-    public static function get_operation_name(string $operation): \lang_string|string {
-        return match ($operation) {
-            'apply' => get_string('apply', 'local_securitypatcher'),
-            'restore' => get_string('restore', 'local_securitypatcher'),
-            default => throw new \InvalidArgumentException(get_string('exception:invalidoperation',
-                    'local_securitypatcher', $operation), 500),
-        };
+    public static function get_operation_name(string $operation): string {
+        switch ($operation) {
+            case 'apply':
+                return get_string('apply', 'local_securitypatcher');
+            case 'restore':
+                return get_string('restore', 'local_securitypatcher');
+            default:
+                throw new \InvalidArgumentException(
+                        get_string('exception:invalidoperation', 'local_securitypatcher', $operation),
+                        500
+                );
+        }
     }
 
     /**
@@ -444,11 +453,12 @@ class patch_manager {
      * @param string $status The status representing the patch report status.
      * @return \lang_string|string The localized patch report status.
      */
-    public static function get_patch_report_status(string $status): \lang_string|string {
-        return match ($status) {
-            self::PATCH_REPORT_SUCCESS => get_string('operation_success', 'local_securitypatcher'),
-            default => get_string('operation_error', 'local_securitypatcher'),
-        };
+    public static function get_patch_report_status(string $status): string {
+        if ($status === self::PATCH_REPORT_SUCCESS) {
+            return get_string('operation_success', 'local_securitypatcher');
+        }
+
+        return get_string('operation_error', 'local_securitypatcher');
     }
 
     /**

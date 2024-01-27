@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_securitypatcher\classes\privacy;
+namespace local_securitypatcher\privacy;
 
 /**
  * Privacy Subsystem for local_securitypatcher implementing null_provider.

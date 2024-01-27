@@ -24,9 +24,11 @@
 
 namespace local_securitypatcher\datatables\tables;
 
+use html_writer;
 use local_securitypatcher\api;
 use local_securitypatcher\datatables\ssp;
 use local_securitypatcher\managers\patch_manager;
+use moodle_url;
 use stdClass;
 
 /**
@@ -83,7 +85,7 @@ class patches {
                 patch_manager::PATCH_APPLIED => get_string('apply', 'local_securitypatcher'),
                 patch_manager::PATCH_RESTORED => get_string('restore', 'local_securitypatcher'),
         ];
-        return \html_writer::select($options, 'status', '', ['' => 'choosedots'], ['class' => 'w-100']);
+        return html_writer::select($options, 'status', '', ['' => 'choosedots'], ['class' => 'w-100']);
     }
 
     /**
@@ -138,11 +140,11 @@ class patches {
     public function parse_actions(object $patch): string {
         global $OUTPUT;
 
-        $actions = \html_writer::start_div('patch-actions-wrapper');
+        $actions = html_writer::start_div('patch-actions-wrapper');
 
         // Edit action.
-        $actions .= \html_writer::link(
-                new \moodle_url('/local/securitypatcher/patch.php', ['id' => $patch->id]),
+        $actions .= html_writer::link(
+                new moodle_url('/local/securitypatcher/patch.php', ['id' => $patch->id]),
                 $OUTPUT->pix_icon('t/edit', get_string('patches:editaction', 'local_securitypatcher'),
                         'local_securitypatcher'),
                 [
@@ -152,7 +154,7 @@ class patches {
         );
 
         // View action.
-        $actions .= \html_writer::tag(
+        $actions .= html_writer::tag(
                 'button',
                 $OUTPUT->pix_icon('t/search', get_string('patches:viewaction', 'local_securitypatcher'),
                         'local_securitypatcher'),
@@ -163,7 +165,7 @@ class patches {
         );
 
         // Reports action.
-        $actions .= \html_writer::tag(
+        $actions .= html_writer::tag(
                 'button',
                 $OUTPUT->pix_icon('t/report', get_string('patches:viewreportaction', 'local_securitypatcher'),
                         'local_securitypatcher'),
@@ -175,7 +177,7 @@ class patches {
         );
 
         // Apply action.
-        $actions .= \html_writer::tag(
+        $actions .= html_writer::tag(
                 'button',
                 $OUTPUT->pix_icon('t/approve', get_string('patches:applyaction', 'local_securitypatcher'),
                         'local_securitypatcher'),
@@ -186,7 +188,7 @@ class patches {
         );
 
         // Restore action.
-        $actions .= \html_writer::tag(
+        $actions .= html_writer::tag(
                 'button',
                 $OUTPUT->pix_icon('t/refresh', get_string('patches:restoreaction', 'local_securitypatcher'),
                         'local_securitypatcher'),
@@ -197,7 +199,7 @@ class patches {
         );
 
         // Delete action.
-        $actions .= \html_writer::tag(
+        $actions .= html_writer::tag(
                 'button',
                 $OUTPUT->pix_icon('t/trash', get_string('patches:deleteaction', 'local_securitypatcher'),
                         'local_securitypatcher'),
@@ -207,7 +209,7 @@ class patches {
                 ]
         );
 
-        $actions .= \html_writer::end_div();
+        $actions .= html_writer::end_div();
         return $actions;
     }
 
