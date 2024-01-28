@@ -37,13 +37,12 @@ to complete the installation from the command line.
 ## Minimum Requirements ##
 
 - Moodle version 4.1
-- PHP 8.1
 - Git version 2
 
 
 ## License ##
 
-2023 Andrei-Robert Tica <andreastsika@gmail.com>
+2024 Andrei-Robert Tica <andreastsika@gmail.com>
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
