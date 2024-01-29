@@ -65,6 +65,14 @@
         <licenseversion></licenseversion>
     </library>
     <library>
+        <location>amd/src/responsive.bootstrap4.js</location>
+        <name>Responsive Bootstrap 4 Datatables</name>
+        <description>Bootstrap 4 integration for DataTables' Responsive</description>
+        <version>2.5.0</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
         <location>amd/src/jszip.js</location>
         <name>JSZIP Library</name>
         <description>A JavaScript class for generating and reading zip files</description>
@@ -93,6 +101,38 @@
         <name>Moment.js</name>
         <description>A JavaScript date library for parsing, validating, manipulating, and formatting dates.</description>
         <version>2.30.1</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>styles/responsive.bootstrap4.css</location>
+        <name>Responsive Bootstrap 4 Styling</name>
+        <description>Bootstrap 4 Responsive Styling</description>
+        <version>2.5.0</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>styles/buttons.bootstrap4.css</location>
+        <name>Buttons Bootstrap 4 Styling</name>
+        <description>Bootstrap 4 Buttons Styling</description>
+        <version>2.4.2</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>styles/dataTables.dateTime.css</location>
+        <name>DataTables DateTime Styling</name>
+        <description>DataTables DateTime Styling</description>
+        <version>1.5.1</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>styles/dataTables.bootstrap4.css</location>
+        <name>DataTables Bootstrap 4 Styling</name>
+        <description>DataTables Bootstrap 4 Styling</description>
+        <version>1.13.6</version>
         <license>MIT</license>
         <licenseversion></licenseversion>
     </library>
