@@ -18,7 +18,7 @@
  * Plugin version and other meta-data are defined here.
  *
  * @package     local_securitypatcher
- * @copyright   2023 Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright   2023 Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

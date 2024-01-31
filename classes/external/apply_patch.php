@@ -18,7 +18,7 @@
  * External function apply_patch for local_securitypatcher.
  *
  * @package   local_securitypatcher
- * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -39,7 +39,7 @@ require_once($CFG->libdir . '/externallib.php');
  * External class apply_patch for local_securitypatcher.
  *
  * @package   local_securitypatcher
- * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class apply_patch extends external_api {

@@ -18,7 +18,7 @@
  * Server Side Processing class for the local_securitypatcher plugin.
  *
  * @package   local_securitypatcher
- * @copyright 2024 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2024 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ use stdClass;
  * Class for server side processing of DataTables data.
  *
  * @package    local_securitypatcher
- * @copyright  2024 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright  2024 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class ssp {

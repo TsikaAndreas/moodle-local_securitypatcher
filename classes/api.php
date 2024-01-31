@@ -18,7 +18,7 @@
  * General Api class for the local_securitypatcher plugin.
  *
  * @package   local_securitypatcher
- * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,7 +28,7 @@ namespace local_securitypatcher;
  * General purpose api class.
  *
  * @package   local_securitypatcher
- * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class api {

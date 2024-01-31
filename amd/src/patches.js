@@ -17,7 +17,7 @@
  * A javascript module to handle web service calls.
  *
  * @package   local_securitypatcher
- * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repository',

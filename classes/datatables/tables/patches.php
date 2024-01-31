@@ -18,7 +18,7 @@
  * Patches process class for the local_securitypatcher plugin.
  *
  * @package   local_securitypatcher
- * @copyright 2024 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2024 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -35,7 +35,7 @@ use stdClass;
  * Patches process class for the server side of DataTables.
  *
  * @package   local_securitypatcher
- * @copyright 2024 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2024 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class patches {

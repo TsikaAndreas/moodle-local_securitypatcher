@@ -18,7 +18,7 @@
  * Patch manager class for the local_securitypatcher plugin.
  *
  * @package   local_securitypatcher
- * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,7 +33,7 @@ use stored_file;
  * Patch manager class responsible for the management of security patches.
  *
  * @package   local_securitypatcher
- * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class patch_manager {

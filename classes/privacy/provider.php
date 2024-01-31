@@ -18,7 +18,7 @@
  * Privacy provider implementation for the local_securitypatcher plugin.
  *
  * @package   local_securitypatcher
- * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,7 +27,7 @@ namespace local_securitypatcher\privacy;
 /**
  * Privacy Subsystem for local_securitypatcher implementing null_provider.
  *
- * @copyright 2023 onwards Andrei-Robert Tica <andreastsika@gmail.com>
+ * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
