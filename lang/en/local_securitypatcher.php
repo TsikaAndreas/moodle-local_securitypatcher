@@ -41,7 +41,6 @@ $string['operation_error'] = 'Error occurred';
 $string['settings:manage'] = 'Manage Security Patcher';
 $string['settings:manage:git'] = 'Path to Git';
 $string['settings:manage:git_desc'] = 'Path to Git. On Linux it is something like /usr/bin/git.
-On Windows it is something like C:\Program Files (x86)\Git\bin\git.exe. On Mac it is something like /opt/local/bin/git.
 To be able to execute the security patching, you must have installed the git executable and point to it here.';
 $string['settings:addsecuritypatches'] = 'Add Security Patches';
 $string['settings:patchesreport'] = 'Security Patches List';
