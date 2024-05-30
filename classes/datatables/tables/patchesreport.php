@@ -15,25 +15,25 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Patch report process class for the local_securitypatcher plugin.
+ * Patch report process class for the local_codepatcher plugin.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2024 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_securitypatcher\datatables\tables;
+namespace local_codepatcher\datatables\tables;
 
 use html_writer;
-use local_securitypatcher\api;
-use local_securitypatcher\datatables\ssp;
-use local_securitypatcher\managers\patch_manager;
+use local_codepatcher\api;
+use local_codepatcher\datatables\ssp;
+use local_codepatcher\managers\patch_manager;
 use stdClass;
 
 /**
  * Patch report process class for the server side of DataTables.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2024 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -99,8 +99,8 @@ class patchesreport {
      */
     public static function html_status_select_options(): string {
         $options = [
-                patch_manager::PATCH_REPORT_SUCCESS => get_string('operation_success', 'local_securitypatcher'),
-                patch_manager::PATCH_REPORT_ERROR => get_string('operation_error', 'local_securitypatcher'),
+                patch_manager::PATCH_REPORT_SUCCESS => get_string('operation_success', 'local_codepatcher'),
+                patch_manager::PATCH_REPORT_ERROR => get_string('operation_error', 'local_codepatcher'),
         ];
         return html_writer::select($options, 'status', '', ['' => 'choosedots'], ['class' => 'w-100']);
     }
@@ -112,8 +112,8 @@ class patchesreport {
      */
     public static function html_operation_select_options(): string {
         $options = [
-                'apply' => get_string('apply', 'local_securitypatcher'),
-                'restore' => get_string('restore', 'local_securitypatcher'),
+                'apply' => get_string('apply', 'local_codepatcher'),
+                'restore' => get_string('restore', 'local_codepatcher'),
         ];
         return html_writer::select($options, 'operation', '', ['' => 'choosedots'], ['class' => 'w-100']);
     }
@@ -139,13 +139,13 @@ class patchesreport {
     }
 
     /**
-     * Parse actions for a given security patch report object.
+     * Parse actions for a given code patch report object.
      *
-     * This method generates HTML code for various actions for a security patch report.
+     * This method generates HTML code for various actions for a code patch report.
      *
-     * @param object $report The security patch report object to generate actions for.
+     * @param object $report The code patch report object to generate actions for.
      *
-     * @return string HTML code containing the security patch report actions.
+     * @return string HTML code containing the code patch report actions.
      */
     public function parse_actions(object $report): string {
         global $OUTPUT;
@@ -155,8 +155,8 @@ class patchesreport {
         // View action.
         $actions .= html_writer::tag(
                 'button',
-                $OUTPUT->pix_icon('t/search', get_string('patchesreport:viewaction', 'local_securitypatcher'),
-                        'local_securitypatcher'),
+                $OUTPUT->pix_icon('t/search', get_string('patchesreport:viewaction', 'local_codepatcher'),
+                        'local_codepatcher'),
                 [
                         'class' => 'view-report-action align-self-center border-0 bg-transparent',
                         'data-report' => $report->id,
@@ -166,8 +166,8 @@ class patchesreport {
         // Delete action.
         $actions .= html_writer::tag(
                 'button',
-                $OUTPUT->pix_icon('t/trash', get_string('patchesreport:deleteaction', 'local_securitypatcher'),
-                        'local_securitypatcher'),
+                $OUTPUT->pix_icon('t/trash', get_string('patchesreport:deleteaction', 'local_codepatcher'),
+                        'local_codepatcher'),
                 [
                         'class' => 'delete-report-action align-self-center border-0 bg-transparent',
                         'data-report' => $report->id,
@@ -195,7 +195,7 @@ class patchesreport {
      * @return string The count SQL query.
      */
     private function count_sql(): string {
-        return "SELECT count(*) FROM {local_securitypatcher_data}";
+        return "SELECT count(*) FROM {local_codepatcher_data}";
     }
 
     /**
@@ -206,7 +206,7 @@ class patchesreport {
      * @return string The main SQL query.
      */
     private function main_sql(): string {
-        return "SELECT * FROM {local_securitypatcher_data}";
+        return "SELECT * FROM {local_codepatcher_data}";
     }
 
     /**

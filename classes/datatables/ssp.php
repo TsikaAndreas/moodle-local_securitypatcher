@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Server Side Processing class for the local_securitypatcher plugin.
+ * Server Side Processing class for the local_codepatcher plugin.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2024 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_securitypatcher\datatables;
+namespace local_codepatcher\datatables;
 
 use stdClass;
 
 /**
  * Class for server side processing of DataTables data.
  *
- * @package    local_securitypatcher
+ * @package    local_codepatcher
  * @copyright  2024 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

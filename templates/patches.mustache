@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template local_securitypatcher/patches
+    @template local_codepatcher/patches
 
     Patches List dataTable.
 
@@ -55,35 +55,35 @@
     }
 }}
 <div class="new-patch-btn">
-    <a class="btn btn-primary" role="button" href="/local/securitypatcher/patch.php">
-        {{#str}} new_patch_button, local_securitypatcher {{/str}}
+    <a class="btn btn-primary" role="button" href="/local/codepatcher/patch.php">
+        {{#str}} new_patch_button, local_codepatcher {{/str}}
     </a>
 </div>
 <div class="table-wrapper">
     <div class="datatable-loader">
         <div class="datatable-loader-overlay">
             <div class="loader"></div>
-            <span class="text">{{#str}} loading, local_securitypatcher {{/str}}.</span>
+            <span class="text">{{#str}} loading, local_codepatcher {{/str}}.</span>
         </div>
     </div>
     <table id="patchestable" class="table table-striped table-bordered nowrap" style="width: 100%">
         <thead>
         <tr>
             <th></th>
-            <th>{{#str}} datatable:patches:name, local_securitypatcher {{/str}}</th>
-            <th>{{#str}} datatable:patches:lastaction, local_securitypatcher {{/str}}</th>
-            <th>{{#str}} datatable:patches:created, local_securitypatcher {{/str}}</th>
-            <th>{{#str}} datatable:patches:modified, local_securitypatcher {{/str}}</th>
-            <th>{{#str}} datatable:patches:applied, local_securitypatcher {{/str}}</th>
-            <th>{{#str}} datatable:patches:restored, local_securitypatcher {{/str}}</th>
-            <th>{{#str}} datatable:patches:actions, local_securitypatcher {{/str}}</th>
+            <th>{{#str}} datatable:patches:name, local_codepatcher {{/str}}</th>
+            <th>{{#str}} datatable:patches:lastaction, local_codepatcher {{/str}}</th>
+            <th>{{#str}} datatable:patches:created, local_codepatcher {{/str}}</th>
+            <th>{{#str}} datatable:patches:modified, local_codepatcher {{/str}}</th>
+            <th>{{#str}} datatable:patches:applied, local_codepatcher {{/str}}</th>
+            <th>{{#str}} datatable:patches:restored, local_codepatcher {{/str}}</th>
+            <th>{{#str}} datatable:patches:actions, local_codepatcher {{/str}}</th>
         </tr>
         </thead>
     </table>
 </div>
 {{#js}}
-    require(['local_securitypatcher/patches', 'local_securitypatcher/jszip',
-                'local_securitypatcher/moment'], function(Patches, Jszip, Moment) {
+    require(['local_codepatcher/patches', 'local_codepatcher/jszip',
+                'local_codepatcher/moment'], function(Patches, Jszip, Moment) {
         window.JSZip=Jszip;
         window.moment = Moment;
         let options = {{{filters}}};

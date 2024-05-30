@@ -15,75 +15,75 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Security patcher external functions and service definitions.
+ * Code patcher external functions and service definitions.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
-        'local_securitypatcher_get_patches' => [
-                'classname' => 'local_securitypatcher\external\get_patches',
-                'description' => 'Get security patches',
-                'capabilities' => 'local/securitypatcher:viewpatch',
+        'local_codepatcher_get_patches' => [
+                'classname' => 'local_codepatcher\external\get_patches',
+                'description' => 'Get code patches',
+                'capabilities' => 'local/codepatcher:viewpatch',
                 'type' => 'read',
                 'ajax' => true,
                 'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
         ],
-        'local_securitypatcher_delete_patch' => [
-                'classname' => 'local_securitypatcher\external\delete_patch',
-                'description' => 'Delete security patch',
-                'capabilities' => 'local/securitypatcher:deletepatch',
+        'local_codepatcher_delete_patch' => [
+                'classname' => 'local_codepatcher\external\delete_patch',
+                'description' => 'Delete code patch',
+                'capabilities' => 'local/codepatcher:deletepatch',
                 'type' => 'write',
                 'ajax' => true,
                 'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
         ],
-        'local_securitypatcher_apply_patch' => [
-                'classname' => 'local_securitypatcher\external\apply_patch',
-                'description' => 'Apply security patch',
-                'capabilities' => 'local/securitypatcher:applypatch',
+        'local_codepatcher_apply_patch' => [
+                'classname' => 'local_codepatcher\external\apply_patch',
+                'description' => 'Apply code patch',
+                'capabilities' => 'local/codepatcher:applypatch',
                 'type' => 'write',
                 'ajax' => true,
                 'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
         ],
-        'local_securitypatcher_restore_patch' => [
-                'classname' => 'local_securitypatcher\external\restore_patch',
-                'description' => 'Restore security patch',
-                'capabilities' => 'local/securitypatcher:restorepatch',
+        'local_codepatcher_restore_patch' => [
+                'classname' => 'local_codepatcher\external\restore_patch',
+                'description' => 'Restore code patch',
+                'capabilities' => 'local/codepatcher:restorepatch',
                 'type' => 'write',
                 'ajax' => true,
                 'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
         ],
-        'local_securitypatcher_get_patch_reports' => [
-                'classname' => 'local_securitypatcher\external\get_patch_reports',
-                'description' => 'Get security patch reports',
-                'capabilities' => 'local/securitypatcher:viewreports',
+        'local_codepatcher_get_patch_reports' => [
+                'classname' => 'local_codepatcher\external\get_patch_reports',
+                'description' => 'Get code patch reports',
+                'capabilities' => 'local/codepatcher:viewreports',
                 'type' => 'read',
                 'ajax' => true,
                 'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
         ],
-        'local_securitypatcher_get_patch_info' => [
-                'classname' => 'local_securitypatcher\external\get_patch_info',
-                'description' => 'Get security patch info',
-                'capabilities' => 'local/securitypatcher:viewpatch',
+        'local_codepatcher_get_patch_info' => [
+                'classname' => 'local_codepatcher\external\get_patch_info',
+                'description' => 'Get code patch info',
+                'capabilities' => 'local/codepatcher:viewpatch',
                 'type' => 'read',
                 'ajax' => true,
                 'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
         ],
-        'local_securitypatcher_delete_patch_report' => [
-                'classname' => 'local_securitypatcher\external\delete_patch_report',
-                'description' => 'Delete security patch report',
-                'capabilities' => 'local/securitypatcher:deletepatchreport',
+        'local_codepatcher_delete_patch_report' => [
+                'classname' => 'local_codepatcher\external\delete_patch_report',
+                'description' => 'Delete code patch report',
+                'capabilities' => 'local/codepatcher:deletepatchreport',
                 'type' => 'write',
                 'ajax' => true,
                 'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
         ],
-        'local_securitypatcher_get_patch_report_info' => [
-                'classname' => 'local_securitypatcher\external\get_patch_report_info',
-                'description' => 'Get security patch report_info',
-                'capabilities' => 'local/securitypatcher:viewpatch',
+        'local_codepatcher_get_patch_report_info' => [
+                'classname' => 'local_codepatcher\external\get_patch_report_info',
+                'description' => 'Get code patch report_info',
+                'capabilities' => 'local/codepatcher:viewpatch',
                 'type' => 'read',
                 'ajax' => true,
                 'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],

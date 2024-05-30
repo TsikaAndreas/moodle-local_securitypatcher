@@ -16,18 +16,18 @@
 /**
  * A javascript module to handle web service calls.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repository',
+define(['jquery', 'core/ajax', 'core/notification', 'local_codepatcher/repository',
         'core/prefetch', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/templates',
-        'local_securitypatcher/jquery.dataTables', 'local_securitypatcher/dataTables.dateTime',
-        'local_securitypatcher/dataTables.bootstrap4',
-        'local_securitypatcher/dataTables.buttons', 'local_securitypatcher/buttons.bootstrap4',
-        'local_securitypatcher/buttons.colVis', 'local_securitypatcher/buttons.html5',
-        'local_securitypatcher/buttons.print', 'local_securitypatcher/pdfmake',
-        'local_securitypatcher/dataTables.responsive', 'local_securitypatcher/responsive.bootstrap4'],
+        'local_codepatcher/jquery.dataTables', 'local_codepatcher/dataTables.dateTime',
+        'local_codepatcher/dataTables.bootstrap4',
+        'local_codepatcher/dataTables.buttons', 'local_codepatcher/buttons.bootstrap4',
+        'local_codepatcher/buttons.colVis', 'local_codepatcher/buttons.html5',
+        'local_codepatcher/buttons.print', 'local_codepatcher/pdfmake',
+        'local_codepatcher/dataTables.responsive', 'local_codepatcher/responsive.bootstrap4'],
     function ($, Ajax, Notification, Repository, Prefetch,
               Str, ModalFactory, ModalEvents, Template, DataTable
 ) {
@@ -157,8 +157,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 let patch = parseInt(this.getAttribute('data-patch'), 10);
 
                 // Confirmation message.
-                let confirmQuestion = Str.get_string('patches:patch_confirmdelete', 'local_securitypatcher');
-                let confirmButton = Str.get_string('patches:patch_confirmdeletebtn', 'local_securitypatcher');
+                let confirmQuestion = Str.get_string('patches:patch_confirmdelete', 'local_codepatcher');
+                let confirmButton = Str.get_string('patches:patch_confirmdeletebtn', 'local_codepatcher');
 
                 let confirmCallback = function () {
                     datatable_loader(true);
@@ -185,8 +185,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 let node = this;
 
                 // Confirmation message.
-                let confirmQuestion = Str.get_string('patches:patch_confirmapply', 'local_securitypatcher');
-                let confirmButton = Str.get_string('patches:patch_confirmapplybtn', 'local_securitypatcher');
+                let confirmQuestion = Str.get_string('patches:patch_confirmapply', 'local_codepatcher');
+                let confirmButton = Str.get_string('patches:patch_confirmapplybtn', 'local_codepatcher');
 
                 let confirmCallback = function () {
                     datatable_loader(true);
@@ -215,8 +215,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 let node = this;
 
                 // Confirmation message.
-                let confirmQuestion = Str.get_string('patches:patch_confirmrestore', 'local_securitypatcher');
-                let confirmButton = Str.get_string('patches:patch_confirmrestorebtn', 'local_securitypatcher');
+                let confirmQuestion = Str.get_string('patches:patch_confirmrestore', 'local_codepatcher');
+                let confirmButton = Str.get_string('patches:patch_confirmrestorebtn', 'local_codepatcher');
 
                 let confirmCallback = function () {
                     datatable_loader(true);
@@ -268,7 +268,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                     patchname: this.getAttribute('data-name'),
                     filters: JSON.stringify(filters),
                 };
-                Template.renderForPromise('local_securitypatcher/patches_report', context)
+                Template.renderForPromise('local_codepatcher/patches_report', context)
                     .then(async ({html, js}) => {
                         let output = document.createElement("div");
                         output.id = 'patches-report-modal-wrapper';
@@ -282,7 +282,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
 
     async function create_report_modal(name, html) {
         let modal = await ModalFactory.create({
-            title: Str.get_string('datatable:patchesreport', 'local_securitypatcher', name),
+            title: Str.get_string('datatable:patchesreport', 'local_codepatcher', name),
             body: html,
             large: true,
             removeOnClose: true,
@@ -370,10 +370,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
      */
     function show_confirmation(question, confirmButton, confirmCallback) {
         Notification.confirm(
-            Str.get_string('confirm_title', 'local_securitypatcher'),
+            Str.get_string('confirm_title', 'local_codepatcher'),
             question,
             confirmButton,
-            Str.get_string('confirm_cancel', 'local_securitypatcher'),
+            Str.get_string('confirm_cancel', 'local_codepatcher'),
             confirmCallback,
             null
         );
@@ -403,7 +403,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
      * @return {void}
      */
     function prefetch_strings() {
-        Prefetch.prefetchStrings('local_securitypatcher', [
+        Prefetch.prefetchStrings('local_codepatcher', [
             'confirm_title', 'confirm_cancel', 'patches:patch_confirmdelete',
             'patches:patch_confirmdeletebtn', 'patches:patch_confirmapply',
             'patches:patch_confirmapplybtn', 'patches:patch_confirmrestore',
@@ -418,7 +418,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
      * @return {void}
      */
     function prefetch_templates() {
-        Prefetch.prefetchTemplate('local_securitypatcher/patches_report');
+        Prefetch.prefetchTemplate('local_codepatcher/patches_report');
     }
 
     /**

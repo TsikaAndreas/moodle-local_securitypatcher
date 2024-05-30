@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * External function get_patch_report_info for local_securitypatcher.
+ * External function get_patch_report_info for local_codepatcher.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_securitypatcher\external;
+namespace local_codepatcher\external;
 
 use external_api;
 use external_function_parameters;
 use external_single_structure;
 use external_value;
-use local_securitypatcher\api;
-use local_securitypatcher\managers\patch_manager;
+use local_codepatcher\api;
+use local_codepatcher\managers\patch_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -37,9 +37,9 @@ global $CFG;
 require_once($CFG->libdir . '/externallib.php');
 
 /**
- * External class get_patch_report_info for local_securitypatcher.
+ * External class get_patch_report_info for local_codepatcher.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -52,12 +52,12 @@ class get_patch_report_info extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-                'reportid' => new external_value(PARAM_INT, 'id of security patch report'),
+                'reportid' => new external_value(PARAM_INT, 'id of code patch report'),
         ]);
     }
 
     /**
-     * Returns the information of security patch report.
+     * Returns the information of code patch report.
      *
      * @param int $reportid
      * @return array
@@ -70,9 +70,9 @@ class get_patch_report_info extends external_api {
         ]);
 
         $context = \context_system::instance();
-        require_capability('local/securitypatcher:viewreports', $context);
+        require_capability('local/codepatcher:viewreports', $context);
 
-        $report = $DB->get_record('local_securitypatcher_data', ['id' => $params['reportid']], '*', MUST_EXIST);
+        $report = $DB->get_record('local_codepatcher_data', ['id' => $params['reportid']], '*', MUST_EXIST);
         $info = new \stdClass();
         $info->date = api::get_date($report->timecreated);
         $info->content = $report->data;
@@ -89,9 +89,9 @@ class get_patch_report_info extends external_api {
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
                 'result' => new external_single_structure([
-                    'date' => new external_value(PARAM_TEXT, 'Security patch report date.'),
-                    'content' => new external_value(PARAM_RAW, 'Security patch report content.'),
-                ], 'Result object with the security patch report info.'),
+                    'date' => new external_value(PARAM_TEXT, 'Code patch report date.'),
+                    'content' => new external_value(PARAM_RAW, 'Code patch report content.'),
+                ], 'Result object with the code patch report info.'),
         ]);
     }
 }

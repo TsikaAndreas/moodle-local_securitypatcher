@@ -17,7 +17,7 @@
 /**
  * Plugin capabilities are defined here.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @category  access
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,14 +27,14 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
 
-        'local/securitypatcher:viewpatch' => [
+        'local/codepatcher:viewpatch' => [
                 'captype' => 'view',
                 'contextlevel' => CONTEXT_SYSTEM,
                 'archetypes' => [
                 ],
         ],
 
-        'local/securitypatcher:addpatch' => [
+        'local/codepatcher:addpatch' => [
                 'riskbitmask' => RISK_SPAM | RISK_XSS,
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM,
@@ -42,7 +42,7 @@ $capabilities = [
                 ],
         ],
 
-        'local/securitypatcher:editpatch' => [
+        'local/codepatcher:editpatch' => [
                 'riskbitmask' => RISK_SPAM | RISK_XSS,
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM,
@@ -50,14 +50,14 @@ $capabilities = [
                 ],
         ],
 
-        'local/securitypatcher:viewreports' => [
+        'local/codepatcher:viewreports' => [
                 'captype' => 'view',
                 'contextlevel' => CONTEXT_SYSTEM,
                 'archetypes' => [
                 ],
         ],
 
-        'local/securitypatcher:config' => [
+        'local/codepatcher:config' => [
                 'riskbitmask' => RISK_CONFIG,
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM,
@@ -65,27 +65,27 @@ $capabilities = [
                 ],
         ],
 
-        'local/securitypatcher:deletepatch' => [
+        'local/codepatcher:deletepatch' => [
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM,
                 'archetypes' => [
                 ],
         ],
 
-        'local/securitypatcher:restorepatch' => [
+        'local/codepatcher:restorepatch' => [
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM,
                 'archetypes' => [
                 ],
         ],
 
-        'local/securitypatcher:applypatch' => [
+        'local/codepatcher:applypatch' => [
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM,
                 'archetypes' => [
                 ],
         ],
-        'local/securitypatcher:deletepatchreport' => [
+        'local/codepatcher:deletepatchreport' => [
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM,
                 'archetypes' => [

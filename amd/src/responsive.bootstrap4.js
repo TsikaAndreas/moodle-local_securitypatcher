@@ -5,7 +5,7 @@
 (function( factory ){
 	if ( typeof define === 'function' && define.amd ) {
 		// AMD
-		define( ['jquery', 'local_securitypatcher/dataTables.bootstrap4', 'local_securitypatcher/dataTables.responsive'], function ( $ ) {
+		define( ['jquery', 'local_codepatcher/dataTables.bootstrap4', 'local_codepatcher/dataTables.responsive'], function ( $ ) {
 			return factory( $, window, document );
 		} );
 	}

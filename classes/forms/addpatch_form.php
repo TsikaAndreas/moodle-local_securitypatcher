@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_securitypatcher\forms;
+namespace local_codepatcher\forms;
 
-use local_securitypatcher\api;
+use local_codepatcher\api;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -24,9 +24,9 @@ require_once("$CFG->libdir/formslib.php");
 require_once($CFG->dirroot . '/repository/lib.php');
 
 /**
- * File description for the local_securitypatcher plugin.
+ * File description for the local_codepatcher plugin.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -44,18 +44,18 @@ class addpatch_form extends \moodleform {
         $mform->setType('id', PARAM_INT);
 
         // Name.
-        $mform->addElement('text', 'name', get_string('patch:name', 'local_securitypatcher'));
+        $mform->addElement('text', 'name', get_string('patch:name', 'local_codepatcher'));
         $mform->setType('name', PARAM_TEXT);
-        $mform->addRule('name', get_string('err:namerequired', 'local_securitypatcher'), 'required');
-        $mform->addHelpButton('name', 'patch:name', 'local_securitypatcher');
+        $mform->addRule('name', get_string('err:namerequired', 'local_codepatcher'), 'required');
+        $mform->addHelpButton('name', 'patch:name', 'local_codepatcher');
 
         // Attachment.
-        $mform->addElement('filemanager', 'attachments_filemanager', get_string('patch:file', 'local_securitypatcher'), null,
+        $mform->addElement('filemanager', 'attachments_filemanager', get_string('patch:file', 'local_codepatcher'), null,
                 $filemanageroptions);
-        $mform->addRule('attachments_filemanager', get_string('err:filerequired', 'local_securitypatcher'), 'required');
+        $mform->addRule('attachments_filemanager', get_string('err:filerequired', 'local_codepatcher'), 'required');
 
         // Save and cancel.
-        $this->add_action_buttons(true, get_string('patch:save', 'local_securitypatcher'));
+        $this->add_action_buttons(true, get_string('patch:save', 'local_codepatcher'));
     }
 
     /**
@@ -72,10 +72,10 @@ class addpatch_form extends \moodleform {
         $errors = [];
 
         if (empty($patch->id)) {
-            // Check if security patch with the same name exists.
-            $record = $DB->record_exists('local_securitypatcher', ['name' => $data['name']]);
+            // Check if code patch with the same name exists.
+            $record = $DB->record_exists('local_codepatcher', ['name' => $data['name']]);
             if ($record) {
-                $errors['name'] = get_string('err:existingname', 'securitypatcher', s($data['name']));
+                $errors['name'] = get_string('err:existingname', 'codepatcher', s($data['name']));
             }
         }
 

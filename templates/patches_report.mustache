@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template local_securitypatcher/patches_report
+    @template local_codepatcher/patches_report
 
     Patches report dataTable.
 
@@ -50,22 +50,22 @@
 <div class="datatable-loader">
     <div class="datatable-loader-overlay">
         <div class="loader"></div>
-        <span class="text">{{#str}} loading, local_securitypatcher {{/str}}.</span>
+        <span class="text">{{#str}} loading, local_codepatcher {{/str}}.</span>
     </div>
 </div>
 <table id="patchesreporttable" class="table table-striped table-bordered nowrap" style="width: 100%">
     <thead>
     <tr>
         <th></th>
-        <th>{{#str}} datatable:patchesreport:timecreated, local_securitypatcher {{/str}}</th>
-        <th>{{#str}} datatable:patchesreport:status, local_securitypatcher {{/str}}</th>
-        <th>{{#str}} datatable:patchesreport:operation, local_securitypatcher {{/str}}</th>
-        <th>{{#str}} datatable:patchesreport:actions, local_securitypatcher {{/str}}</th>
+        <th>{{#str}} datatable:patchesreport:timecreated, local_codepatcher {{/str}}</th>
+        <th>{{#str}} datatable:patchesreport:status, local_codepatcher {{/str}}</th>
+        <th>{{#str}} datatable:patchesreport:operation, local_codepatcher {{/str}}</th>
+        <th>{{#str}} datatable:patchesreport:actions, local_codepatcher {{/str}}</th>
     </tr>
     </thead>
 </table>
 {{#js}}
-    require(['local_securitypatcher/patches_report'], function(Report) {
+    require(['local_codepatcher/patches_report'], function(Report) {
         let options = {
             id: {{patchid}},
             filters: {{{filters}}},

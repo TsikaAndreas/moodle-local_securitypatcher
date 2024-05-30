@@ -6,7 +6,7 @@
 (function( factory ){
 	if ( typeof define === 'function' && define.amd ) {
 		// AMD
-		define( ['jquery', 'local_securitypatcher/jquery.dataTables', 'local_securitypatcher/dataTables.buttons'], function ( $ ) {
+		define( ['jquery', 'local_codepatcher/jquery.dataTables', 'local_codepatcher/dataTables.buttons'], function ( $ ) {
 			return factory( $, window, document );
 		} );
 	}

@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Report page for the local_securitypatcher plugin.
+ * Report page for the local_codepatcher plugin.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_securitypatcher\api;
+use local_codepatcher\api;
 
 require_once(__DIR__ . '/../../config.php');
 
@@ -32,15 +32,15 @@ require_login();
 $PAGE->set_pagelayout('admin');
 $context = context_system::instance();
 $PAGE->set_context($context);
-$PAGE->set_url('/local/securitypatcher/patches.php', []);
-$PAGE->set_title(get_string('patches:title', 'local_securitypatcher'));
-$PAGE->set_heading(get_string('patches:heading', 'local_securitypatcher'));
-require_capability('local/securitypatcher:viewreports', $context);
+$PAGE->set_url('/local/codepatcher/patches.php', []);
+$PAGE->set_title(get_string('patches:title', 'local_codepatcher'));
+$PAGE->set_heading(get_string('patches:heading', 'local_codepatcher'));
+require_capability('local/codepatcher:viewreports', $context);
 // Load css.
 api::load_datatables_css();
-$PAGE->requires->css('/local/securitypatcher/styles/patches.css');
+$PAGE->requires->css('/local/codepatcher/styles/patches.css');
 
 // Render the reports page.
 echo $OUTPUT->header();
-echo $OUTPUT->render(new local_securitypatcher\output\patches());
+echo $OUTPUT->render(new local_codepatcher\output\patches());
 echo $OUTPUT->footer();

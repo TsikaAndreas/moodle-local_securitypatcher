@@ -15,20 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * External function get_patch_info for local_securitypatcher.
+ * External function get_patch_info for local_codepatcher.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_securitypatcher\external;
+namespace local_codepatcher\external;
 
 use external_api;
 use external_function_parameters;
 use external_single_structure;
 use external_value;
-use local_securitypatcher\managers\patch_manager;
+use local_codepatcher\managers\patch_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -36,9 +36,9 @@ global $CFG;
 require_once($CFG->libdir . '/externallib.php');
 
 /**
- * External class get_patch_info for local_securitypatcher.
+ * External class get_patch_info for local_codepatcher.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -51,12 +51,12 @@ class get_patch_info extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-                'patchid' => new external_value(PARAM_INT, 'id of security patch'),
+                'patchid' => new external_value(PARAM_INT, 'id of code patch'),
         ]);
     }
 
     /**
-     * Returns the information of security patch.
+     * Returns the information of code patch.
      *
      * @param int $patchid
      * @return array
@@ -68,7 +68,7 @@ class get_patch_info extends external_api {
         ]);
 
         $context = \context_system::instance();
-        require_capability('local/securitypatcher:viewpatch', $context);
+        require_capability('local/codepatcher:viewpatch', $context);
 
         $manager = new patch_manager();
         $result = $manager->get_patch_info($params['patchid']);
@@ -85,9 +85,9 @@ class get_patch_info extends external_api {
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
                 'result' => new external_single_structure([
-                    'name' => new external_value(PARAM_TEXT, 'Security patch file name.'),
-                    'content' => new external_value(PARAM_RAW, 'Security patch file content.'),
-                ], 'Result object with the security patch info.'),
+                    'name' => new external_value(PARAM_TEXT, 'Code patch file name.'),
+                    'content' => new external_value(PARAM_RAW, 'Code patch file content.'),
+                ], 'Result object with the code patch info.'),
         ]);
     }
 }

@@ -15,17 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Privacy provider implementation for the local_securitypatcher plugin.
+ * Privacy provider implementation for the local_codepatcher plugin.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_securitypatcher\privacy;
+namespace local_codepatcher\privacy;
 
 /**
- * Privacy Subsystem for local_securitypatcher implementing null_provider.
+ * Privacy Subsystem for local_codepatcher implementing null_provider.
  *
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

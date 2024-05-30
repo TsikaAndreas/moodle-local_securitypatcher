@@ -15,26 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * General Api class for the local_securitypatcher plugin.
+ * General Api class for the local_codepatcher plugin.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_securitypatcher;
+namespace local_codepatcher;
 
 /**
  * General purpose api class.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class api {
 
     /**
-     * Retrieve file manager options specifically designed for handling security patch attachments.
+     * Retrieve file manager options specifically designed for handling code patch attachments.
      *
      * @return array An associative array containing options for the file manager.
      *   - 'maxfiles': Maximum number of files (1 for single file upload).
@@ -80,9 +80,9 @@ class api {
     public static function load_datatables_css(): void {
         global $PAGE;
 
-        $PAGE->requires->css('/local/securitypatcher/styles/dataTables.bootstrap4.min.css');
-        $PAGE->requires->css('/local/securitypatcher/styles/buttons.bootstrap4.min.css');
-        $PAGE->requires->css('/local/securitypatcher/styles/responsive.bootstrap4.min.css');
-        $PAGE->requires->css('/local/securitypatcher/styles/dataTables.dateTime.min.css');
+        $PAGE->requires->css('/local/codepatcher/styles/dataTables.bootstrap4.min.css');
+        $PAGE->requires->css('/local/codepatcher/styles/buttons.bootstrap4.min.css');
+        $PAGE->requires->css('/local/codepatcher/styles/responsive.bootstrap4.min.css');
+        $PAGE->requires->css('/local/codepatcher/styles/dataTables.dateTime.min.css');
     }
 }

@@ -15,20 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * External function delete_patch for local_securitypatcher.
+ * External function delete_patch for local_codepatcher.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_securitypatcher\external;
+namespace local_codepatcher\external;
 
 use external_api;
 use external_function_parameters;
 use external_single_structure;
 use external_value;
-use local_securitypatcher\managers\patch_manager;
+use local_codepatcher\managers\patch_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -36,9 +36,9 @@ global $CFG;
 require_once($CFG->libdir . '/externallib.php');
 
 /**
- * External class delete_patch for local_securitypatcher.
+ * External class delete_patch for local_codepatcher.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -51,12 +51,12 @@ class delete_patch extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-                'patchid' => new external_value(PARAM_INT, 'id of security patch'),
+                'patchid' => new external_value(PARAM_INT, 'id of code patch'),
         ]);
     }
 
     /**
-     * Delete a security patch.
+     * Delete a code patch.
      *
      * @param int $patchid
      * @return array
@@ -70,13 +70,13 @@ class delete_patch extends external_api {
         ]);
 
         $context = \context_system::instance();
-        require_capability('local/securitypatcher:deletepatch', $context);
+        require_capability('local/codepatcher:deletepatch', $context);
 
         // Perform the delete action.
         $deleted = false;
-        if ($DB->record_exists('local_securitypatcher', ['id' => $params['patchid']])) {
-            $DB->delete_records('local_securitypatcher', ['id' => $params['patchid']]);
-            $DB->delete_records('local_securitypatcher_data', ['patchid' => $params['patchid']]);
+        if ($DB->record_exists('local_codepatcher', ['id' => $params['patchid']])) {
+            $DB->delete_records('local_codepatcher', ['id' => $params['patchid']]);
+            $DB->delete_records('local_codepatcher_data', ['patchid' => $params['patchid']]);
 
             $manager = new patch_manager();
             $manager->delete_patch_stored_file($params['patchid']);

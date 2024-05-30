@@ -16,7 +16,7 @@
 /**
  * A javascript module to handle web service calls.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,7 +25,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
     let get_patches = function (args) {
 
         let request = {
-            methodname: 'local_securitypatcher_get_patches',
+            methodname: 'local_codepatcher_get_patches',
             args: args
         };
 
@@ -39,7 +39,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
     let delete_patch = function (args) {
 
         let request = {
-            methodname: 'local_securitypatcher_delete_patch',
+            methodname: 'local_codepatcher_delete_patch',
             args: args
         };
 
@@ -53,7 +53,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
     let apply_patch = function (args) {
 
         let request = {
-            methodname: 'local_securitypatcher_apply_patch',
+            methodname: 'local_codepatcher_apply_patch',
             args: args
         };
 
@@ -67,7 +67,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
     let restore_patch = function (args) {
 
         let request = {
-            methodname: 'local_securitypatcher_restore_patch',
+            methodname: 'local_codepatcher_restore_patch',
             args: args
         };
 
@@ -81,7 +81,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
     let get_patch_reports = function (args) {
 
         let request = {
-            methodname: 'local_securitypatcher_get_patch_reports',
+            methodname: 'local_codepatcher_get_patch_reports',
             args: args
         };
 
@@ -95,7 +95,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
     let get_patch_info = function (args) {
 
         let request = {
-            methodname: 'local_securitypatcher_get_patch_info',
+            methodname: 'local_codepatcher_get_patch_info',
             args: args
         };
 
@@ -109,7 +109,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
     let delete_patch_report = function (args) {
 
         let request = {
-            methodname: 'local_securitypatcher_delete_patch_report',
+            methodname: 'local_codepatcher_delete_patch_report',
             args: args
         };
 
@@ -123,7 +123,7 @@ define(['jquery', 'core/ajax', 'core/notification'], function ($, Ajax, Notifica
     let get_patch_report_info = function (args) {
 
         let request = {
-            methodname: 'local_securitypatcher_get_patch_report_info',
+            methodname: 'local_codepatcher_get_patch_report_info',
             args: args
         };
 

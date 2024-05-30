@@ -17,7 +17,7 @@
 /**
  * Plugin administration pages are defined here.
  *
- * @package     local_securitypatcher
+ * @package     local_codepatcher
  * @category    admin
  * @copyright   2023 Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,36 +26,36 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    $manage = new admin_category('local_securitypatcher', get_string('pluginname', 'local_securitypatcher'));
+    $manage = new admin_category('local_codepatcher', get_string('pluginname', 'local_codepatcher'));
     $ADMIN->add('server', $manage);
 
     // Add manage settings page.
-    $settingspage = new admin_settingpage('managelocalsecuritypatcher',
-            new lang_string('settings:manage', 'local_securitypatcher'),
-            'local/securitypatcher:config');
+    $settingspage = new admin_settingpage('managelocalcodepatcher',
+            new lang_string('settings:manage', 'local_codepatcher'),
+            'local/codepatcher:config');
 
     if ($ADMIN->fulltree) {
         // Git command.
         $settingspage->add(new admin_setting_configexecutable(
-                'local_securitypatcher/git',
-                new lang_string('settings:manage:git', 'local_securitypatcher'),
-                new lang_string('settings:manage:git_desc', 'local_securitypatcher'),
+                'local_codepatcher/git',
+                new lang_string('settings:manage:git', 'local_codepatcher'),
+                new lang_string('settings:manage:git_desc', 'local_codepatcher'),
                 ''
         ));
     }
 
-    $ADMIN->add('local_securitypatcher', $settingspage);
+    $ADMIN->add('local_codepatcher', $settingspage);
 
-    // Add security patches page.
-    $ADMIN->add('local_securitypatcher', new admin_externalpage('addsecuritypatches',
-            get_string('settings:addsecuritypatches', 'local_securitypatcher'),
-            new moodle_url('/local/securitypatcher/patch.php'),
-            'local/securitypatcher:addpatch'
+    // Add code patches page.
+    $ADMIN->add('local_codepatcher', new admin_externalpage('addcodepatches',
+            get_string('settings:addcodepatches', 'local_codepatcher'),
+            new moodle_url('/local/codepatcher/patch.php'),
+            'local/codepatcher:addpatch'
     ));
     // Add patches page.
-    $ADMIN->add('local_securitypatcher', new admin_externalpage('reportsecuritypatches',
-            get_string('settings:patchesreport', 'local_securitypatcher'),
-            new moodle_url('/local/securitypatcher/patches.php'),
-            'local/securitypatcher:viewreports'
+    $ADMIN->add('local_codepatcher', new admin_externalpage('reportcodepatches',
+            get_string('settings:patchesreport', 'local_codepatcher'),
+            new moodle_url('/local/codepatcher/patches.php'),
+            'local/codepatcher:viewreports'
     ));
 }

@@ -30,7 +30,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file keeps track of upgrades to the local_securitypatcher plugin.
+ * This file keeps track of upgrades to the local_codepatcher plugin.
  *
  * Sometimes, changes between versions involve alterations to database structures
  * and other major things that may break installations.
@@ -46,28 +46,28 @@
  * Please do not forget to use upgrade_set_timeout()
  * before any action that may take longer time to finish.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2024 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
- * Upgrade the local_securitypatcher plugin
+ * Upgrade the local_codepatcher plugin
  *
  * @param int $oldversion the version we are upgrading from
  * @param bool result
  */
-function xmldb_local_securitypatcher_upgrade(int $oldversion) {
+function xmldb_local_codepatcher_upgrade(int $oldversion) {
     global $CFG, $DB;
 
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2023083006) {
 
-        // Define table local_securitypatcher_data to be created.
-        $table = new xmldb_table('local_securitypatcher_data');
+        // Define table local_codepatcher_data to be created.
+        $table = new xmldb_table('local_codepatcher_data');
 
-        // Adding fields to table local_securitypatcher_data.
+        // Adding fields to table local_codepatcher_data.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('patchid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('status', XMLDB_TYPE_INTEGER, '1', null, null, null, null);
@@ -76,29 +76,29 @@ function xmldb_local_securitypatcher_upgrade(int $oldversion) {
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
 
-        // Adding keys to table local_securitypatcher_data.
+        // Adding keys to table local_codepatcher_data.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $table->add_key('patchid', XMLDB_KEY_FOREIGN, ['patchid'], 'local_securitypatcher', ['id']);
+        $table->add_key('patchid', XMLDB_KEY_FOREIGN, ['patchid'], 'local_codepatcher', ['id']);
 
-        // Conditionally launch create table for local_securitypatcher_data.
+        // Conditionally launch create table for local_codepatcher_data.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
 
-        // Securitypatcher savepoint reached.
-        upgrade_plugin_savepoint(true, 2023083006, 'local', 'securitypatcher');
+        // codepatcher savepoint reached.
+        upgrade_plugin_savepoint(true, 2023083006, 'local', 'codepatcher');
     }
 
     if ($oldversion < 2023083008) {
 
-        // Changing type of field status on table local_securitypatcher_data to char.
-        $table = new xmldb_table('local_securitypatcher_data');
+        // Changing type of field status on table local_codepatcher_data to char.
+        $table = new xmldb_table('local_codepatcher_data');
         $field = new xmldb_field('status', XMLDB_TYPE_CHAR, '50', null, XMLDB_NOTNULL, null, null, 'patchid');
 
         // Launch change of type for field status.
         $dbman->change_field_type($table, $field);
 
-        // Define field statuscode to be added to local_securitypatcher_data.
+        // Define field statuscode to be added to local_codepatcher_data.
         $field = new xmldb_field('statuscode', XMLDB_TYPE_INTEGER, '2', null, null, null, null, 'status');
 
         // Conditionally launch add field statuscode.
@@ -106,8 +106,8 @@ function xmldb_local_securitypatcher_upgrade(int $oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        // Securitypatcher savepoint reached.
-        upgrade_plugin_savepoint(true, 2023083008, 'local', 'securitypatcher');
+        // codepatcher savepoint reached.
+        upgrade_plugin_savepoint(true, 2023083008, 'local', 'codepatcher');
     }
 
     return true;

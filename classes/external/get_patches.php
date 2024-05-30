@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * External function get_patches for local_securitypatcher.
+ * External function get_patches for local_codepatcher.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_securitypatcher\external;
+namespace local_codepatcher\external;
 
 use external_api;
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
 use external_value;
-use local_securitypatcher\datatables\tables\patches;
+use local_codepatcher\datatables\tables\patches;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -37,16 +37,16 @@ global $CFG;
 require_once($CFG->libdir . '/externallib.php');
 
 /**
- * External class get_patches for local_securitypatcher.
+ * External class get_patches for local_codepatcher.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class get_patches extends external_api {
 
     /**
-     * Returns the list of security patches.
+     * Returns the list of code patches.
      *
      * @param string $data
      * @return object
@@ -59,7 +59,7 @@ class get_patches extends external_api {
         ]);
 
         $context = \context_system::instance();
-        require_capability('local/securitypatcher:viewpatch', $context);
+        require_capability('local/codepatcher:viewpatch', $context);
         $PAGE->set_context($context);
 
         $request = json_decode($params['data'], true, 512, JSON_THROW_ON_ERROR);
@@ -101,7 +101,7 @@ class get_patches extends external_api {
                                 'created' => new external_value(PARAM_TEXT, 'patch creation time'),
                                 'actions' => new external_value(PARAM_RAW, 'patch actions'),
                         ])
-                        , 'Result with list of security patches'),
+                        , 'Result with list of code patches'),
         ]);
     }
 }

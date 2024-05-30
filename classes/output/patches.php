@@ -15,29 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Patches output file for the local_securitypatcher plugin.
+ * Patches output file for the local_codepatcher plugin.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_securitypatcher\output;
+namespace local_codepatcher\output;
 
-use local_securitypatcher\datatables\tables\patchesreport;
+use local_codepatcher\datatables\tables\patchesreport;
 use renderer_base;
 
 /**
- * Class containing data for security patches datatable.
+ * Class containing data for code patches datatable.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class patches implements \renderable, \templatable {
 
     /**
-     * Return security patches datatable data.
+     * Return code patches datatable data.
      *
      * @param renderer_base $output
      * @return array
@@ -46,7 +46,7 @@ class patches implements \renderable, \templatable {
 
         $filters = [
                 'patches' => [
-                        'status' => \local_securitypatcher\datatables\tables\patches::html_status_select_options(),
+                        'status' => \local_codepatcher\datatables\tables\patches::html_status_select_options(),
                 ],
                 'patchesreport' => [
                         'status' => patchesreport::html_status_select_options(),

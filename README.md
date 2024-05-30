@@ -1,19 +1,19 @@
-# local_securitypatcher
+# local_codepatcher
 
-The **local_securitypatcher** plugin simplifies the process of applying and managing security patches within your Moodle Learning Management System (LMS). With this plugin, effortlessly import security patch files from the official Moodle security announcements site.
+The **local_codepatcher** plugin simplifies the process of applying and managing code patches within your platform. With this plugin, effortlessly import code patch files from the official security announcements site.
 
 ### Key Features:
-- **Effortless Patch Import:** Easily import security patch diff files from official Moodle announcements into your platform.
-- **Seamless Application:** Apply security fixes across your Moodle LMS with the click of a button.
+- **Effortless Patch Import:** Easily import code patch diff files from official security announcements page into your platform.
+- **Seamless Application:** Apply code fixes across your platform with the click of a button.
 - **Error Handling:** Receive clear notifications in case of any errors or code mismatches during patch application, ensuring your platform's integrity.
-- **Reversion Capability:** Revert applied security changes swiftly and effortlessly, providing flexibility in managing your platform's security updates.
-- **User-Friendly Interface:** All these functionalities are conveniently accessible through a user-friendly interface, making security management hassle-free.
+- **Reversion Capability:** Revert applied code changes swiftly and effortlessly, providing flexibility in managing your platform's code patch updates.
+- **User-Friendly Interface:** All these functionalities are conveniently accessible through a user-friendly interface, making the process hassle-free.
 
-Enhance your Moodle LMS security management by simplifying the process of applying, verifying, and reverting security patches. Keep your platform secure without complexities, using the **local_securitypatcher** plugin.
+Enhance your platform management by simplifying the process of applying, verifying, and reverting code patches. Keep your platform without complexities, using the **local_codepatcher** plugin.
 
 ## Installing via uploaded ZIP file ##
 
-1. Log in to your Moodle site as an admin and go to _Site administration >
+1. Log in to your site as an admin and go to _Site administration >
    Plugins > Install plugins_.
 2. Upload the ZIP file with the plugin code. You should only be prompted to add
    extra details if your plugin type is not automatically detected.
@@ -23,9 +23,9 @@ Enhance your Moodle LMS security management by simplifying the process of applyi
 
 The plugin can be also installed by putting the contents of this directory to
 
-    {your/moodle/dirroot}/local/securitypatcher
+    {your/dirroot}/local/codepatcher
 
-Afterwards, log in to your Moodle site as an admin and go to _Site administration >
+Afterward, log in to your site as an admin and go to _Site administration >
 Notifications_ to complete the installation.
 
 Alternatively, you can run

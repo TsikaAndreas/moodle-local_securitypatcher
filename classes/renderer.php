@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Renderer file for the local_securitypatcher plugin.
+ * Renderer file for the local_codepatcher plugin.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace local_securitypatcher;
+namespace local_codepatcher;
 
-use local_securitypatcher\output\patches;
+use local_codepatcher\output\patches;
 use plugin_renderer_base;
 
 /**
  * Implements the renderer
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -42,6 +42,6 @@ class renderer extends plugin_renderer_base {
      * @return string HTML to output.
      */
     public function render_patches(patches $patches): string {
-        return $this->render_from_template('local_securitypatcher/patches', $patches->export_for_template($this));
+        return $this->render_from_template('local_codepatcher/patches', $patches->export_for_template($this));
     }
 }

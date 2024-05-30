@@ -17,15 +17,15 @@
 /**
  * Plugin version and other meta-data are defined here.
  *
- * @package     local_securitypatcher
+ * @package     local_codepatcher
  * @copyright   2023 Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_securitypatcher';
+$plugin->component = 'local_codepatcher';
 $plugin->release = '1.1.0';
-$plugin->version = 2023083009;
+$plugin->version = 2023083010;
 $plugin->requires = 2022112800;
 $plugin->maturity = MATURITY_STABLE;

@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Security patch creation and editing form for the local_securitypatcher plugin.
+ * Code patch creation and editing form for the local_codepatcher plugin.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,9 +25,9 @@
 require_once(__DIR__ . '/../../config.php');
 
 use core\output\notification;
-use local_securitypatcher\forms\addpatch_form;
-use local_securitypatcher\api;
-use local_securitypatcher\managers\patch_manager;
+use local_codepatcher\forms\addpatch_form;
+use local_codepatcher\api;
+use local_codepatcher\managers\patch_manager;
 
 global $OUTPUT, $PAGE, $CFG;
 
@@ -37,37 +37,37 @@ require_login();
 $id = optional_param('id', null, PARAM_INT);
 
 // Set page configuration.
-$pageurl = new moodle_url('/local/securitypatcher/patch.php');
-$pachesreporturl = new moodle_url('/local/securitypatcher/patches.php');
+$pageurl = new moodle_url('/local/codepatcher/patch.php');
+$pachesreporturl = new moodle_url('/local/codepatcher/patches.php');
 $PAGE->set_url($pageurl);
 $PAGE->set_pagelayout('admin');
 $context = context_system::instance();
 $PAGE->set_context($context);
-$PAGE->set_title(new lang_string('patch:title', 'local_securitypatcher'));
-$PAGE->set_heading(new lang_string('patch:header', 'local_securitypatcher'));
+$PAGE->set_title(new lang_string('patch:title', 'local_codepatcher'));
+$PAGE->set_heading(new lang_string('patch:header', 'local_codepatcher'));
 
 // Initialize the patch manager.
 $manager = new patch_manager();
 
-// Check if an ID is provided, indicating whether this is a new or existing security patch.
+// Check if an ID is provided, indicating whether this is a new or existing code patch.
 if (empty($id)) {
-    require_capability('local/securitypatcher:addpatch', $context);
-    $securitypatch = new stdClass();
-    $securitypatch->id = null;
+    require_capability('local/codepatcher:addpatch', $context);
+    $codepatch = new stdClass();
+    $codepatch->id = null;
 } else {
-    require_capability('local/securitypatcher:editpatch', $context);
-    $securitypatch = $manager->get_patch($id);
+    require_capability('local/codepatcher:editpatch', $context);
+    $codepatch = $manager->get_patch($id);
 }
 
-// Set up the form instance with the security patch data.
+// Set up the form instance with the code patch data.
 $filemangeroptions = api::get_patch_filemanager_options();
-$formargs = ['patch' => $securitypatch];
+$formargs = ['patch' => $codepatch];
 $mform = new addpatch_form(null, $formargs);
 $toform = [];
 
 // Prepare the file manager for handling attachments.
-file_prepare_standard_filemanager($securitypatch, 'attachments', $filemangeroptions, $context,
-        $manager::$component, $manager::$filearea, $securitypatch->id);
+file_prepare_standard_filemanager($codepatch, 'attachments', $filemangeroptions, $context,
+        $manager::$component, $manager::$filearea, $codepatch->id);
 
 // Form actions.
 if ($mform->is_cancelled()) {
@@ -75,28 +75,28 @@ if ($mform->is_cancelled()) {
     redirect(new moodle_url('/'));
 } else if ($fromform = $mform->get_data()) {
     // If form data is submitted.
-    if (empty($securitypatch->id)) {
-        // If it's a new security patch then create it.
+    if (empty($codepatch->id)) {
+        // If it's a new code patch then create it.
         $patch = $manager->create_patch($fromform);
     } else {
-        // If it's an existing security patch, update it.
-        $fromform->id = $securitypatch->id;
+        // If it's an existing code patch, update it.
+        $fromform->id = $codepatch->id;
         $patch = $manager->update_patch($fromform);
     }
 
     // Redirection based on success or failure.
     if ($patch === false) {
         // Redirect with an error notification in case of failure.
-        redirect($pageurl, get_string('notification:failnewpatchsave', 'local_securitypatcher'),
+        redirect($pageurl, get_string('notification:failnewpatchsave', 'local_codepatcher'),
                 null, notification::NOTIFY_ERROR);
     } else {
         // Redirect with a success notification in case of success.
-        redirect($pachesreporturl, get_string('notification:successnewpatchsave', 'local_securitypatcher'),
+        redirect($pachesreporturl, get_string('notification:successnewpatchsave', 'local_codepatcher'),
                 null, notification::NOTIFY_SUCCESS);
     }
 } else {
     // If no form data is submitted, set the form data.
-    $mform->set_data($securitypatch);
+    $mform->set_data($codepatch);
     // Render the page.
     echo $OUTPUT->header();
     // Display the form.

@@ -16,16 +16,16 @@
 /**
  * A javascript module to handle web service calls.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repository',
+define(['jquery', 'core/ajax', 'core/notification', 'local_codepatcher/repository',
         'core/str', 'core/modal_factory',
-        'local_securitypatcher/jquery.dataTables', 'local_securitypatcher/dataTables.dateTime',
-        'local_securitypatcher/dataTables.bootstrap4', 'local_securitypatcher/dataTables.buttons',
-        'local_securitypatcher/buttons.bootstrap4', 'local_securitypatcher/buttons.colVis',
-        'local_securitypatcher/dataTables.responsive', 'local_securitypatcher/responsive.bootstrap4'],
+        'local_codepatcher/jquery.dataTables', 'local_codepatcher/dataTables.dateTime',
+        'local_codepatcher/dataTables.bootstrap4', 'local_codepatcher/dataTables.buttons',
+        'local_codepatcher/buttons.bootstrap4', 'local_codepatcher/buttons.colVis',
+        'local_codepatcher/dataTables.responsive', 'local_codepatcher/responsive.bootstrap4'],
     function ($, Ajax, Notification, Repository, Str, ModalFactory, DataTable
 ) {
     /**
@@ -134,8 +134,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
                 let report = parseInt(this.getAttribute('data-report'), 10);
 
                 // Confirmation message.
-                let confirmQuestion = Str.get_string('patchesreport:report_confirmdelete', 'local_securitypatcher');
-                let confirmButton = Str.get_string('patchesreport:report_confirmdeletebtn', 'local_securitypatcher');
+                let confirmQuestion = Str.get_string('patchesreport:report_confirmdelete', 'local_codepatcher');
+                let confirmButton = Str.get_string('patchesreport:report_confirmdeletebtn', 'local_codepatcher');
 
                 let confirmCallback = function () {
                     datatable_loader(true);
@@ -168,10 +168,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'local_securitypatcher/repos
      */
     function show_confirmation(question, confirmButton, confirmCallback) {
         Notification.confirm(
-            Str.get_string('confirm_title', 'local_securitypatcher'),
+            Str.get_string('confirm_title', 'local_codepatcher'),
             question,
             confirmButton,
-            Str.get_string('confirm_cancel', 'local_securitypatcher'),
+            Str.get_string('confirm_cancel', 'local_codepatcher'),
             confirmCallback,
             null
         );

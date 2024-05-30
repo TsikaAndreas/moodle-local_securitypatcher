@@ -15,24 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Patch manager class for the local_securitypatcher plugin.
+ * Patch manager class for the local_codepatcher plugin.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_securitypatcher\managers;
+namespace local_codepatcher\managers;
 
 use context_system;
-use local_securitypatcher\api;
+use local_codepatcher\api;
 use stdClass;
 use stored_file;
 
 /**
- * Patch manager class responsible for the management of security patches.
+ * Patch manager class responsible for the management of code patches.
  *
- * @package   local_securitypatcher
+ * @package   local_codepatcher
  * @copyright 2023 onwards Andrei-Robert Țîcă <andreastsika@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -49,9 +49,9 @@ class patch_manager {
     /** Patch report error status. */
     public const PATCH_REPORT_ERROR = 'error';
 
-    /** @var int The identifier of the security patch. */
+    /** @var int The identifier of the code patch. */
     private int $patchid;
-    /** @var object The current security patch in use. */
+    /** @var object The current code patch in use. */
     private object $currentpatch;
     /** @var array|string[] Valid patch operations. */
     private array $validpatchoperations = ['apply', 'restore'];
@@ -68,29 +68,29 @@ class patch_manager {
     private ?int $operationstatus = null;
 
     /**
-     * @var string The filearea that the security patches are stored.
+     * @var string The filearea that the code patches are stored.
      */
-    public static string $filearea = 'local_securitypatcher_security_patches';
+    public static string $filearea = 'local_codepatcher_code_patches';
     /**
-     * @var string The component the security files belongs.
+     * @var string The component the code files belongs.
      */
-    public static string $component = 'local_securitypatcher';
+    public static string $component = 'local_codepatcher';
 
     /**
-     * Retrieve a security patch record by its ID.
+     * Retrieve a code patch record by its ID.
      *
-     * @param int $patchid The ID of the security patch to retrieve.
+     * @param int $patchid The ID of the code patch to retrieve.
      *
-     * @return stdClass|false Returns the security patch record as an object if found, or false if not found.
+     * @return stdClass|false Returns the code patch record as an object if found, or false if not found.
      */
     public function get_patch(int $patchid) {
         global $DB;
 
-        return $DB->get_record('local_securitypatcher', ['id' => $patchid], '*', MUST_EXIST);
+        return $DB->get_record('local_codepatcher', ['id' => $patchid], '*', MUST_EXIST);
     }
 
     /**
-     * Creates a new security patch record in the database and stores the file attachment.
+     * Creates a new code patch record in the database and stores the file attachment.
      *
      * @param object $formdata An object containing the form data for the new patch.
      *
@@ -118,7 +118,7 @@ class patch_manager {
         $patch->timemodified = $currenttime;
 
         // Insert the new patch record into the database.
-        $patchid = $DB->insert_record('local_securitypatcher', $patch);
+        $patchid = $DB->insert_record('local_codepatcher', $patch);
 
         // Check if the insertion was successful.
         if (empty($patchid)) {
@@ -136,11 +136,11 @@ class patch_manager {
         $patch->attachments = $formdata->attachments;
 
         // Update the patch record in the database and return the result.
-        return $DB->update_record('local_securitypatcher', $patch);
+        return $DB->update_record('local_codepatcher', $patch);
     }
 
     /**
-     * Updates an existing security patch record in the database.
+     * Updates an existing code patch record in the database.
      *
      * @param object $formdata An object containing the updated form data for the patch.
      *
@@ -166,7 +166,7 @@ class patch_manager {
         $patch->attachments = $formdata->attachments;
 
         // Update the patch record in the database and return the result.
-        return $DB->update_record('local_securitypatcher', $patch);
+        return $DB->update_record('local_codepatcher', $patch);
     }
 
     /**
@@ -181,7 +181,7 @@ class patch_manager {
 
         // Retrieve the patch record from the table.
         if (empty($this->currentpatch)) {
-            $this->currentpatch = $DB->get_record('local_securitypatcher', ['id' => $this->patchid], '*', MUST_EXIST);
+            $this->currentpatch = $DB->get_record('local_codepatcher', ['id' => $this->patchid], '*', MUST_EXIST);
         }
 
         // Get the Moodle file storage.
@@ -195,7 +195,7 @@ class patch_manager {
         }
 
         throw new \RuntimeException(get_string('exception:patchfilenotfound',
-                'local_securitypatcher', $this->currentpatch->name), 404);
+                'local_codepatcher', $this->currentpatch->name), 404);
     }
 
     /**
@@ -211,9 +211,9 @@ class patch_manager {
     }
 
     /**
-     * Deletes the stored security patch file.
+     * Deletes the stored code patch file.
      *
-     * @param int $patchid The ID of the security patch file to delete.
+     * @param int $patchid The ID of the code patch file to delete.
      * @return bool always true or exception if error occurred.
      */
     public function delete_patch_stored_file(int $patchid): bool {
@@ -229,7 +229,7 @@ class patch_manager {
      * @return false|mixed|object|string The path to the Git command if configured, or false if not set.
      */
     private function get_git_command_path() {
-        return get_config('local_securitypatcher', 'git');
+        return get_config('local_codepatcher', 'git');
     }
 
     /**
@@ -240,11 +240,11 @@ class patch_manager {
      */
     private function check_operation_action(): void {
         if (empty($this->operationaction)) {
-            throw new \InvalidArgumentException(get_string('exception:operationnotfound', 'local_securitypatcher'), 500);
+            throw new \InvalidArgumentException(get_string('exception:operationnotfound', 'local_codepatcher'), 500);
         }
         if (!in_array($this->operationaction, $this->validpatchoperations, true)) {
             throw new \InvalidArgumentException(get_string('exception:invalidoperation',
-                    'local_securitypatcher', $this->operationaction), 500);
+                    'local_codepatcher', $this->operationaction), 500);
         }
     }
 
@@ -261,10 +261,10 @@ class patch_manager {
 
         $gitpath = $this->get_git_command_path();
         if (empty($gitpath)) {
-            throw new \RuntimeException(get_string('exception:gitpathnotfound', 'local_securitypatcher'), 404);
+            throw new \RuntimeException(get_string('exception:gitpathnotfound', 'local_codepatcher'), 404);
         }
 
-        $this->currentpatch = $DB->get_record('local_securitypatcher', ['id' => $patchid], '*', MUST_EXIST);
+        $this->currentpatch = $DB->get_record('local_codepatcher', ['id' => $patchid], '*', MUST_EXIST);
         $this->patchid = $patchid;
 
         $file = $this->get_stored_file();
@@ -279,7 +279,7 @@ class patch_manager {
     }
 
     /**
-     * Update the security patch status.
+     * Update the code patch status.
      *
      * @return void
      */
@@ -297,7 +297,7 @@ class patch_manager {
             default:
                 return;
         }
-        $DB->update_record('local_securitypatcher', $this->currentpatch);
+        $DB->update_record('local_codepatcher', $this->currentpatch);
     }
 
     /**
@@ -339,7 +339,7 @@ class patch_manager {
         $record->timecreated = time();
         $record->timemodified = time();
 
-        return $DB->insert_record('local_securitypatcher_data', $record, true);
+        return $DB->insert_record('local_codepatcher_data', $record, true);
     }
 
     /**
@@ -419,11 +419,11 @@ class patch_manager {
     public function get_last_operation_name(int $status): string {
         switch ($status) {
             case self::PATCH_APPLIED:
-                return get_string('apply', 'local_securitypatcher');
+                return get_string('apply', 'local_codepatcher');
             case self::PATCH_RESTORED:
-                return get_string('restore', 'local_securitypatcher');
+                return get_string('restore', 'local_codepatcher');
             default:
-                return get_string('none', 'local_securitypatcher');
+                return get_string('none', 'local_codepatcher');
         }
     }
 
@@ -436,12 +436,12 @@ class patch_manager {
     public static function get_operation_name(string $operation): string {
         switch ($operation) {
             case 'apply':
-                return get_string('apply', 'local_securitypatcher');
+                return get_string('apply', 'local_codepatcher');
             case 'restore':
-                return get_string('restore', 'local_securitypatcher');
+                return get_string('restore', 'local_codepatcher');
             default:
                 throw new \InvalidArgumentException(
-                        get_string('exception:invalidoperation', 'local_securitypatcher', $operation),
+                        get_string('exception:invalidoperation', 'local_codepatcher', $operation),
                         500
                 );
         }
@@ -455,16 +455,16 @@ class patch_manager {
      */
     public static function get_patch_report_status(string $status): string {
         if ($status === self::PATCH_REPORT_SUCCESS) {
-            return get_string('operation_success', 'local_securitypatcher');
+            return get_string('operation_success', 'local_codepatcher');
         }
 
-        return get_string('operation_error', 'local_securitypatcher');
+        return get_string('operation_error', 'local_codepatcher');
     }
 
     /**
-     * Sets the current security patch in use.
+     * Sets the current code patch in use.
      *
-     * @param object $currentpatch The current security patch object in use.
+     * @param object $currentpatch The current code patch object in use.
      */
     public function set_current_patch(object $currentpatch): void {
         $this->currentpatch = $currentpatch;
